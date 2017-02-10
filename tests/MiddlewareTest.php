@@ -27,7 +27,7 @@ class MiddlewareTest extends TestCase
         $this->delegate = new MockDelegate();
         Resolver::config([
             'cache' => new LocalAdapter('/tmp'),
-            'base_uri' => 'http://127.0.0.1',
+            'base_uri' => 'http://127.0.0.1:1349',
         ]);
     }
 

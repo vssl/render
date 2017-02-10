@@ -1,5 +1,6 @@
 Vessel Render
 -------------
+[![Build Status](https://travis-ci.org/journeygroup/vessel-render.svg?branch=master)](https://travis-ci.org/journeygroup/vessel-render)
 
 ## What
 
@@ -10,7 +11,7 @@ markup.
 
 ## Configuration
 
-```
+```php
 use Vessel\Resolver;
 use Journey\Cache\LocalAdapter;
 

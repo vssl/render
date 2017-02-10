@@ -1,6 +1,6 @@
 {
     "name": "vessel/render",
-    "description": "Rendering agent for Journey Group’s Vessel pages.",
+    "description": "Rendering agent for Journey Group’s Vessel APIs.",
     "license": "MIT",
     "require": {
         "php": ">=5.6.0",
