@@ -4,6 +4,7 @@ namespace Vessel\Render;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use Journey\Cache\CacheAdapterInterface;
 
 class PageApi
@@ -55,6 +56,8 @@ class PageApi
             return $this->http->request(strtoupper($method), $url);
         } catch (ClientException $e) {
             return $e->getResponse();
+        } catch (ConnectException $e) {
+            return false;
         }
     }
 }

@@ -61,13 +61,15 @@ class Resolver
      */
     public function resolve()
     {
-        $response = $this->api->getPage($this->request->getUri()->getPath());
-        $data = $this->decodeBody($response);
-        return [
-            'status' => $response->getStatusCode(),
-            'data' => $data,
-            'page' => is_array($data) ? new Renderer($this->config, $data) : $data,
-        ];
+        if ($response = $this->api->getPage($this->request->getUri()->getPath())) {
+            $data = $this->decodeBody($response);
+            return [
+                'status' => $response->getStatusCode(),
+                'data' => $data,
+                'page' => is_array($data) ? new Renderer($this->config, $data) : $data,
+            ];
+        }
+        return false;
     }
 
     /**

@@ -52,4 +52,19 @@ class ResolverTest extends TestCase
         $this->assertArrayHasKey('id', $page['data']);
         $this->assertInstanceOf(Renderer::class, $page['page']);
     }
+
+    /**
+     * Ensure that the resolver returns false for bad endpoints.
+     *
+     * @return void
+     */
+    public function testBadEndpoint()
+    {
+        $resolver = new Resolver($this->request, [
+            'base_uri' => 'http://' . bin2hex(openssl_random_pseudo_bytes(16)) . ".com",
+            'cache' => new LocalAdapter('/tmp')
+        ]);
+        $page = $resolver->getRequest()->getAttribute('ws-page');
+        $this->assertFalse($page);
+    }
 }
