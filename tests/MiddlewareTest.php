@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Tests\Mocks\MockDelegate;
 use Vessel\Render\Middleware;
 use Vessel\Render\Resolver;
@@ -51,7 +52,6 @@ class MiddlewareTest extends TestCase
     {
         $middleware = new Middleware();
         $middleware->process(new ServerRequest("GET", "http://127.0.0.1/404"), $this->delegate);
-        $page = $this->delegate->getRequest()->getAttribute('ws-page');
-        $this->assertEquals(404, $page['status']);
+        $this->assertInstanceOf(ServerRequestInterface::class, $this->delegate->getRequest());
     }
 }
