@@ -1,6 +1,8 @@
 Vessel Render
 -------------
 [![Build Status](https://travis-ci.org/journeygroup/vessel-render.svg?branch=master)](https://travis-ci.org/journeygroup/vessel-render)
+[![Code Coverage](https://scrutinizer-ci.com/g/journeygroup/vessel-render/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vessel-render/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/journeygroup/vessel-render/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vessel-render/?branch=master)
 
 ## What
 
