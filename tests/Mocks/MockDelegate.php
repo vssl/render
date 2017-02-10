@@ -2,6 +2,7 @@
 
 namespace Tests\Mocks;
 
+use GuzzleHttp\Psr7\Response;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -23,6 +24,7 @@ class MockDelegate implements DelegateInterface
     public function process(ServerRequestInterface $request)
     {
         $this->request = $request;
+        return new Response();
     }
 
     /**

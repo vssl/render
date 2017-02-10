@@ -18,6 +18,6 @@ class Middleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, DelegateInterface $next)
     {
         $resolver = new Resolver($request);
-        $next->process($resolver->getRequest());
+        return $next->process($resolver->getRequest());
     }
 }
