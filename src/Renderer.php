@@ -65,6 +65,9 @@ class Renderer
         $this->setData($data);
         $this->engine = new Engine(__DIR__ . "/../templates");
         $this->registerFunctions();
+        if (isset($config['templates'])) {
+            $this->registerTheme('default', $config['templates']);
+        }
     }
 
     /**

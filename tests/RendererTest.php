@@ -101,4 +101,22 @@ class RendererTest extends TestCase
             'title' => 'hello',
         ]);
     }
+
+    /**
+     * Test the render engine's ability to accept a 'templates' configuration item.
+     *
+     * @return void
+     */
+    public function testTemplateConfiguraton()
+    {
+        $config = Resolver::config();
+        $config['templates'] = __DIR__ . "/templates";
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-test',
+        ];
+        $renderer = new Renderer($config, $data);
+        $output = (string) $renderer;
+        $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
+    }
 }
