@@ -1,9 +1,12 @@
 {
-  "id": 123,
-  "title": "my story",
-  "stripes": [
-    {
-      "type": "stripe-header"
-    }
-  ]
+  "exists": 1,
+  "page": {
+    "id": 123,
+    "title": "my story",
+    "stripes": [
+      {
+        "type": "stripe-header"
+      }
+    ]
+  }
 }

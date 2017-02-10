@@ -34,7 +34,7 @@ class RendererTest extends TestCase
         $this->data = json_decode(file_get_contents(__DIR__ . "/server/assets/single.json"), true);
         $this->renderer = new Renderer(
             Resolver::config(),
-            $this->data
+            $this->data['page']
         );
     }
 

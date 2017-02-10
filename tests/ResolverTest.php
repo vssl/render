@@ -31,7 +31,7 @@ class ResolverTest extends TestCase
     {
         $this->request = new ServerRequest(
             'GET',
-            'http://www.webrender.com/test-page'
+            'http://127.0.0.1:1349/test-page'
         );
         $this->resolver = new Resolver($this->request, [
             'cache' => new LocalAdapter('/tmp'),
@@ -65,6 +65,6 @@ class ResolverTest extends TestCase
             'cache' => new LocalAdapter('/tmp')
         ]);
         $page = $resolver->getRequest()->getAttribute('ws-page');
-        $this->assertFalse($page);
+        $this->assertArrayHasKey('error', $page);
     }
 }

@@ -33,7 +33,7 @@ class PageApi
         $this->http = new Client([
             'base_uri' => $config['base_uri'],
             'headers' => [
-                'X-Render-Host: ' . $request->getHost(),
+                'X-Render-Host: ' . $request->getUri()->getHost(),
             ]
         ]);
     }

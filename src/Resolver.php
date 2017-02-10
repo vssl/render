@@ -55,21 +55,27 @@ class Resolver
     }
 
     /**
-     * Resolve the current page from WebStories.
+     * Resolve the current page from WebStories. Returns a render able page or
+     * false.
      *
      * @return array
      */
     public function resolve()
     {
-        if ($response = $this->api->getPage($this->request->getUri()->getPath())) {
-            $data = $this->decodeBody($response);
+        $response = $this->api->getPage($this->request->getUri()->getPath());
+        if ($response && ($page = $this->decodePage($response))) {
+            $status = $response->getStatusCode();
             return [
-                'status' => $response->getStatusCode(),
-                'data' => $data,
-                'page' => is_array($data) ? new Renderer($this->config, $data) : $data,
+                'status' => $status,
+                'data' => $page,
+                'page' => (is_array($page) && $status == 200) ? new Renderer($this->config, $page) : $page,
             ];
         }
-        return false;
+        return [
+            'status' => false,
+            'error' => 'An unknown error occurred',
+            'data' => []
+        ];
     }
 
     /**
@@ -77,13 +83,14 @@ class Resolver
      *
      * @return mixed
      */
-    public function decodeBody(ResponseInterface $response)
+    public function decodePage(ResponseInterface $response)
     {
         $body = (string) $response->getBody();
         if ($response->getHeaderLine('Content-Type') == "application/json") {
-            return json_decode($body, true);
+            $page = json_decode($body, true);
+            return !empty($page['exists']) ? $page['page'] : false;
         }
-        return $body;
+        return false;
     }
 
     /**
