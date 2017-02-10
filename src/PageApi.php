@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use Journey\Cache\CacheAdapterInterface;
+use Psr\Http\Message\RequestInterface;
 
 class PageApi
 {
@@ -26,11 +27,14 @@ class PageApi
     /**
      * Initialize the page api methods.
      */
-    public function __construct(array $config)
+    public function __construct(RequestInterface $request, array $config)
     {
         $this->cache = $config['cache'];
         $this->http = new Client([
-            'base_uri' => $config['base_uri']
+            'base_uri' => $config['base_uri'],
+            'headers' => [
+                'X-Render-Host: ' . $request->getHost(),
+            ]
         ]);
     }
 

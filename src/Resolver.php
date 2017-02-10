@@ -41,7 +41,7 @@ class Resolver
         if (!$this->config['cache'] instanceof CacheAdapterInterface) {
             throw new ResolverException('Cache must implement \Journey\Cache\CacheAdapterInterface.');
         }
-        $this->api = new PageApi($this->config);
+        $this->api = new PageApi($request, $this->config);
     }
 
     /**
