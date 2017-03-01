@@ -1,6 +1,6 @@
 <?php
 
-namespace Vessel\Render;
+namespace Vssl\Render;
 
 class ResolverException extends \Exception
 {

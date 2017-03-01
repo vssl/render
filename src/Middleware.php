@@ -1,6 +1,6 @@
 <?php
 
-namespace Vessel\Render;
+namespace Vssl\Render;
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;

@@ -9,8 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tests\Mocks\MockDelegate;
-use Vessel\Render\Middleware;
-use Vessel\Render\Resolver;
+use Vssl\Render\Middleware;
+use Vssl\Render\Resolver;
 
 class MiddlewareTest extends TestCase
 {

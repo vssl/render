@@ -6,16 +6,16 @@ use GuzzleHttp\Psr7\ServerRequest;
 use Journey\Cache\Adapters\LocalAdapter;
 use League\Plates\Engine;
 use PHPUnit\Framework\TestCase;
-use Vessel\Render\Renderer;
-use Vessel\Render\RendererException;
-use Vessel\Render\Resolver;
+use Vssl\Render\Renderer;
+use Vssl\Render\RendererException;
+use Vssl\Render\Resolver;
 
 class RendererTest extends TestCase
 {
     /**
      * Instance of our renderer
      *
-     * @var \Vessel\Render\Renderer
+     * @var \Vssl\Render\Renderer
      */
     protected $renderer;
 

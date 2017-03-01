@@ -5,15 +5,15 @@ namespace Tests;
 use GuzzleHttp\Psr7\ServerRequest;
 use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
-use Vessel\Render\Renderer;
-use Vessel\Render\Resolver;
+use Vssl\Render\Renderer;
+use Vssl\Render\Resolver;
 
 class ResolverTest extends TestCase
 {
     /**
      * Instance of our resolver
      *
-     * @var \Vessel\Render\Resolver
+     * @var \Vssl\Render\Resolver
      */
     protected $resolver;
 

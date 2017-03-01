@@ -1,6 +1,6 @@
 <?php
 
-namespace Vessel\Render;
+namespace Vssl\Render;
 
 use League\Plates\Engine;
 

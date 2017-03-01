@@ -1,6 +1,6 @@
 <?php
 
-namespace Vessel\Render;
+namespace Vssl\Render;
 
 use GuzzleHttp\Client;
 use Journey\Cache\Adapters\LocalAdapter;
@@ -27,7 +27,7 @@ class Resolver
     /**
      * The page api object.
      *
-     * @var \Vessel\Render\PageApi
+     * @var \Vssl\Render\PageApi
      */
     protected $api;
 

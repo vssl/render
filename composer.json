@@ -1,6 +1,6 @@
 {
-    "name": "vessel/render",
-    "description": "Rendering agent for Journey Group’s Vessel APIs.",
+    "name": "vssl/render",
+    "description": "Rendering agent for Journey Group’s Vssl APIs.",
     "authors": [{
         "name": "Justin Schroeder",
         "homepage": "http://www.jpschroeder.com"
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Vessel\\Render\\": "src/",
+            "Vssl\\Render\\": "src/",
             "Tests\\": "tests/"
         }
     },

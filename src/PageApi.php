@@ -1,6 +1,6 @@
 <?php
 
-namespace Vessel\Render;
+namespace Vssl\Render;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
