@@ -6,9 +6,9 @@ Vssl Render
 
 ## What
 
-This package contains a PHP rendering agent for Vssl pages. It is includes a
+This package contains a PHP rendering agent for VSSL Pages. It is includes a
 PSR-15 middleware implementation to easily attach to any conforming framework
-and will automatically consume the Vssl Pages API and render production ready
+and will automatically consume the VSSL Pages API and render production ready
 markup.
 
 ## Configuration
