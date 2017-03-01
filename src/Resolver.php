@@ -105,7 +105,7 @@ class Resolver
         if (is_array($assign) || !$config) {
             $config = array_merge([
                 'cache' => null,
-                'base_uri' => 'https://www.webstories.com/',
+                'base_uri' => 'https://pages.vssl.io/',
                 'required_fields' => [
                     'id',
                     'title',

@@ -78,6 +78,7 @@ class Renderer
     public function registerFunctions()
     {
         $this->engine->registerFunction('wrapperClasses', [$this, 'wrapperClasses']);
+        $this->engine->registerFunction('image', [$this, 'image']);
     }
 
     /**
@@ -152,7 +153,19 @@ class Renderer
     public function wrapperClasses($string)
     {
         $type = str_replace("stripe-", "", $string);
-        return 'ws-stripe--' . $type;
+        return 'vssl-stripe vssl-stripe--' . $type;
+    }
+
+    /**
+     * Returns the image url on the vssl server.
+     *
+     * @param  string $imageName hash.extension
+     * @param  string $style     image style name
+     * @return string
+     */
+    public function image($name, $style = false)
+    {
+        return ltrim($this->config['base_uri'], '/') . "/images" . ($style ? '/' . $style : '') . "/" . $name;
     }
 
     /**

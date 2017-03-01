@@ -47,7 +47,7 @@ class RendererTest extends TestCase
     {
         $output = (string) $this->renderer;
         $this->assertInternalType('string', $output);
-        $this->assertTrue((boolean) preg_match("/ws-stripe--header/", $output));
+        $this->assertTrue((boolean) preg_match("/vssl-stripe--header/", $output));
     }
 
     /**
@@ -118,5 +118,6 @@ class RendererTest extends TestCase
         $renderer = new Renderer($config, $data);
         $output = (string) $renderer;
         $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
+        $this->assertTrue((boolean) preg_match("/http:\/\/127.0.0.1:1349\/images\/sepia\/123.jpg/", $output));
     }
 }

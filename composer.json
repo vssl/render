@@ -1,6 +1,6 @@
 {
     "name": "vssl/render",
-    "description": "Rendering agent for Journey Group’s VSSL APIs.",
+    "description": "Rendering agent for Journey Group’s VSSL Pages.",
     "authors": [{
         "name": "Justin Schroeder",
         "homepage": "http://www.jpschroeder.com"
