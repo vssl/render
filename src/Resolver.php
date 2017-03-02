@@ -69,6 +69,7 @@ class Resolver
                 'status' => $status,
                 'data' => $page,
                 'page' => (is_array($page) && $status == 200) ? new Renderer($this->config, $page) : $page,
+                'type' => !empty($page['type']) ? $page['type'] : false
             ];
         }
         return [
