@@ -51,7 +51,7 @@ class Resolver
      */
     public function getRequest()
     {
-        return $this->request->withAttribute('ws-page', $this->resolve());
+        return $this->request->withAttribute('vssl-page', $this->resolve());
     }
 
     /**

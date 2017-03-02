@@ -43,7 +43,7 @@ templates       | Additional directory to find custom render templates.
 
 Attach the [middleware](/src/Middleware.php) to your favorite PSR-15 dispatcher 
 before your router. When the request arrives in your controller methods, it will
-have an attribute `ws-page` with content ready to be rendered.
+have an attribute `vssl-page` with content ready to be rendered.
 
 ```php
 <?php
@@ -56,7 +56,7 @@ class YourController {
      */
     public function anypage(ServerRequestInterface $request)
     {
-        $page = $request->getAttribute('ws-page');
+        $page = $request->getAttribute('vssl-page');
     }
 }
 ```

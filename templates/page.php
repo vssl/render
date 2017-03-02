@@ -1,6 +1,6 @@
-<div class="ws-page" data-id="<?= $this->e($id) ?>">
+<div class="vssl-page" data-id="<?= $this->e($id) ?>">
     <?php if ($stripes) : ?>
-    <div class="ws-stripes">
+    <div class="vssl-stripes">
         <?php foreach ($stripes as $stripe) : ?>
         <?= $this->insert($themePrefix . 'stripes/' . $stripe['type'], $stripe) ?>
         <?php endforeach; ?>

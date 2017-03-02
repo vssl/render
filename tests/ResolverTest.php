@@ -46,7 +46,7 @@ class ResolverTest extends TestCase
      */
     public function testResolver()
     {
-        $page = $this->resolver->getRequest()->getAttribute('ws-page');
+        $page = $this->resolver->getRequest()->getAttribute('vssl-page');
         $this->assertInternalType('array', $page);
         $this->assertEquals($page['status'], 200);
         $this->assertArrayHasKey('id', $page['data']);
@@ -64,7 +64,7 @@ class ResolverTest extends TestCase
             'base_uri' => 'http://' . bin2hex(openssl_random_pseudo_bytes(16)) . ".com",
             'cache' => new LocalAdapter('/tmp')
         ]);
-        $page = $resolver->getRequest()->getAttribute('ws-page');
+        $page = $resolver->getRequest()->getAttribute('vssl-page');
         $this->assertArrayHasKey('error', $page);
     }
 }
