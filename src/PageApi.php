@@ -50,6 +50,20 @@ class PageApi
     }
 
     /**
+     * Get a particular page from the api.
+     *
+     * @param  array $ids unique ids of pages to fetch data for.
+     * @return array|false
+     */
+    public function getPagesById($ids)
+    {
+        $ids = array_filter(array_map(function ($id) {
+            return is_numeric($id) ? (integer) $id : null;
+        }, $ids));
+        return $this->call("get", "/api/pages?ids=" . implode(",", $ids));
+    }
+
+    /**
      * Call a particular api endpoint.
      *
      * @return \Psr\Http\Message\ResponseInterface

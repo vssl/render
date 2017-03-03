@@ -43,7 +43,7 @@ class Metadata
      *
      * @return string
      */
-    public function title()
+    public function titleTag()
     {
         $title = empty($this->page['title']) ? null : htmlspecialchars($this->page['title'], ENT_QUOTES);
         return $title
@@ -56,7 +56,7 @@ class Metadata
      *
      * @return string
      */
-    public function description()
+    public function descriptionTag()
     {
         $summary = empty($this->page['summary']) ? null : htmlspecialchars($this->page['summary'], ENT_QUOTES);
         return $summary
@@ -69,7 +69,7 @@ class Metadata
      *
      * @return [type] [description]
      */
-    public function image()
+    public function imageTag()
     {
         $image = empty($this->page['image'])
             ? null
@@ -87,7 +87,7 @@ class Metadata
     public function getTags()
     {
         return array_filter(array_map(function ($tag) {
-            return $this->{$tag}();
+            return $this->{$tag . "Tag"}();
         }, $this->tags));
     }
 

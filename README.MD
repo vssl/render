@@ -1,8 +1,8 @@
 Vssl Render
 -------------
 [![Build Status](https://travis-ci.org/journeygroup/vessel-render.svg?branch=master)](https://travis-ci.org/journeygroup/vssl-render)
-[![Code Coverage](https://scrutinizer-ci.com/g/journeygroup/vessel-render/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/journeygroup/vessel-render/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/journeygroup/vssl-render/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/journeygroup/vssl-render/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
 
 ## What
 

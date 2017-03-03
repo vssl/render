@@ -46,7 +46,7 @@ class MetadataTest extends TestCase
      */
     public function testTitle()
     {
-        $this->assertEquals('<meta property="og:title" content="my story" />', $this->metadata->title());
+        $this->assertEquals('<meta property="og:title" content="my story" />', $this->metadata->titleTag());
     }
 
     /**
@@ -58,7 +58,7 @@ class MetadataTest extends TestCase
     {
         $this->assertEquals(
             '<meta property="og:description" content="this is a testable summary" />',
-            $this->metadata->description()
+            $this->metadata->descriptionTag()
         );
     }
 
@@ -71,7 +71,7 @@ class MetadataTest extends TestCase
     {
         $this->assertEquals(
             '<meta property="og:image" content="http://127.0.0.1:1349/images/somrandomhash.jpg" />',
-            $this->metadata->image()
+            $this->metadata->imageTag()
         );
     }
 
@@ -83,7 +83,7 @@ class MetadataTest extends TestCase
     public function testGetTags()
     {
         $tags = $this->metadata->getTags();
-        $value = [$this->metadata->title(), $this->metadata->description(), $this->metadata->image()];
+        $value = [$this->metadata->titleTag(), $this->metadata->descriptionTag(), $this->metadata->imageTag()];
         $this->assertEquals($value, $tags);
     }
 

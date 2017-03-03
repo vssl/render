@@ -55,6 +55,16 @@ class Resolver
     }
 
     /**
+     * Get an instance of the PageApi class.
+     *
+     * @return \Vssl\Render\PageApi
+     */
+    public function getPageApi()
+    {
+        return $this->api;
+    }
+
+    /**
      * Resolve the current page from WebStories. Returns a render able page or
      * false.
      *
