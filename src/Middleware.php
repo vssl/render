@@ -18,6 +18,7 @@ class Middleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, DelegateInterface $next)
     {
         $resolver = new Resolver($request);
-        return $next->process($resolver->getRequest());
+        $request = $resolver->getRequest();
+        return $next->process($request->withAttribute('vssl-resolver', $resolver));
     }
 }
