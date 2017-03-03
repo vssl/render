@@ -79,6 +79,7 @@ class Renderer
     {
         $this->engine->registerFunction('wrapperClasses', [$this, 'wrapperClasses']);
         $this->engine->registerFunction('image', [$this, 'image']);
+        $this->engine->registerFunction('inline', [$this, 'inline']);
     }
 
     /**
@@ -166,6 +167,18 @@ class Renderer
     public function image($name, $style = false)
     {
         return ltrim($this->config['base_uri'], '/') . "/images" . ($style ? '/' . $style : '') . "/" . $name;
+    }
+
+    /**
+     * Strip most tags from output stored by the inline editor.
+     *
+     * @param  string $str           Output
+     * @param  string $allowed_tags  Permitted HTML tags
+     * @return string
+     */
+    public function inline($str, $allowed_tags = '<a><b><strong><i><em>')
+    {
+        return strip_tags($str, $allowed_tags);
     }
 
     /**

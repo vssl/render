@@ -65,6 +65,7 @@ class RendererTest extends TestCase
         $this->renderer->setData($data);
         $output = (string) $this->renderer;
         $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
+        $this->assertTrue((boolean) preg_match("/<a>Test<\/a>/", $output));
     }
 
     /**
