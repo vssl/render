@@ -64,6 +64,17 @@ class PageApi
     }
 
     /**
+     * Get a list of pages of a particular type from the api.
+     *
+     * @param  string $type type of pages to get.
+     * @return array
+     */
+    public function getPagesByType($type)
+    {
+        return $this->call("get", "/api/pages?type=" . urlencode($type));
+    }
+
+    /**
      * Call a particular api endpoint.
      *
      * @return \Psr\Http\Message\ResponseInterface
