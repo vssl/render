@@ -33,7 +33,7 @@ class PageApi
         $this->http = new Client([
             'base_uri' => $config['base_uri'],
             'headers' => [
-                'X-Render-Host: ' . $request->getUri()->getHost(),
+                'X-Render-Host' => $request->getUri()->getHost(),
             ]
         ]);
     }
@@ -61,6 +61,17 @@ class PageApi
             return is_numeric($id) ? (integer) $id : null;
         }, $ids));
         return $this->call("get", "/api/pages?ids=" . implode(",", $ids));
+    }
+
+    /**
+     * Get a list of pages of a particular type from the api.
+     *
+     * @param  string $type type of pages to get.
+     * @return array
+     */
+    public function getPagesByType($type)
+    {
+        return $this->call("get", "/api/pages?type=" . urlencode($type));
     }
 
     /**
