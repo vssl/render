@@ -1,4 +1,4 @@
-<div class="vssl-page" data-id="<?= $this->e($id) ?>">
+<div class="vssl-page" data-id="<?= $this->e($id) ?>" data-type="<?= $this->e($type) ?>">
     <?php if ($stripes) : ?>
     <div class="vssl-stripes">
         <?php foreach ($stripes as $stripe) : ?>
