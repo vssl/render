@@ -3,8 +3,10 @@
 namespace Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Psr7\str;
 use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Vssl\Render\Renderer;
@@ -34,19 +36,42 @@ class PageApiTest extends TestCase
     protected $api;
 
     /**
+     * Cache instance.
+     *
+     * @var \Journey\Cache\Adapters\LocalAdapter
+     */
+    protected $cache;
+
+    /**
      * Initialize a PageApi instance.
      */
     public function setUp()
     {
+        $this->cache = (new LocalAdapter('/tmp'))->clear();
         $this->request = new ServerRequest(
             'GET',
             'http://127.0.0.1:1349/test-page'
         );
         $this->resolver = new Resolver($this->request, [
-            'cache' => new LocalAdapter('/tmp'),
+            'cache' => $this->cache,
+            'cache_ttl' => 300,
             'base_uri' => 'http://127.0.0.1:1349',
         ]);
         $this->api = $this->resolver->getPageApi();
+    }
+
+    /**
+     * Tests the page api's ability to read/store via cache adapter.
+     *
+     * @return void
+     */
+    public function testCallCache()
+    {
+        $api = $this->resolver->getPageApi();
+        $this->cache->clear();
+        $responseA = $api->call('GET', 'http://127.0.0.1:1349/cache-test');
+        $responseB = $api->call('GET', 'http://127.0.0.1:1349/cache-test');
+        $this->assertEquals(\GuzzleHttp\Psr7\str($responseA), \GuzzleHttp\Psr7\str($responseB));
     }
 
     /**

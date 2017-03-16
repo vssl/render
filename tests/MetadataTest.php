@@ -30,9 +30,10 @@ class MetadataTest extends TestCase
     public function setUp()
     {
         $this->data = json_decode(file_get_contents(__DIR__ . "/server/assets/single.json"), true);
+        $cache = (new LocalAdapter('/tmp'))->clear();
         $this->metadata = new Metadata(
             Resolver::config([
-                'cache' => new LocalAdapter('/tmp'),
+                'cache' => $cache,
                 'base_uri' => 'http://127.0.0.1:1349',
             ]),
             $this->data['page']

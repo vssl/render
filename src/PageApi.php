@@ -25,10 +25,18 @@ class PageApi
     protected $cache;
 
     /**
+     * Number of seconds responses should be cached for.
+     *
+     * @var integer
+     */
+    protected $ttl;
+
+    /**
      * Initialize the page api methods.
      */
     public function __construct(RequestInterface $request, array $config)
     {
+        $this->ttl = $config['cache_ttl'];
         $this->cache = $config['cache'];
         $this->http = new Client([
             'base_uri' => $config['base_uri'],
@@ -75,18 +83,41 @@ class PageApi
     }
 
     /**
+     * Clear the cache of a given endpoint immediately.
+     *
+     * @param  string $method get/post/put
+     * @param  string $url    endpoint to hit
+     * @return $this
+     */
+    public function clearEndpoint($method, $url)
+    {
+        $cacheKey = md5(strtoupper($method) . "::" . $url);
+        $this->cache->delete($cacheKey);
+        return $this;
+    }
+
+    /**
      * Call a particular api endpoint.
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function call($method, $url)
     {
+        $cacheKey = md5(strtoupper($method) . "::" . $url);
         try {
-            return $this->http->request(strtoupper($method), $url);
+            if (!$value = $this->cache->get($cacheKey)) {
+                $response = $this->http->request(strtoupper($method), $url);
+            }
         } catch (ClientException $e) {
-            return $e->getResponse();
+            $response = $e->getResponse();
         } catch (ConnectException $e) {
             return false;
         }
+        if (!isset($response)) {
+            $response = \GuzzleHttp\Psr7\parse_response($value);
+        } elseif ($this->ttl) {
+            $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), time() + $this->ttl);
+        }
+        return $response;
     }
 }

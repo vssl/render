@@ -29,12 +29,13 @@ class ResolverTest extends TestCase
      */
     public function setUp()
     {
+        $cache = (new LocalAdapter('/tmp'))->clear();
         $this->request = new ServerRequest(
             'GET',
             'http://127.0.0.1:1349/test-page'
         );
         $this->resolver = new Resolver($this->request, [
-            'cache' => new LocalAdapter('/tmp'),
+            'cache' => $cache,
             'base_uri' => 'http://127.0.0.1:1349',
         ]);
     }

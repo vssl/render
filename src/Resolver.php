@@ -86,7 +86,8 @@ class Resolver
         return [
             'status' => false,
             'error' => 'An unknown error occurred',
-            'data' => []
+            'data' => [],
+            'type' => false
         ];
     }
 
@@ -117,6 +118,7 @@ class Resolver
         if (is_array($assign) || !$config) {
             $config = array_merge([
                 'cache' => null,
+                'cache_ttl' => false,
                 'base_uri' => 'https://pages.vssl.io/',
                 'required_fields' => [
                     'id',

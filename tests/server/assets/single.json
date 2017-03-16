@@ -3,6 +3,7 @@
   "page": {
     "id": 123,
     "title": "my story",
+    "type": "story",
     "summary": "this is a testable summary",
     "image": "somrandomhash.jpg",
     "stripes": [
