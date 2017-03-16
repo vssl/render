@@ -67,11 +67,22 @@ class PageApiTest extends TestCase
      */
     public function testCallCache()
     {
-        $api = $this->resolver->getPageApi();
         $this->cache->clear();
-        $responseA = $api->call('GET', 'http://127.0.0.1:1349/cache-test');
-        $responseB = $api->call('GET', 'http://127.0.0.1:1349/cache-test');
+        $responseA = $this->api->call('GET', 'http://127.0.0.1:1349/cache-test');
+        $responseB = $this->api->call('GET', 'http://127.0.0.1:1349/cache-test');
         $this->assertEquals(\GuzzleHttp\Psr7\str($responseA), \GuzzleHttp\Psr7\str($responseB));
+    }
+
+    /**
+     * Test the clearEndpoint method.
+     *
+     * @return void
+     */
+    public function testClearEndpoint()
+    {
+        $response = $this->api->call('GET', 'http://127.0.0.1:1349/cache-test');
+        $this->api->clearEndpoint('GET', 'http://127.0.0.1:1349/cache-test');
+        $this->assertFalse($this->cache->get(md5('GET::http://127.0.0.1:1349/cache-test')));
     }
 
     /**

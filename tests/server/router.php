@@ -7,10 +7,13 @@ switch (strtok($_SERVER["REQUEST_URI"], '?')) {
         } elseif (isset($_GET['ids'])) {
             echo json_encode(['pages' => array_map(function ($id) {
                 return ['id' => $id];
-            }, explode(",",$_GET['ids']))]);
+            }, explode(",", $_GET['ids']))]);
         } else {
             readfile(__DIR__ . "/assets/list.json");
         }
+        break;
+    case "cache-test":
+        echo "cache-test";
         break;
     default:
         return false;

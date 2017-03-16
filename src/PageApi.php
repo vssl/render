@@ -72,17 +72,6 @@ class PageApi
     }
 
     /**
-     * Get a list of pages of a particular type from the api.
-     *
-     * @param  string $type type of pages to get.
-     * @return array
-     */
-    public function getPagesByType($type)
-    {
-        return $this->call("get", "/api/pages?type=" . urlencode($type));
-    }
-
-    /**
      * Clear the cache of a given endpoint immediately.
      *
      * @param  string $method get/post/put
@@ -99,7 +88,7 @@ class PageApi
     /**
      * Call a particular api endpoint.
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface|false
      */
     public function call($method, $url)
     {
@@ -111,13 +100,13 @@ class PageApi
         } catch (ClientException $e) {
             $response = $e->getResponse();
         } catch (ConnectException $e) {
-            return false;
+            // Suppress network errors at this level.
         }
-        if (!isset($response)) {
+        if (!isset($response) && $value) {
             $response = \GuzzleHttp\Psr7\parse_response($value);
         } elseif ($this->ttl) {
             $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), time() + $this->ttl);
         }
-        return $response;
+        return isset($response) ? $response : false;
     }
 }

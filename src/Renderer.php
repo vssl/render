@@ -205,10 +205,6 @@ class Renderer
      */
     public function render()
     {
-        if (!isset($this->data['type'])) {
-            print_r($this->data);
-            die();
-        }
         return $this->engine->render('page', $this->processData($this->data));
     }
 

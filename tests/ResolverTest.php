@@ -2,11 +2,13 @@
 
 namespace Tests;
 
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
 use Vssl\Render\Renderer;
 use Vssl\Render\Resolver;
+use Vssl\Render\ResolverException;
 
 class ResolverTest extends TestCase
 {
@@ -41,6 +43,17 @@ class ResolverTest extends TestCase
     }
 
     /**
+     * Should throw an exception when no cache adapter is used.
+     *
+     * @return void
+     */
+    public function testInvalidCache()
+    {
+        $this->expectException(ResolverException::class);
+        new Resolver($this->request, []);
+    }
+
+    /**
      * Ensure that the middleware implements the PSR-15 pattern.
      *
      * @return void
@@ -67,5 +80,15 @@ class ResolverTest extends TestCase
         ]);
         $page = $resolver->getRequest()->getAttribute('vssl-page');
         $this->assertArrayHasKey('error', $page);
+    }
+
+    /**
+     * Test that when a non json response is given, only 'false' is returned.
+     *
+     * @return void
+     */
+    public function testNonJsonDecode()
+    {
+        $this->assertFalse($this->resolver->decodePage(new Response()));
     }
 }

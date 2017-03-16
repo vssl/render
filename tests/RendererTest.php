@@ -121,4 +121,20 @@ class RendererTest extends TestCase
         $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
         $this->assertTrue((boolean) preg_match("/http:\/\/127.0.0.1:1349\/images\/sepia\/123.jpg/", $output));
     }
+
+    /**
+     * Test the exception handling on templates that throw exceptions.
+     *
+     * @return void
+     */
+    public function testRenderException()
+    {
+        $this->renderer->registerTheme('test', __DIR__ . "/templates");
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-exception',
+        ];
+        $this->renderer->setData($data);
+        $this->assertEquals('Error rendering page: k+M8itwwby/pfbbKmz2', (string) $this->renderer);
+    }
 }
