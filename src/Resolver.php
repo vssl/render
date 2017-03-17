@@ -63,6 +63,26 @@ class Resolver
     }
 
     /**
+     * Get the configuration settings.
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * Get the configured CacheAdapterInterface.
+     *
+     * @return \Journey\Cache\CacheAdapterInterface
+     */
+    public function getCache()
+    {
+        return $this->config['cache'];
+    }
+
+    /**
      * Resolve the current page from WebStories. Returns a render able page or
      * false.
      *

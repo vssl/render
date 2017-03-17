@@ -74,18 +74,6 @@ class PageApiTest extends TestCase
     }
 
     /**
-     * Test the clearEndpoint method.
-     *
-     * @return void
-     */
-    public function testClearEndpoint()
-    {
-        $response = $this->api->call('GET', 'http://127.0.0.1:1349/cache-test');
-        $this->api->clearEndpoint('GET', 'http://127.0.0.1:1349/cache-test');
-        $this->assertFalse($this->cache->get(md5('GET::http://127.0.0.1:1349/cache-test')));
-    }
-
-    /**
      * Test the getPagesById() method.
      *
      * @return void

@@ -5,6 +5,7 @@ namespace Tests;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use Journey\Cache\Adapters\LocalAdapter;
+use Journey\Cache\CacheAdapterInterface;
 use PHPUnit\Framework\TestCase;
 use Vssl\Render\Renderer;
 use Vssl\Render\Resolver;
@@ -90,5 +91,25 @@ class ResolverTest extends TestCase
     public function testNonJsonDecode()
     {
         $this->assertFalse($this->resolver->decodePage(new Response()));
+    }
+
+    /**
+     * Test that getConfig does return the configuration file.
+     *
+     * @return void
+     */
+    public function testGetConfig()
+    {
+        $this->assertEquals('http://127.0.0.1:1349', $this->resolver->getConfig()['base_uri']);
+    }
+
+    /**
+     * Test that getConfig does return the configuration file.
+     *
+     * @return void
+     */
+    public function testGetCache()
+    {
+        $this->assertInstanceOf(CacheAdapterInterface::class, $this->resolver->getCache());
     }
 }

@@ -72,20 +72,6 @@ class PageApi
     }
 
     /**
-     * Clear the cache of a given endpoint immediately.
-     *
-     * @param  string $method get/post/put
-     * @param  string $url    endpoint to hit
-     * @return $this
-     */
-    public function clearEndpoint($method, $url)
-    {
-        $cacheKey = strtoupper($method) . "::" . $url;
-        $this->cache->delete($cacheKey);
-        return $this;
-    }
-
-    /**
      * Call a particular api endpoint.
      * @param string $method
      * @param string $url
