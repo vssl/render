@@ -51,7 +51,7 @@ class Renderer
     /**
      * Name of the current theme.
      *
-     * @var array
+     * @var string
      */
     protected $theme;
 
