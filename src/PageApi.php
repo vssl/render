@@ -87,7 +87,8 @@ class PageApi
 
     /**
      * Call a particular api endpoint.
-     *
+     * @param string $method
+     * @param string $url
      * @return \Psr\Http\Message\ResponseInterface|false
      */
     public function call($method, $url)
@@ -104,9 +105,9 @@ class PageApi
         }
         if (!isset($response) && $value) {
             $response = \GuzzleHttp\Psr7\parse_response($value);
-        } elseif ($this->ttl) {
+        } elseif ($this->ttl && !empty($response)) {
             $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), time() + $this->ttl);
         }
-        return isset($response) ? $response : false;
+        return !empty($response) ? $response : false;
     }
 }

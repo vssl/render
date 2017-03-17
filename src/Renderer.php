@@ -85,7 +85,8 @@ class Renderer
     /**
      * Add a single directory to the template engine.
      *
-     * @param  string $directories directory of templates
+     * @param  string $theme
+     * @param  string $directory directory of templates
      * @return $this
      */
     public function registerTheme($theme, $directory)
@@ -101,7 +102,7 @@ class Renderer
     /**
      * Returns the template rendering engine.
      *
-     * @return League\Plates\Engine
+     * @return \League\Plates\Engine
      */
     public function getEngine()
     {
@@ -160,7 +161,7 @@ class Renderer
     /**
      * Returns the image url on the vssl server.
      *
-     * @param  string $imageName hash.extension
+     * @param  string $name      hash.extension
      * @param  string $style     image style name
      * @return string
      */

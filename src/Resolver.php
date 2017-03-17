@@ -2,8 +2,6 @@
 
 namespace Vssl\Render;
 
-use GuzzleHttp\Client;
-use Journey\Cache\Adapters\LocalAdapter;
 use Journey\Cache\CacheAdapterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
