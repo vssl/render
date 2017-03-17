@@ -80,7 +80,7 @@ class PageApi
      */
     public function clearEndpoint($method, $url)
     {
-        $cacheKey = md5(strtoupper($method) . "::" . $url);
+        $cacheKey = strtoupper($method) . "::" . $url;
         $this->cache->delete($cacheKey);
         return $this;
     }
@@ -93,7 +93,7 @@ class PageApi
      */
     public function call($method, $url)
     {
-        $cacheKey = md5(strtoupper($method) . "::" . $url);
+        $cacheKey = strtoupper($method) . "::" . $url;
         try {
             if (!$value = $this->cache->get($cacheKey)) {
                 $response = $this->http->request(strtoupper($method), $url);
@@ -103,7 +103,7 @@ class PageApi
         } catch (ConnectException $e) {
             // Suppress network errors at this level.
         }
-        if (!isset($response) && $value) {
+        if (!isset($response) && !empty($value)) {
             $response = \GuzzleHttp\Psr7\parse_response($value);
         } elseif ($this->ttl && !empty($response)) {
             $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), time() + $this->ttl);
