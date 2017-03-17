@@ -105,8 +105,8 @@ class PageApi
         }
         if (!isset($response) && !empty($value)) {
             $response = \GuzzleHttp\Psr7\parse_response($value);
-        } elseif ($this->ttl && !empty($response)) {
-            $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), time() + $this->ttl);
+        } elseif ($this->ttl !== false && !empty($response)) {
+            $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), $this->ttl ? time() + $this->ttl : 0);
         }
         return !empty($response) ? $response : false;
     }
