@@ -63,6 +63,17 @@ class PageApi
      * @param  array $ids unique ids of pages to fetch data for.
      * @return array|false
      */
+    public function getPageById($id)
+    {
+        return $this->call("get", "/api/pages?ids=" . $id);
+    }
+
+    /**
+     * Get a set of pages from the api.
+     *
+     * @param  array $ids unique ids of pages to fetch data for.
+     * @return array|false
+     */
     public function getPagesById($ids)
     {
         $ids = array_filter(array_map(function ($id) {
