@@ -60,7 +60,7 @@ class PageApi
     /**
      * Get a particular page from the api.
      *
-     * @param  array $ids unique ids of pages to fetch data for.
+     * @param  integer $id  unique id of page to fetch data for.
      * @return array|false
      */
     public function getPageById($id)
