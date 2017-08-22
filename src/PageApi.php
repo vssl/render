@@ -60,6 +60,17 @@ class PageApi
     /**
      * Get a particular page from the api.
      *
+     * @param  integer $id  unique id of page to fetch data for.
+     * @return array|false
+     */
+    public function getPageById($id)
+    {
+        return $this->call("get", "/api/pages?ids=" . $id);
+    }
+
+    /**
+     * Get a set of pages from the api.
+     *
      * @param  array $ids unique ids of pages to fetch data for.
      * @return array|false
      */
