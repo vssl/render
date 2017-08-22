@@ -2,13 +2,13 @@ Vssl Render
 -------------
 [![Build Status](https://travis-ci.org/journeygroup/vssl-render.svg?branch=master)](https://travis-ci.org/journeygroup/vssl-render)
 [![Code Coverage](https://scrutinizer-ci.com/g/journeygroup/vssl-render/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/journeygroup/vssl-render/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vssl/render/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/vssl/render/?branch=master)
 
 ## What
 
-This package contains a PHP rendering agent for VSSL Pages. It is includes a
+This package contains a PHP rendering agent for VSSL Pages. It includes a
 PSR-15 middleware implementation to easily attach to any conforming framework
-and will automatically consume the VSSL Pages API and render production ready
+and will automatically consume the VSSL Pages API and render production-ready
 markup.
 
 ## Configuration
