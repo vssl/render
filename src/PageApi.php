@@ -31,6 +31,13 @@ class PageApi
      */
     protected $ttl;
 
+    /** 
+     * X-Render-Host
+     *
+     * @var string
+     */
+    protected $host;
+
     /**
      * Initialize the page api methods.
      */
@@ -38,6 +45,7 @@ class PageApi
     {
         $this->ttl = $config['cache_ttl'];
         $this->cache = $config['cache'];
+        $this->host = $request->getUri()->getHost();
         $this->http = new Client([
             'base_uri' => $config['base_uri'],
             'headers' => [
@@ -90,7 +98,7 @@ class PageApi
      */
     public function call($method, $url)
     {
-        $cacheKey = strtoupper($method) . "::" . $url;
+        $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
         try {
             if (!$value = $this->cache->get($cacheKey)) {
                 $response = $this->http->request(strtoupper($method), $url);
