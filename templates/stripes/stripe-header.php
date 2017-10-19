@@ -1,5 +1,8 @@
-<header<?= (!empty($image) ? ' data-has-image="true"' : '') ?> class="<?= $this->e($type, 'wrapperClasses') ?>"
-    style="<?= (!empty($image)) ? 'background-image: url(' . $this->image($image) . ');' : ''?> background-size: cover; background-position: center;">
+<header<?= (!empty($image) ? ' data-has-image="true"' : '') ?> class="<?= $this->e($type, 'wrapperClasses') ?>">
+    <?php if (!empty($image)): ?>
+    <div class="vssl-stripe--header--background" style="background-image: url('<?= $this->image($image) ?>');"></div>
+    <?php endif; ?>
+
     <div class="vssl-stripe-column">
         <?php if (!empty($hed['html'])) : ?>
         <h1 class="vssl-stripe--header--hed"><?= $this->inline($hed['html']) ?></h1>
