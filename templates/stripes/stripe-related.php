@@ -1,6 +1,6 @@
 <?php
 $links = array_values(array_filter($links, function ($link) {
-        return !empty($link['page_id']);
+    return !empty($link['page_id']);
 }));
 ?>
 <?php if (count($links)) : ?>

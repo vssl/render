@@ -4,7 +4,7 @@
     <div class="vssl-stripe--text-image--text"><?= $text['html'] ?></div>
     <div class="vssl-stripe--text-image--image">
         <img src="<?= $this->image($image) ?>" alt="<?= $image ?>">
-      </div>
+    </div>
   </div>
 </div>
 <?php endif; ?>
