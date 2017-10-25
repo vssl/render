@@ -19,9 +19,9 @@ if (!empty($location)):
   var weight = <?= $weight ?>;
   var styles = <?= (!empty($options) && !empty($options['styles'])) ? json_encode($options['styles']) : '[]' ?>;
   var maptype = '<?= !empty($maptype) ? $maptype : "" ?>';
-  var address = '<?= !empty($location) ? $location : "" ?>';
+  var address = '<?= !empty($location) ? addslashes($location) : "" ?>';
   var zoom = <?= !empty($zoom) ? $zoom : 15 ?>;
-  zoom = ((zoom === 16) && ('<?= !empty($location) ?>')) ? 8 : zoom;
+  zoom = ('<?= empty($zoom) && empty($location) ?>') ? 8 : zoom;
 
   // Create the map
   var map = new google.maps.Map(document.getElementById('map-' + weight), {
