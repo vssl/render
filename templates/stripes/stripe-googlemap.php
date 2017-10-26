@@ -1,26 +1,11 @@
-<?php
-$styles = (!empty($options['styles']) ? $options['styles'] : []);
-$address = (!empty($formatted_address) ? $formatted_address : (!empty($location) ? $location : ''));
-
-if (!empty($address)) {
-  $navigationUrl = 'https://www.google.com/maps?mapclient=embed&daddr='
-    . rawurlencode($address) . (!empty($maptype) ? '&maptype=' . $maptype : '');
-
-  $largerUrl = 'https://maps.google.com/maps/place/' . rawurlencode($address);
-}
-
-if (empty($zoom)) {
-  $zoom = (empty($address) ? 8 : 15);
-}
-
-if ($address):
-?>
-
+<?php if ($address): ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
   <div class="vssl-stripe-column">
     <div class="vssl-stripe--googlemap--embed"
-      data-styles="<?= htmlspecialchars(json_encode($styles), ENT_QUOTES, 'UTF-8') ?>"
-      data-coordinates="<?= htmlspecialchars(json_encode($coordinates), ENT_QUOTES, 'UTF-8') ?>"
+      data-styles="<?= $this->inlineJson($styles) ?>"
+      <?php if (isset($coordinates)): ?>
+      data-coordinates="<?= $this->inlineJson($coordinates) ?>"
+      <?php endif; ?>
       data-maptype="<?= $maptype ?>"
       data-zoom="<?= $zoom ?>"
     >
