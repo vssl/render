@@ -2,11 +2,15 @@
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
   <div class="vssl-stripe-column">
     <div class="vssl-stripe--googlemap--embed"
-      data-styles="<?= $this->inlineJson($styles) ?>"
+      <?php if (isset($options['styles'])): ?>
+      data-styles="<?= $this->inlineJson($options['styles']) ?>"
+      <?php endif; ?>
       <?php if (isset($coordinates)): ?>
       data-coordinates="<?= $this->inlineJson($coordinates) ?>"
+      <?php else: ?>
+      data-location="<?= $address ?>"
       <?php endif; ?>
-      data-maptype="<?= $maptype ?>"
+      data-maptype="<?= isset($maptype) ? $maptype : 'roadmap' ?>"
       data-zoom="<?= $zoom ?>"
     >
       <div id="map-<?= $weight ?>" class="vssl-stripe--googlemap--map">

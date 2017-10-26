@@ -236,9 +236,6 @@ class Renderer
      */
     public function processStripeGooglemap($stripe)
     {
-        $stripe['styles'] = !empty($stripe['options']['styles'])
-            ? $stripe['options']['styles']
-            : [];
         $stripe['address'] = !empty($stripe['formatted_address'])
             ? $stripe['formatted_address']
             : (!empty($stripe['location'])
@@ -246,11 +243,7 @@ class Renderer
                 : '');
 
         if (!empty($stripe['address'])) {
-          $stripe['navigationUrl'] = 'https://www.google.com/maps?mapclient=embed&daddr='
-            . rawurlencode($stripe['address'])
-            . (!empty($stripe['maptype'])
-                ? '&maptype=' . $stripe['maptype']
-                : '');
+          $stripe['navigationUrl'] = 'https://www.google.com/maps?mapclient=embed&daddr=' . rawurlencode($stripe['address']);
           $stripe['largerUrl'] = 'https://maps.google.com/maps/place/' . rawurlencode($stripe['address']);
         }
         if (empty($stripe['zoom'])) {
