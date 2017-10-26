@@ -241,7 +241,9 @@ class Renderer
             : [];
         $stripe['address'] = !empty($stripe['formatted_address'])
             ? $stripe['formatted_address']
-            : $stripe['location'];
+            : (!empty($stripe['location'])
+                ? $stripe['location']
+                : '');
 
         if (!empty($stripe['address'])) {
           $stripe['navigationUrl'] = 'https://www.google.com/maps?mapclient=embed&daddr='
