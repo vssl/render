@@ -1,6 +1,6 @@
 <?php
 $styles = (!empty($options['styles']) ? $options['styles'] : []);
-$address = (!empty($formatted_address) ? $formatted_address : $location);
+$address = (!empty($formatted_address) ? $formatted_address : (!empty($location) ? $location : ''));
 
 if (!empty($address)) {
   $navigationUrl = 'https://www.google.com/maps?mapclient=embed&daddr='
