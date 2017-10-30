@@ -236,19 +236,23 @@ class Renderer
      */
     public function processStripeGooglemap($stripe)
     {
-        $stripe['address'] = !empty($stripe['formatted_address'])
+        $stripe['location'] = (!empty($stripe['location'])
+            ? $stripe['location']
+            : '');
+
+        $stripe['address'] = (!empty($stripe['formatted_address'])
             ? $stripe['formatted_address']
-            : (!empty($stripe['location'])
-                ? $stripe['location']
-                : '');
+            : $stripe['location']);
 
         if (!empty($stripe['address'])) {
           $stripe['navigationUrl'] = 'https://www.google.com/maps?mapclient=embed&daddr=' . rawurlencode($stripe['address']);
           $stripe['largerUrl'] = 'https://maps.google.com/maps/place/' . rawurlencode($stripe['address']);
         }
+
         if (empty($stripe['zoom'])) {
           $stripe['zoom'] = (empty($stripe['address']) ? 8 : 15);
         }
+
         return $stripe;
     }
 

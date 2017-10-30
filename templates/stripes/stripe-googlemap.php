@@ -7,7 +7,8 @@
       <?php endif; ?>
       <?php if (isset($coordinates)): ?>
       data-coordinates="<?= $this->inlineJson($coordinates) ?>"
-      <?php else: ?>
+      <?php endif; ?>
+      <?php if (isset($address)): ?>
       data-location="<?= $address ?>"
       <?php endif; ?>
       data-maptype="<?= isset($maptype) ? $maptype : 'roadmap' ?>"
