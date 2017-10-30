@@ -81,6 +81,7 @@ class Renderer
         $this->engine->registerFunction('image', [$this, 'image']);
         $this->engine->registerFunction('file', [$this, 'file']);
         $this->engine->registerFunction('inline', [$this, 'inline']);
+        $this->engine->registerFunction('inlineJson', [$this, 'inlineJson']);
     }
 
     /**
@@ -195,6 +196,17 @@ class Renderer
     }
 
     /**
+     * Converts an array into inline JSON. e.g. use in data-attrs
+     *
+     * @param  array $values
+     * @return string
+     */
+    public function inlineJson($values)
+    {
+        return htmlspecialchars(json_encode($values), ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
      * Process data before its output. This is the last chance to make changes
      * to data before being passed to the actual template files.
      *
@@ -204,11 +216,44 @@ class Renderer
     {
         $data['themePrefix'] = $this->theme ? $this->theme . "::" : "";
         if (isset($data['stripes'])) {
-            $data['stripes'] = array_filter($data['stripes'], function ($stripe) use ($data) {
+            $data['stripes'] = array_map(function ($stripe) {
+                $hook = 'processStripe' . ucwords(preg_replace("/^stripe\-/", '', $stripe['type']));
+                return is_callable([$this, $hook])
+                    ? $this->$hook($stripe)
+                    : $stripe;
+            }, array_filter($data['stripes'], function ($stripe) use ($data) {
                 return $this->engine->exists($data['themePrefix'] . 'stripes/' . $stripe['type']);
-            });
+            }));
         }
         return $data;
+    }
+
+    /**
+     * Process stripe-googlemaps data. (implements preprocessStripeHook)
+     *
+     * @param  array $stripe array of data
+     * @return array
+     */
+    public function processStripeGooglemap($stripe)
+    {
+        $stripe['location'] = (!empty($stripe['location'])
+            ? $stripe['location']
+            : '');
+
+        $stripe['address'] = (!empty($stripe['formatted_address'])
+            ? $stripe['formatted_address']
+            : $stripe['location']);
+
+        if (!empty($stripe['address'])) {
+          $stripe['navigationUrl'] = 'https://www.google.com/maps?mapclient=embed&daddr=' . rawurlencode($stripe['address']);
+          $stripe['largerUrl'] = 'https://maps.google.com/maps/place/' . rawurlencode($stripe['address']);
+        }
+
+        if (empty($stripe['zoom'])) {
+          $stripe['zoom'] = (empty($stripe['address']) ? 8 : 15);
+        }
+
+        return $stripe;
     }
 
     /**
