@@ -1,4 +1,4 @@
-<?php if (!empty($first['html']) || !empty($second['html'])) : ?>
+<?php if (!empty($first['html']) || !empty($second['html']) || (!empty($btn) && !empty($btntxt) && !empty($btnurl))): ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--cta--text">
