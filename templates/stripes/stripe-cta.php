@@ -1,3 +1,4 @@
+<?php if (!empty($first['html']) || !empty($second['html'])) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--cta--text">
@@ -17,3 +18,4 @@
         <?php endif; ?>
     </div>
 </div>
+<?php endif; ?>
