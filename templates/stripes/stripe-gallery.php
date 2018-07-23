@@ -11,7 +11,9 @@ $slides = array_values(array_filter($slides, function ($slide) {
                 <?php foreach ($slides as $idx => $slide) : ?>
                 <div class="vssl-stripe--gallery--slide">
                     <div class="vssl-stripe--gallery--image">
-                        <img src="<?= $this->image($slide['image']) ?>" alt="<?= $slide['image'] ?>">
+                        <img src="<?= $this->image($slide['image']) ?>" alt="<?= !empty($slide['alt']['html'])
+                            ? htmlspecialchars(strip_tags($slide['alt']['html']), ENT_QUOTES, 'UTF-8')
+                            : '' ?>">
                     </div>
                     <?php if (!empty($slide['caption']['html']) || !empty($slide['credit']['html']) || count($slides) > 1) : ?>
                     <div class="vssl-stripe--gallery--meta">
