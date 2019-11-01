@@ -137,7 +137,7 @@ class Resolver
             $config = array_merge([
                 'cache' => null,
                 'cache_ttl' => false,
-                'base_uri' => 'https://pages.vssl.io/',
+                'base_uri' => 'https://api.vssl.io/',
                 'required_fields' => [
                     'id',
                     'title',
