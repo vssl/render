@@ -5,6 +5,9 @@
       <?php if (isset($options['styles'])): ?>
       data-styles="<?= $this->inlineJson($options['styles']) ?>"
       <?php endif; ?>
+      <?php if (isset($options['marker'])): ?>
+      data-marker="<?= $options['marker'] ?>"
+      <?php endif; ?>
       <?php if (isset($coordinates)): ?>
       data-coordinates="<?= $this->inlineJson($coordinates) ?>"
       <?php endif; ?>
