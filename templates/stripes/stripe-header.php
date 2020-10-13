@@ -4,6 +4,10 @@
     <?php endif; ?>
 
     <div class="vssl-stripe-column">
+        <?php if (!empty($label['html'])) : ?>
+        <div class="vssl-stripe--header--label"><?= $this->inline($label['html']) ?></div>
+        <?php endif; ?>
+
         <?php if (!empty($hed['html'])) : ?>
         <h1 class="vssl-stripe--header--hed"><?= $this->inline($hed['html']) ?></h1>
         <?php endif; ?>
