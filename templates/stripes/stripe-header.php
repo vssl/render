@@ -5,7 +5,10 @@
 
     <div class="vssl-stripe-column">
         <?php if (!empty($label['html'])) : ?>
-        <div class="vssl-stripe--header--label"><?= $this->inline($label['html']) ?></div>
+        <div
+            class="vssl-stripe--header--label"
+            data-label="<?= strip_tags($label['html']) ?>"
+        ><?= $this->inline($label['html']) ?></div>
         <?php endif; ?>
 
         <?php if (!empty($hed['html'])) : ?>
