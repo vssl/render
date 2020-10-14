@@ -1,7 +1,7 @@
 <?php if (!empty($url['html'])) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
-        <a href="<?= $this->inline($url['html']) ?>" class="vssl-stripe--link">
+        <a href="<?= $this->inline($url['html']) ?>" class="vssl-stripe--link--card">
             <?php if (!empty($image)) : ?>
             <div class="vssl-stripe--link--thumbnail">
                 <img
