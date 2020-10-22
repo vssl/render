@@ -1,15 +1,22 @@
-<?php if (!empty($url['html'])) : ?>
+<?php if (!empty($url['html']) || (!empty($url) && is_string($url))) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
-        <a href="<?= $this->inline($url['html']) ?>" class="vssl-stripe--link--card">
+        <a
+            href="<?=
+                !empty($url['html'])
+                    ? $this->inline($url['html'])
+                    : (!empty($url) && is_string($url) ? $url : '')
+            ?>"
+            class="vssl-stripe--link--card"
+        >
             <?php if (!empty($image)) : ?>
             <div class="vssl-stripe--link--thumbnail">
                 <img
                     src="<?= $this->image($image) ?>"
                     alt="<?=
-                    !empty($alt['html'])
-                        ? htmlspecialchars(strip_tags($alt['html']), ENT_QUOTES, 'UTF-8')
-                        : ''
+                        !empty($alt['html'])
+                            ? htmlspecialchars(strip_tags($alt['html']), ENT_QUOTES, 'UTF-8')
+                            : (!empty($alt) && is_string($alt) ? $alt : '')
                     ?>"
                 >
             </div>
@@ -31,7 +38,10 @@
                 </div>
 
                 <p class="vssl-stripe--link--url">
-                    <?= parse_url(strip_tags($url['html']), PHP_URL_HOST) ?>
+                    <?= parse_url(
+                        !empty($url) && is_string($url) ? $url : strip_tags($url['html']),
+                        PHP_URL_HOST
+                    ) ?>
                 </p>
             </div>
         </a>
