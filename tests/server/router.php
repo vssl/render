@@ -1,6 +1,6 @@
 <?php
 switch (strtok($_SERVER["REQUEST_URI"], '?')) {
-    case "/api/pages":
+    case "/api/v1/pages":
         header("Content-Type: application/json");
         if (isset($_GET['slug'])) {
             readfile(__DIR__ . "/assets/single.json");

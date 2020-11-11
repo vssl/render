@@ -65,7 +65,7 @@ class MiddlewareTest extends TestCase
     public function testMiddlewareResponse()
     {
         $middleware = new Middleware();
-        $result = $middleware->process(new ServerRequest("GET", "http://127.0.0.1/api/pages"), $this->delegate);
+        $result = $middleware->process(new ServerRequest("GET", "http://127.0.0.1/api/v1/pages"), $this->delegate);
         $this->assertInstanceOf(ResponseInterface::class, $result);
     }
 }

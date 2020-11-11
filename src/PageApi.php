@@ -62,7 +62,7 @@ class PageApi
      */
     public function getPage($path)
     {
-        return $this->call("get", "/api/pages?slug=" . $path);
+        return $this->call("get", "/api/v1/pages?slug=" . $path);
     }
 
     /**
@@ -73,7 +73,7 @@ class PageApi
      */
     public function getPageById($id)
     {
-        return $this->call("get", "/api/pages?ids=" . $id);
+        return $this->call("get", "/api/v1/pages?ids=" . $id);
     }
 
     /**
@@ -87,7 +87,7 @@ class PageApi
         $ids = array_filter(array_map(function ($id) {
             return is_numeric($id) ? (integer) $id : null;
         }, $ids));
-        return $this->call("get", "/api/pages?ids=" . implode(",", $ids));
+        return $this->call("get", "/api/v1/pages?ids=" . implode(",", $ids));
     }
 
     /**
