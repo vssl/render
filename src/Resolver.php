@@ -36,7 +36,7 @@ class Resolver
     {
         $this->request = $request;
         $this->config = is_array($config) ? static::config($config) : static::config();
-        if (!$this->config['cache'] instanceof CacheAdapterInterface) {
+        if (!empty($this->config['cache']) && !$this->config['cache'] instanceof CacheAdapterInterface) {
             throw new ResolverException('Cache must implement \Journey\Cache\CacheAdapterInterface.');
         }
         $this->api = new PageApi($request, $this->config);

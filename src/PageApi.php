@@ -50,10 +50,12 @@ class PageApi
      */
     public function __construct(RequestInterface $request, array $config)
     {
-        $this->ttl = $config['cache_ttl'];
-        $this->cache = $config['cache'];
+        $this->cache = $config['cache'] ?? null;
+        $this->ttl = $config['cache_ttl'] ?? 0;
+
         $this->host = $request->getUri()->getHost();
         $this->apiPath = '/' . (ltrim($config['base_path'], '/') ?? 'api');
+
         $this->http = new Client([
             'base_uri' => rtrim($config['base_uri'], '/'),
             'headers' => [
@@ -109,8 +111,9 @@ class PageApi
     {
         $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
         $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
+
         try {
-            if (!$value = $this->cache->get($cacheKey)) {
+            if (empty($this->cache) || !$value = $this->cache->get($cacheKey)) {
                 $response = $this->http->request(strtoupper($method), $url);
             }
         } catch (ClientException $e) {
@@ -118,11 +121,13 @@ class PageApi
         } catch (ConnectException $e) {
             // Suppress network errors at this level.
         }
+
         if (!isset($response) && !empty($value)) {
             $response = \GuzzleHttp\Psr7\parse_response($value);
-        } elseif ($this->ttl !== false && !empty($response)) {
-            $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), $this->ttl ? time() + $this->ttl : 0);
+        } elseif (!empty($this->cache) && !empty($response)) {
+            $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), !empty($this->ttl) ? time() + $this->ttl : 0);
         }
+
         return !empty($response) ? $response : false;
     }
 }

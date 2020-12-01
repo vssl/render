@@ -34,7 +34,8 @@ The only required configuration option is an implementation of
 
 Option            | Description
 ------------------|---------------------------------------
-`cache`           | Instance of `Journey\Cache\CacheAdapterInterface`
+`cache`           | Instance of `Journey\Cache\CacheAdapterInterface` (or `null` to disable)
+`cache_ttl`       | Integer, number of seconds to store in cache
 `base_uri`        | URI for Vessel API interaction
 `base_path`       | Path to add to `base_uri` for versioned Vessel API interaction
 `required_fields` | Keys required for API data to be considered valid
