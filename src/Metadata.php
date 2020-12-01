@@ -73,7 +73,7 @@ class Metadata
     {
         $image = empty($this->page['image'])
             ? null
-            : ltrim($this->config['base_uri'], '/') . "/images/" . $this->page['image'];
+            : rtrim($this->config['base_uri'], '/') . "/images/" . $this->page['image'];
         return $image
             ? '<meta property="og:image" content="' . $image . '" />'
             : null;

@@ -47,7 +47,7 @@ class PageApi
         $this->cache = $config['cache'];
         $this->host = $request->getUri()->getHost();
         $this->http = new Client([
-            'base_uri' => $config['base_uri'],
+            'base_uri' => rtrim($config['base_uri'], "/") . "/" . trim($config['base_api_path'], "/"),
             'headers' => [
                 'X-Render-Host' => $request->getUri()->getHost(),
             ]
@@ -62,7 +62,7 @@ class PageApi
      */
     public function getPage($path)
     {
-        return $this->call("get", "/api/v1/pages?slug=" . $path);
+        return $this->call("get", "/pages?slug=" . $path);
     }
 
     /**
@@ -73,7 +73,7 @@ class PageApi
      */
     public function getPageById($id)
     {
-        return $this->call("get", "/api/v1/pages?ids=" . $id);
+        return $this->call("get", "/pages?ids=" . $id);
     }
 
     /**
@@ -87,7 +87,7 @@ class PageApi
         $ids = array_filter(array_map(function ($id) {
             return is_numeric($id) ? (integer) $id : null;
         }, $ids));
-        return $this->call("get", "/api/v1/pages?ids=" . implode(",", $ids));
+        return $this->call("get", "/pages?ids=" . implode(",", $ids));
     }
 
     /**

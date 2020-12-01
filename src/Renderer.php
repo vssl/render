@@ -169,7 +169,7 @@ class Renderer
      */
     public function image($name, $style = false)
     {
-        return ltrim($this->config['base_uri'], '/') . "/images" . ($style ? '/' . $style : '') . "/" . $name;
+        return rtrim($this->config['base_uri'], '/') . "/images" . ($style ? '/' . $style : '') . "/" . $name;
     }
 
     /**
