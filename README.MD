@@ -1,4 +1,4 @@
-Vssl Render
+Vessel Render
 -------------
 [![Build Status](https://travis-ci.org/journeygroup/vssl-render.svg?branch=master)](https://travis-ci.org/journeygroup/vssl-render)
 [![Code Coverage](https://scrutinizer-ci.com/g/journeygroup/vssl-render/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/journeygroup/vssl-render/?branch=master)
@@ -6,9 +6,9 @@ Vssl Render
 
 ## What
 
-This package contains a PHP rendering agent for VSSL Pages. It includes a
+This package contains a PHP rendering agent for Vessel Pages. It includes a
 PSR-15 middleware implementation to easily attach to any conforming framework
-and will automatically consume the VSSL Pages API and render production-ready
+and will automatically consume the Vessel Pages API and render production-ready
 markup.
 
 ## Configuration
@@ -32,12 +32,13 @@ $resolver = new Resolver($request, $config);
 The only required configuration option is an implementation of 
 `Journey\Cache\CacheAdapterInterface`.
 
-Option          | Description
-----------------|---------------------------------------
-cache           | Instance of `Journey\Cache\CacheAdapterInterface`
-base_uri        | URI for Vssl API interaction
-required_fields | Only considers API data valid if it contains these keys.
-templates       | Additional directory to find custom render templates.
+Option            | Description
+------------------|---------------------------------------
+`cache`           | Instance of `Journey\Cache\CacheAdapterInterface`
+`base_uri`        | URI for Vessel API interaction
+`base_path`       | Path to add to `base_uri` for versioned Vessel API interaction
+`required_fields` | Keys required for API data to be considered valid
+`templates`       | Additional directory to find custom render templates
 
 ## How
 
