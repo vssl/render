@@ -18,6 +18,13 @@ class PageApi
     protected $http;
 
     /**
+     * Path to the API.
+     *
+     * @var string
+     */
+    protected $apiPath;
+
+    /**
      * A cache adapter for storing results.
      *
      * @var \Journey\Cache\CacheAdapterInterface
@@ -31,7 +38,7 @@ class PageApi
      */
     protected $ttl;
 
-    /** 
+    /**
      * X-Render-Host
      *
      * @var string
@@ -46,8 +53,9 @@ class PageApi
         $this->ttl = $config['cache_ttl'];
         $this->cache = $config['cache'];
         $this->host = $request->getUri()->getHost();
+        $this->apiPath = '/' . (ltrim($config['base_path'], '/') ?? 'api');
         $this->http = new Client([
-            'base_uri' => rtrim($config['base_uri'], "/") . "/" . trim($config['base_api_path'], "/"),
+            'base_uri' => rtrim($config['base_uri'], '/'),
             'headers' => [
                 'X-Render-Host' => $request->getUri()->getHost(),
             ]
@@ -55,7 +63,7 @@ class PageApi
     }
 
     /**
-     * Get a particular page from the api.
+     * Get a particular page from the API.
      *
      * @param  string $path path of the page
      * @return array|false
@@ -66,7 +74,7 @@ class PageApi
     }
 
     /**
-     * Get a particular page from the api.
+     * Get a particular page from the API.
      *
      * @param  integer $id  unique id of page to fetch data for.
      * @return array|false
@@ -77,7 +85,7 @@ class PageApi
     }
 
     /**
-     * Get a set of pages from the api.
+     * Get a set of pages from the API.
      *
      * @param  array $ids unique ids of pages to fetch data for.
      * @return array|false
@@ -91,13 +99,15 @@ class PageApi
     }
 
     /**
-     * Call a particular api endpoint.
+     * Call a particular API endpoint.
      * @param string $method
      * @param string $url
+     * @param boolean $withPath
      * @return \Psr\Http\Message\ResponseInterface|false
      */
-    public function call($method, $url)
+    public function call($method, $url, $withPath = true)
     {
+        $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
         $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
         try {
             if (!$value = $this->cache->get($cacheKey)) {

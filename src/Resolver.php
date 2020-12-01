@@ -138,7 +138,7 @@ class Resolver
                 'cache' => null,
                 'cache_ttl' => false,
                 'base_uri' => 'https://api.vssl.io',
-                'base_api_path' => '/api/v2',
+                'base_path' => '/api/v2',
                 'required_fields' => [
                     'id',
                     'title',
