@@ -2,23 +2,24 @@
 
 namespace Vssl\Render;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class Middleware implements MiddlewareInterface
 {
     /**
      * Use this PSR-15 middleware to pre-render a particular page.
      *
-     * @param  \Interop\Http\ServerMiddleware\MiddlewareInterface $request HTTP Request
-     * @param  \Interop\Http\ServerMiddleware\DelegateInterface   $next    Next delegate
+     * @param  Psr\Http\Message\ServerRequestInterface $request PSR-7 request
+     * @param  Psr\Http\Server\RequestHandlerInterface $handler PSR-15 request handler
      * @return void
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $next)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $resolver = new Resolver($request);
         $request = $resolver->getRequest();
-        return $next->process($request->withAttribute('vssl-resolver', $resolver));
+        return $handler->handle($request->withAttribute('vssl-resolver', $resolver));
     }
 }

@@ -34,7 +34,7 @@ class MetadataTest extends TestCase
         $this->metadata = new Metadata(
             Resolver::config([
                 'cache' => $cache,
-                'base_uri' => 'http://127.0.0.1:1349',
+                'base_uri' => 'https://api.vssl.io',
             ]),
             $this->data['page']
         );
@@ -71,7 +71,7 @@ class MetadataTest extends TestCase
     public function testImage()
     {
         $this->assertEquals(
-            '<meta property="og:image" content="http://127.0.0.1:1349/images/somrandomhash.jpg" />',
+            '<meta property="og:image" content="https://api.vssl.io/images/somrandomhash.jpg" />',
             $this->metadata->imageTag()
         );
     }

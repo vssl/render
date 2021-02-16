@@ -3,10 +3,14 @@
 namespace Tests\Mocks;
 
 use GuzzleHttp\Psr7\Response;
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Vssl\Render\Middleware;
+use Vssl\Render\Resolver;
 
-class MockDelegate implements DelegateInterface
+class MockRequestHandler implements RequestHandlerInterface
 {
     /**
      * The response handled by the process method.
@@ -14,14 +18,14 @@ class MockDelegate implements DelegateInterface
      * @var void
      */
     protected $request;
-    
+
     /**
-     * Process the next middleware.
+     * Use this PSR-15 middleware to pre-render a particular page.
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request
+     * @param  Psr\Http\Message\ServerRequestInterface $request PSR-7 request
      * @return void
      */
-    public function process(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->request = $request;
         return new Response();
@@ -37,3 +41,4 @@ class MockDelegate implements DelegateInterface
         return $this->request;
     }
 }
+

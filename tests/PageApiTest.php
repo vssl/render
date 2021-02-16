@@ -50,12 +50,12 @@ class PageApiTest extends TestCase
         $this->cache = (new LocalAdapter('/tmp'))->clear();
         $this->request = new ServerRequest(
             'GET',
-            'http://127.0.0.1:1349/test-page'
+            'https://demo.vssl.io/test-page'
         );
         $this->resolver = new Resolver($this->request, [
             'cache' => $this->cache,
             'cache_ttl' => 300,
-            'base_uri' => 'http://127.0.0.1:1349',
+            'base_uri' => 'https://api.vssl.io',
         ]);
         $this->api = $this->resolver->getPageApi();
     }
@@ -68,8 +68,8 @@ class PageApiTest extends TestCase
     public function testCallCache()
     {
         $this->cache->clear();
-        $responseA = $this->api->call('GET', 'http://127.0.0.1:1349/cache-test');
-        $responseB = $this->api->call('GET', 'http://127.0.0.1:1349/cache-test');
+        $responseA = $this->api->call('GET', 'https://demo.vssl.io/cache-test');
+        $responseB = $this->api->call('GET', 'https://demo.vssl.io/cache-test');
         $this->assertEquals(\GuzzleHttp\Psr7\str($responseA), \GuzzleHttp\Psr7\str($responseB));
     }
 
@@ -91,12 +91,12 @@ class PageApiTest extends TestCase
      */
     public function testGetPagesByIdValues()
     {
-        $originalIds = [1, 2, 300, 2122];
+        $originalIds = [69, 71, 72];
         $response = $this->api->getPagesById($originalIds);
-        $value = json_decode((string) $response->getBody(), true);
+        $pages = json_decode((string) $response->getBody(), true);
         $ids = array_map(function ($page) {
             return $page['id'];
-        }, $value['pages']);
+        }, $pages);
         $this->assertEquals($originalIds, $ids);
     }
 }

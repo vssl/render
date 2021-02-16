@@ -35,11 +35,11 @@ class ResolverTest extends TestCase
         $cache = (new LocalAdapter('/tmp'))->clear();
         $this->request = new ServerRequest(
             'GET',
-            'http://127.0.0.1:1349/test-page'
+            'https://demo.vssl.io/test-page'
         );
         $this->resolver = new Resolver($this->request, [
             'cache' => $cache,
-            'base_uri' => 'http://127.0.0.1:1349',
+            'base_uri' => 'https://api.vssl.io'
         ]);
     }
 
@@ -51,7 +51,7 @@ class ResolverTest extends TestCase
     public function testInvalidCache()
     {
         $this->expectException(ResolverException::class);
-        new Resolver($this->request, []);
+        new Resolver($this->request, ['cache' => 'bad cache']);
     }
 
     /**
@@ -100,7 +100,7 @@ class ResolverTest extends TestCase
      */
     public function testGetConfig()
     {
-        $this->assertEquals('http://127.0.0.1:1349', $this->resolver->getConfig()['base_uri']);
+        $this->assertEquals('https://api.vssl.io', $this->resolver->getConfig()['base_uri']);
     }
 
     /**
