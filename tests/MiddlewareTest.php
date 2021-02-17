@@ -3,34 +3,34 @@
 namespace Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tests\Mocks\MockDelegate;
+use Psr\Http\Server\MiddlewareInterface;
+use Tests\Mocks\MockRequestHandler;
 use Vssl\Render\Middleware;
 use Vssl\Render\Resolver;
 
 class MiddlewareTest extends TestCase
 {
     /**
-     * Mock delegate.
+     * Mock handler.
      *
-     * @var \Tests\Mocks\MockDelegate
+     * @var \Tests\Mocks\MockHandler
      */
-    protected $delegate;
+    protected $handler;
 
     /**
      * Setup our middleware test environment.
      */
     public function setUp()
     {
-        $this->delegate = new MockDelegate();
+        $this->handler = new MockRequestHandler();
         $cache = (new LocalAdapter('/tmp'))->clear();
         Resolver::config([
             'cache' => $cache,
-            'base_uri' => 'http://127.0.0.1:1349',
+            'base_uri' => 'https://api.vssl.io',
         ]);
     }
 
@@ -53,8 +53,8 @@ class MiddlewareTest extends TestCase
     public function testMiddlewareProcessor()
     {
         $middleware = new Middleware();
-        $middleware->process(new ServerRequest("GET", "http://127.0.0.1/404"), $this->delegate);
-        $this->assertInstanceOf(ServerRequestInterface::class, $this->delegate->getRequest());
+        $middleware->process(new ServerRequest("GET", "https://demo.vssl.io/test-page"), $this->handler);
+        $this->assertInstanceOf(ServerRequestInterface::class, $this->handler->getRequest());
     }
 
     /**
@@ -65,7 +65,7 @@ class MiddlewareTest extends TestCase
     public function testMiddlewareResponse()
     {
         $middleware = new Middleware();
-        $result = $middleware->process(new ServerRequest("GET", "http://127.0.0.1/api/v1/pages"), $this->delegate);
+        $result = $middleware->process(new ServerRequest("GET", "https://demo.vssl.io/test-page"), $this->handler);
         $this->assertInstanceOf(ResponseInterface::class, $result);
     }
 }

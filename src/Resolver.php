@@ -83,7 +83,7 @@ class Resolver
     }
 
     /**
-     * Resolve the current page from WebStories. Returns a renderable page or
+     * Resolve the current page from Vessel Pages. Returns a renderable page or
      * false.
      *
      * @return array

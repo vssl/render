@@ -119,7 +119,7 @@ class RendererTest extends TestCase
         $renderer = new Renderer($config, $data);
         $output = (string) $renderer;
         $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
-        $this->assertTrue((boolean) preg_match("/http:\/\/127.0.0.1:1349\/images\/sepia\/123.jpg/", $output));
+        $this->assertTrue((boolean) preg_match("/https:\/\/api.vssl.io\/images\/sepia\/123.jpg/", $output));
     }
 
     /**
