@@ -3,7 +3,10 @@
         <div class="vssl-stripe--contact--card vssl-stripe--card">
             <?php if (!empty($headshot)): ?>
             <div class="vssl-stripe--contact--headshot">
-                <img src="<?= $this->image($headshot, 'headshot') ?>" alt="Contact Headshot" />
+                <img
+                    src="<?= $this->image($headshot, !empty($image_style) ? $image_style : 'headshot') ?>"
+                    alt="Contact Headshot"
+                />
             </div>
             <?php endif; ?>
 

@@ -1,6 +1,9 @@
 <div<?= (!empty($image) ? ' data-has-image="true"' : '') ?> class="<?= $this->e($type, 'wrapperClasses') ?>">
     <?php if (!empty($image)): ?>
-    <div class="vssl-stripe--pullquote--background" style="background-image: url('<?= $this->image($image) ?>');"></div>
+    <div
+        class="vssl-stripe--pullquote--background"
+        style="background-image: url('<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>');"
+    ></div>
     <?php endif; ?>
 
     <div class="vssl-stripe-column">
