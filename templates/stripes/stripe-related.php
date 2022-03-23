@@ -14,7 +14,11 @@ $links = array_values(array_filter($links, function ($link) {
                 <div class="vssl-stripe--related--link">
                     <a href="<?= $link['page']['slug'] ?>" target="_blank">
                         <?php if (!empty($link['page']['image'])) : ?>
-                        <img class="vssl-stripe--related--thumbnail" src="<?= $this->image($link['page']['image']) ?>" alt="<?= $link['page']['image'] ?>">
+                        <img
+                            class="vssl-stripe--related--thumbnail"
+                            src="<?= $this->image($link['page']['image'], !empty($style) ? $style : null) ?>"
+                            alt="<?= $link['page']['image'] ?>"
+                        />
                         <?php endif; ?>
 
                         <div class="vssl-stripe--related--text">

@@ -12,13 +12,13 @@
             <?php if (!empty($image)) : ?>
             <div class="vssl-stripe--link--thumbnail">
                 <img
-                    src="<?= $this->image($image) ?>"
+                    src="<?= $this->image($image, !empty($style) ? $style : null) ?>"
                     alt="<?=
                         !empty($alt['html'])
                             ? htmlspecialchars(strip_tags($alt['html']), ENT_QUOTES, 'UTF-8')
                             : (!empty($alt) && is_string($alt) ? $alt : '')
                     ?>"
-                >
+                />
             </div>
             <?php endif; ?>
 
