@@ -16,7 +16,7 @@ $links = array_values(array_filter($links, function ($link) {
                         <?php if (!empty($link['page']['image'])) : ?>
                         <img
                             class="vssl-stripe--related--thumbnail"
-                            src="<?= $this->image($link['page']['image'], !empty($style) ? $style : null) ?>"
+                            src="<?= $this->image($link['page']['image'], !empty($image_style) ? $image_style : null) ?>"
                             alt="<?= $link['page']['image'] ?>"
                         />
                         <?php endif; ?>

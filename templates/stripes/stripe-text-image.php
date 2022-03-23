@@ -3,7 +3,7 @@
   <div class="vssl-stripe-column<?= ($layout == 'image-left') ? ' image-left' : '' ?>">
     <div class="vssl-stripe--text-image--text"><?= $text['html'] ?></div>
     <div class="vssl-stripe--text-image--image">
-        <img src="<?= $this->image($image, !empty($style) ? $style : null) ?>" alt="<?= $image ?>" />
+        <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>" alt="<?= $image ?>" />
     </div>
   </div>
 </div>

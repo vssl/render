@@ -12,7 +12,7 @@ $slides = array_values(array_filter($slides, function ($slide) {
                 <div class="vssl-stripe--gallery--slide">
                     <div class="vssl-stripe--gallery--image">
                         <img
-                            src="<?= $this->image($slide['image'], !empty($style) ? $style : null) ?>"
+                            src="<?= $this->image($slide['image'], !empty($image_style) ? $image_style : null) ?>"
                             alt="<?= !empty($slide['alt']['html'])
                                 ? htmlspecialchars(strip_tags($slide['alt']['html']), ENT_QUOTES, 'UTF-8')
                                 : ''

@@ -2,7 +2,7 @@
     <?php if (!empty($image)): ?>
     <div 
         class="vssl-stripe--header--background"
-        style="background-image: url('<?= $this->image($image, !empty($style) ? $style : null) ?>');"
+        style="background-image: url('<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>');"
     ></div>
     <?php endif; ?>
 

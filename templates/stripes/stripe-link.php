@@ -12,7 +12,7 @@
             <?php if (!empty($image)) : ?>
             <div class="vssl-stripe--link--thumbnail">
                 <img
-                    src="<?= $this->image($image, !empty($style) ? $style : null) ?>"
+                    src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
                     alt="<?=
                         !empty($alt['html'])
                             ? htmlspecialchars(strip_tags($alt['html']), ENT_QUOTES, 'UTF-8')

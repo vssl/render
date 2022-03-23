@@ -4,7 +4,7 @@
             <?php if (!empty($headshot)): ?>
             <div class="vssl-stripe--contact--headshot">
                 <img
-                    src="<?= $this->image($headshot, !empty($style) ? $style : 'headshot') ?>"
+                    src="<?= $this->image($headshot, !empty($image_style) ? $image_style : 'headshot') ?>"
                     alt="Contact Headshot"
                 />
             </div>
