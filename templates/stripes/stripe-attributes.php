@@ -1,7 +1,7 @@
 <?php
-$isEmpty = array_reduce($values, function ($arePreviousEmpty, $value) {
+$isEmpty = !empty($values) ? array_reduce($values, function ($arePreviousEmpty, $value) {
   return $arePreviousEmpty && empty($value);
-}, true);
+}, true) : true;
 ?>
 
 <?php if (!$isEmpty) : ?>
@@ -13,7 +13,7 @@ $isEmpty = array_reduce($values, function ($arePreviousEmpty, $value) {
             <div class="vssl-stripe--attributes--field vssl-stripe--attributes--field--<?= $key ?>">
               <div class="vssl-stripe--attributes--label"><?= $key ?>:</div>
               <div class="vssl-stripe--attributes--value">
-                <?= $this->inline($value['html'], '<a><b><strong><i><em><address>') ?>
+                <?= $this->inline($value['html'], '<a><b><strong><i><em><p>') ?>
               </div>
             </div>
           <?php endif; ?>
