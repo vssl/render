@@ -1,6 +1,6 @@
 <?php
 $isEmpty = array_reduce($values, function ($arePreviousEmpty, $value) {
-  return $arePreviousEmpty && is_null($value);
+  return $arePreviousEmpty && empty($value);
 }, true);
 ?>
 
