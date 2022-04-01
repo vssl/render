@@ -1,7 +1,7 @@
 <?php
-$isEmpty = !empty($values) ? array_reduce($values, function ($arePreviousEmpty, $value) {
+$isEmpty = !empty($values) || array_reduce($values, function ($arePreviousEmpty, $value) {
   return $arePreviousEmpty && empty($value);
-}, true) : true;
+}, true);
 ?>
 
 <?php if (!$isEmpty) : ?>
