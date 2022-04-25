@@ -18,6 +18,7 @@
                             ? htmlspecialchars(strip_tags($alt['html']), ENT_QUOTES, 'UTF-8')
                             : (!empty($alt) && is_string($alt) ? $alt : '')
                     ?>"
+                    loading="lazy"
                 />
             </div>
             <?php endif; ?>

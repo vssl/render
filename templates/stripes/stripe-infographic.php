@@ -9,7 +9,11 @@
         <?php endif; ?>
 
         <div class="vssl-stripe--infographic--image">
-            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>" alt="<?= $image ?>" />
+            <img
+                src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
+                alt="<?= $image ?>"
+                loading="lazy"
+            />
         </div>
         <?php if (!empty($caption['html']) || !empty($credit['html'])) : ?>
         <div class="vssl-stripe--infographic--meta">

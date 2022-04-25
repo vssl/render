@@ -6,6 +6,7 @@
                 <img
                     src="<?= $this->image($headshot, !empty($image_style) ? $image_style : 'headshot') ?>"
                     alt="Contact Headshot"
+                    loading="lazy"
                 />
             </div>
             <?php endif; ?>
