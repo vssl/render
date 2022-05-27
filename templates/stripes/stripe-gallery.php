@@ -17,6 +17,7 @@ $slides = array_values(array_filter($slides, function ($slide) {
                                 ? htmlspecialchars(strip_tags($slide['alt']['html']), ENT_QUOTES, 'UTF-8')
                                 : ''
                             ?>"
+                            loading="lazy"
                         />
                     </div>
                     <?php if (!empty($slide['caption']['html']) || !empty($slide['credit']['html']) || count($slides) > 1) : ?>
