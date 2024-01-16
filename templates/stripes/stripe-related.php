@@ -6,8 +6,8 @@ $links = array_values(array_filter($links, function ($link) {
 <?php if (count($links)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
-        <?php if (!empty($label['html'])) : ?>
-        <h2 class="vssl-stripe--related--label"><?= $label['html'] ?></h2>
+        <?php if (!empty($relatedLabel['html'])) : ?>
+        <h2 class="vssl-stripe--related--label"><?= $relatedLabel['html'] ?></h2>
         <?php endif;?>
         <div class="vssl-stripe--related--links">
             <?php foreach ($links as $idx => $link) : ?>
