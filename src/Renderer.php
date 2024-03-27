@@ -2,6 +2,8 @@
 
 namespace Vssl\Render;
 
+use DOMDocument;
+use DOMXPath;
 use League\Plates\Engine;
 
 class Renderer
@@ -82,6 +84,7 @@ class Renderer
         $this->engine->registerFunction('file', [$this, 'file']);
         $this->engine->registerFunction('inline', [$this, 'inline']);
         $this->engine->registerFunction('inlineJson', [$this, 'inlineJson']);
+        $this->engine->registerFunction('tableOfContents', [$this, 'tableOfContents']);
     }
 
     /**
@@ -204,6 +207,67 @@ class Renderer
     public function inlineJson($values)
     {
         return htmlspecialchars(json_encode($values), ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
+     * Returns a table of contents based on the contents of the page
+     *
+     * @return string
+     */
+    public function tableOfContents()
+    {
+        if (!isset($this->data['stripes'])) return '';
+
+        $stripes = $this->data['stripes'];
+        $filtered = array_filter($stripes, function ($s) {
+            return ($s['type'] === 'stripe-break' && $s['heading']['html'])
+                || ($s['type'] === 'stripe-textblock' && $s['content']['html']);
+        });
+
+        $items = array_map(function ($s) {
+            switch ($s['type']) {
+                case 'stripe-break':
+                    $text = $s['heading']['html'];
+                    return [[
+                        'level' => 1,
+                        'text' => strip_tags($text)
+                    ]];
+                case 'stripe-textblock':
+                    $dom = new DOMDocument();
+                    $dom->loadHTML($s['content']['html']);
+                    $xpath = new DOMXPath($dom);
+                    $headerList = $xpath->query('//h1 | //h2');
+                    $headerArray = iterator_to_array($headerList);
+                    return array_map(fn($n) => [
+                        'level' => $n->tagName === 'h1' ? 1 : 2,
+                        'text' => $n->nodeValue
+                    ], $headerArray);
+                default:
+                    return NULL;
+            }
+        }, $filtered);
+
+        $flatItems = array_merge(...array_filter($items, fn($i) => $i !== NULL));
+
+        $i = 0;
+        $listHtml = "<ul>";
+        while ($i < count($flatItems)) {
+            $item = $flatItems[$i];
+            if ($item['level'] === 1) {
+                $listHtml .= "<li>{$item['text']}</li>";
+                $i++;
+                continue;
+            } else if ($item['level'] === 2) {
+                $listHtml .= "<ul>";
+            }
+            while ($item['level'] === 2) {
+                $listHtml .= "<li>{$item['text']}</li>";
+                $i++;
+                $item = $flatItems[$i];
+            }
+            $listHtml .= "</ul>";
+        }
+        return $listHtml . "</ul>";
     }
 
     /**
