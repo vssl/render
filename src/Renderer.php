@@ -216,12 +216,12 @@ class Renderer
      */
     public function tableOfContents()
     {
-        if (!isset($this->data['stripes'])) return '';
+        if (empty($this->data['stripes'])) return '';
 
         $stripes = $this->data['stripes'];
         $filtered = array_filter($stripes, function ($s) {
-            return ($s['type'] === 'stripe-break' && $s['heading']['html'])
-                || ($s['type'] === 'stripe-textblock' && $s['content']['html']);
+            return ($s['type'] === 'stripe-break' && !empty($s['heading']['html']))
+                || ($s['type'] === 'stripe-textblock' && !empty($s['content']['html']));
         });
 
         $items = array_map(function ($s) {
@@ -249,25 +249,7 @@ class Renderer
 
         $flatItems = array_merge(...array_filter($items, fn($i) => $i !== NULL));
 
-        $i = 0;
-        $listHtml = "<ul>";
-        while ($i < count($flatItems)) {
-            $item = $flatItems[$i];
-            if ($item['level'] === 1) {
-                $listHtml .= "<li>{$item['text']}</li>";
-                $i++;
-                continue;
-            } else if ($item['level'] === 2) {
-                $listHtml .= "<ul>";
-            }
-            while ($item['level'] === 2) {
-                $listHtml .= "<li>{$item['text']}</li>";
-                $i++;
-                $item = $flatItems[$i];
-            }
-            $listHtml .= "</ul>";
-        }
-        return $listHtml . "</ul>";
+        return $flatItems;
     }
 
     /**
