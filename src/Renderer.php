@@ -210,6 +210,57 @@ class Renderer
     }
 
     /**
+     * Given a break stripe's content and index within the page, returns an array of list items for rendering in a table of contents
+     *
+     * @param  string $content the html in the textblock stripe as a string
+     * @param  int    $index   the index of the stripe within the page
+     * @return array
+     *
+     */
+    private function getBreakStripeTableItems($content, $index) {
+        return [[
+            'level' => 1,
+            'text' => strip_tags($content),
+            'id' => 'vssl-stripe--break--heading-' . $index
+        ]];
+    }
+
+    /**
+     * Given a textblock stripe's content and index within the page, returns an array of list items for rendering in a table of contents
+     *
+     * @param  string $content the html in the textblock stripe as a string
+     * @param  int    $index   the index of the stripe within the page
+     * @return array
+     *
+     */
+    private function getTextblockStripeTableItems($content, $index) {
+        $dom = new DOMDocument();
+        $dom->loadHTML($content ?? '');
+        $xpath = new DOMXPath($dom);
+        $headers = $xpath->query('//h1 | //h2');
+
+        $listItems = [];
+        $h1Count = 0;
+        $h2Count = 0;
+        foreach ($headers as $header) {
+            $tagName = $header->tagName;
+            $prefix = 'vssl-stripe--textblock--heading-';
+            $headerIndex = $tagName === 'h1' ? $h1Count : $h2Count;
+            $id = $prefix . $index . '-' . $tagName . '-' . $headerIndex;
+
+            array_push($listItems, [
+                'level' => $tagName === 'h1' ? 1 : 2,
+                'text' => $header->nodeValue,
+                'id' => $id
+            ]);
+
+            if ($tagName === 'h1') $h1Count++;
+            else $h2Count++;
+        }
+        return $listItems;
+    }
+
+    /**
      * Returns a table of contents based on the contents of the page
      *
      * @return string
@@ -219,33 +270,22 @@ class Renderer
         if (empty($this->data['stripes'])) return '';
 
         $stripes = $this->data['stripes'];
-        $filtered = array_filter($stripes, function ($s) {
-            return ($s['type'] === 'stripe-break' && !empty($s['heading']['html']))
-                || ($s['type'] === 'stripe-textblock' && !empty($s['content']['html']));
-        });
-
-        $items = array_map(function ($s) {
-            switch ($s['type']) {
-                case 'stripe-break':
-                    $text = $s['heading']['html'];
-                    return [[
-                        'level' => 1,
-                        'text' => strip_tags($text)
-                    ]];
-                case 'stripe-textblock':
-                    $dom = new DOMDocument();
-                    $dom->loadHTML($s['content']['html']);
-                    $xpath = new DOMXPath($dom);
-                    $headerList = $xpath->query('//h1 | //h2');
-                    $headerArray = iterator_to_array($headerList);
-                    return array_map(fn($n) => [
-                        'level' => $n->tagName === 'h1' ? 1 : 2,
-                        'text' => $n->nodeValue
-                    ], $headerArray);
-                default:
-                    return NULL;
+        $items = array_map(function ($stripe, $index) {
+            if (
+                $stripe['type'] === 'stripe-break'
+                && !empty($stripe['heading']['html'])
+            ) {
+                $content = $stripe['heading']['html'];
+                return $this->getBreakStripeTableItems($content, $index);
             }
-        }, $filtered);
+            if (
+                $stripe['type'] === 'stripe-textblock'
+                && !empty($stripe['content']['html'])
+            ) {
+                $content = $stripe['content']['html'];
+                return $this->getTextblockStripeTableItems($content, $index);
+            }
+        }, $stripes, array_keys($stripes));
 
         $flatItems = array_merge(...array_filter($items, fn($i) => $i !== NULL));
 
@@ -260,18 +300,56 @@ class Renderer
      */
     public function processData($data)
     {
-        $data['themePrefix'] = $this->theme ? $this->theme . "::" : "";
+        $themePrefix = $this->theme ? $this->theme . "::" : "";
+
         if (isset($data['stripes'])) {
-            $data['stripes'] = array_map(function ($stripe) {
+            // filter out stripes that don't exist for the theme
+            $filteredStripes = array_filter(
+                $data['stripes'],
+                fn($s) => $this->engine->exists($themePrefix . 'stripes/' . $s['type'])
+            );
+
+            // get an array of indexes
+            $indexes = array_keys($filteredStripes);
+
+            // process each stripe when any defined `processStripe[type]` functions
+            $processedStripes = array_map(function ($stripe, $index) {
                 $hook = 'processStripe' . ucwords(preg_replace("/^stripe\-/", '', $stripe['type']));
-                return is_callable([$this, $hook])
-                    ? $this->$hook($stripe)
-                    : $stripe;
-            }, array_filter($data['stripes'], function ($stripe) use ($data) {
-                return $this->engine->exists($data['themePrefix'] . 'stripes/' . $stripe['type']);
-            }));
+                return is_callable([$this, $hook]) ? $this->$hook($stripe, $index) : $stripe;
+            }, $filteredStripes, $indexes);
+
+            $data['stripes'] = $processedStripes;
         }
+
+        $data['themePrefix'] = $themePrefix;
+
         return $data;
+    }
+
+    /**
+     * Process stripe-textblock data
+     *
+     * @param  array $stripe array of data
+     * @return array
+     */
+    public function processStripeTextblock($stripe, $stripeIndex)
+    {
+        if (!empty($stripe['content']['html'])) {
+            // add a unique id to each h1 and h2 tag so they can be anchored to
+            $dom = new DOMDocument();
+            $dom->loadHTML($stripe['content']['html']);
+            foreach (['h1', 'h2'] as $tagName) {
+                $headers = $dom->getElementsByTagName($tagName);
+                foreach ($headers as $index => $header) {
+                    $prefix = 'vssl-stripe--textblock--heading-';
+                    $id = $prefix . $stripeIndex . '-' . $tagName . '-' . $index;
+                    $header->setAttribute('id', $id);
+                }
+            }
+            $stripe['content']['html'] = $dom->saveHTML();
+        }
+
+        return $stripe;
     }
 
     /**

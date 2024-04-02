@@ -14,13 +14,17 @@
         <ul>
         <?php endif ?>
 
-          <li><?= $item['text'] ?></li>
+          <li>
+            <a href="#<?= $item['id'] ?>">
+              <?= $item['text'] ?>
+            </a>
+          </li>
 
         <?php if ($i === count($toc) - 1 || $toc[$i + 1]['level'] < $item['level']) : ?>
         </ul>
         <?php endif ?>
 
-        <?php endforeach ?>
+      <?php endforeach ?>
     </div>
   </div>
 </div>
