@@ -4,7 +4,10 @@
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
   <div class="vssl-stripe-column">
     <div class="vssl-stripe--card">
-      <div class="vssl-stripe--toc--title">Table of Contents</div>
+      <?php if (!empty($title['html'])) : ?>
+        <div class="vssl-stripe--toc--title"><?= $this->inline($title['html']) ?></div>
+      <?php endif; ?>
+
       <?php foreach ($toc as $i => $item) : ?>
 
         <?php if ($i === 0 || $toc[$i - 1]['level'] < $item['level']) : ?>
