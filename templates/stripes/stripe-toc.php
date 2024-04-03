@@ -1,4 +1,4 @@
-<?php $toc = $this->tableOfContents() ?>
+<?php $toc = $this->tableOfContents($scope) ?>
 
 <?php if (!empty($toc)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">

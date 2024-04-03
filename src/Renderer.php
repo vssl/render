@@ -265,22 +265,24 @@ class Renderer
      *
      * @return string
      */
-    public function tableOfContents()
+    public function tableOfContents($scope)
     {
         if (empty($this->data['stripes'])) return '';
 
         $stripes = $this->data['stripes'];
-        $items = array_map(function ($stripe, $index) {
+        $items = array_map(function ($stripe, $index) use ($scope) {
             if (
-                $stripe['type'] === 'stripe-break'
-                && !empty($stripe['heading']['html'])
+                (empty($scope) || strpos($scope, 'break') !== false) &&
+                $stripe['type'] === 'stripe-break' &&
+                !empty($stripe['heading']['html'])
             ) {
                 $content = $stripe['heading']['html'];
                 return $this->getBreakStripeTableItems($content, $index);
             }
             if (
-                $stripe['type'] === 'stripe-textblock'
-                && !empty($stripe['content']['html'])
+                (empty($scope) || strpos($scope, 'textblock') !== false) &&
+                $stripe['type'] === 'stripe-textblock' &&
+                !empty($stripe['content']['html'])
             ) {
                 $content = $stripe['content']['html'];
                 return $this->getTextblockStripeTableItems($content, $index);
