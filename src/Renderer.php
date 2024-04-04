@@ -279,25 +279,20 @@ class Renderer
             return null;
         }
 
+        $items = [];
         $stripes = $this->data['stripes'];
-        $items = array_map(function ($stripe, $index) use ($scope) {
-            if (
-                (empty($scope) || strpos($scope, 'break') !== false) &&
-                $stripe['type'] === 'stripe-break'
-            ) {
-                return [$this->getBreakStripeHeading($stripe, $index)];
+        $inScope = fn($type) => empty($scope) || in_array($type, $scope);
+        foreach ($stripes as $index => $stripe) {
+            if ($stripe['type'] === 'stripe-break' && $inScope('break')) {
+                array_push($items, $this->getBreakStripeHeading($stripe, $index));
             }
-            if (
-                (empty($scope) || strpos($scope, 'textblock') !== false) &&
-                $stripe['type'] === 'stripe-textblock'
-            ) {
-                return $this->getTextblockStripeHeadings($stripe, $index);
+
+            if ($stripe['type'] === 'stripe-textblock' && $inScope('textblock')) {
+                array_push($items, ...$this->getTextblockStripeHeadings($stripe, $index));
             }
-        }, $stripes, array_keys($stripes));
+        };
 
-        $flatItems = array_merge(...array_filter($items));
-
-        return $flatItems;
+        return $items;
     }
 
     /**
