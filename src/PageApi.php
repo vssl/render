@@ -100,6 +100,16 @@ class PageApi
         return $this->call("get", "/pages?ids=" . implode(",", $ids));
     }
 
+    public function getMenus()
+    {
+        return $this->call("get", "/menus");
+    }
+
+    public function getMenuById($id)
+    {
+        return $this->call("get", "/menus/" . $id);
+    }
+
     /**
      * Call a particular API endpoint.
      * @param string $method

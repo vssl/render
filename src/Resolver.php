@@ -90,9 +90,11 @@ class Resolver
      */
     public function resolve()
     {
+        $menus = $this->resolveMenus();
         $response = $this->api->getPage($this->request->getUri()->getPath());
         if ($response && ($page = $this->decodePage($response))) {
             $status = $response->getStatusCode();
+            $page['menus'] = $menus;
             return [
                 'status' => $status,
                 'data' => $page,
@@ -122,6 +124,27 @@ class Resolver
             return !empty($page['exists']) ? $page['page'] : false;
         }
         return false;
+    }
+
+    public function resolveMenus()
+    {
+        $response = $this->api->getMenus();
+        if (empty($response)) return false;
+
+        $body = (string) $response->getBody();
+        $results = [];
+        if ($response->getHeaderLine('Content-Type') == "application/json") {
+            $menus = json_decode($body, true);
+            foreach ($menus as $menu) {
+                $r = $this->api->getMenuById($menu['id']);
+                $b = (string) $r->getBody();
+                if ($r->getHeaderLine('Content-Type') == "application/json") {
+                    $m = json_decode($b, true);
+                    array_push($results, $m);
+                }
+            }
+        }
+        return $results;
     }
 
     /**
