@@ -1,12 +1,12 @@
-<?php $toc = $this->tableOfContents($scope) ?>
+<?php $toc = $this->getTableOfContents($scope) ?>
 
 <?php if (!empty($toc)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
   <div class="vssl-stripe-column">
     <div class="vssl-stripe--card">
-      <?php if (!empty($title['html'])) : ?>
-        <div class="vssl-stripe--toc--title"><?= $this->inline($title['html']) ?></div>
-      <?php endif; ?>
+      <div class="vssl-stripe--toc--title">
+        <?= $this->inline(empty($title['html']) ? 'Table of Contents' : $title['html']) ?>
+      </div>
 
       <?php foreach ($toc as $i => $item) : ?>
 
@@ -16,7 +16,7 @@
 
           <li>
             <a href="#<?= $item['id'] ?>">
-              <?= $item['text'] ?>
+              <?= $item['headingText'] ?>
             </a>
           </li>
 
