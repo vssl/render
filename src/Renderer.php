@@ -84,7 +84,7 @@ class Renderer
         $this->engine->registerFunction('file', [$this, 'file']);
         $this->engine->registerFunction('inline', [$this, 'inline']);
         $this->engine->registerFunction('inlineJson', [$this, 'inlineJson']);
-        $this->engine->registerFunction('tableOfContents', [$this, 'tableOfContents']);
+        $this->engine->registerFunction('getTableOfContents', [$this, 'getTableOfContents']);
     }
 
     /**
@@ -217,12 +217,17 @@ class Renderer
      * @return array
      *
      */
-    private function getBreakStripeTableItems($content, $index) {
-        return [[
-            'level' => 1,
-            'text' => strip_tags($content),
-            'id' => 'vssl-stripe--break--heading-' . $index
-        ]];
+    private function getBreakStripeHeading($stripe) {
+        if (empty($stripe['heading']['html'])) {
+            return null;
+        } else {
+            $stripeId = $stripe['id'] ?? 0;
+            return [
+                'level' => 1,
+                'headingText' => strip_tags($stripe['heading']['html']),
+                'id' => "vssl-stripe--break-$stripeId--heading"
+            ];
+        }
     }
 
     /**
@@ -233,9 +238,14 @@ class Renderer
      * @return array
      *
      */
-    private function getTextblockStripeTableItems($content, $index) {
+    private function getTextblockStripeHeadings($stripe) {
+        if (empty($stripe['content']['html'])) {
+            return null;
+        }
+
+        $stripeId = $stripe['id'] ?? 0;
         $dom = new DOMDocument();
-        $dom->loadHTML($content ?? '');
+        $dom->loadHTML($stripe['content']['html']);
         $xpath = new DOMXPath($dom);
         $headers = $xpath->query('//h1 | //h2');
 
@@ -244,13 +254,13 @@ class Renderer
         $h2Count = 0;
         foreach ($headers as $header) {
             $tagName = $header->tagName;
-            $prefix = 'vssl-stripe--textblock--heading-';
+            $prefix = "vssl-stripe--textblock-$stripeId--heading";
             $headerIndex = $tagName === 'h1' ? $h1Count : $h2Count;
-            $id = $prefix . $index . '-' . $tagName . '-' . $headerIndex;
+            $id = $prefix . '-' . $tagName . '-' . $headerIndex;
 
             array_push($listItems, [
                 'level' => $tagName === 'h1' ? 1 : 2,
-                'text' => $header->nodeValue,
+                'headingText' => $header->nodeValue,
                 'id' => $id
             ]);
 
@@ -265,33 +275,26 @@ class Renderer
      *
      * @return string
      */
-    public function tableOfContents($scope)
+    public function getTableOfContents($scope)
     {
-        if (empty($this->data['stripes'])) return '';
+        if (empty($this->data['stripes'])) {
+            return null;
+        }
 
+        $items = [];
         $stripes = $this->data['stripes'];
-        $items = array_map(function ($stripe, $index) use ($scope) {
-            if (
-                (empty($scope) || strpos($scope, 'break') !== false) &&
-                $stripe['type'] === 'stripe-break' &&
-                !empty($stripe['heading']['html'])
-            ) {
-                $content = $stripe['heading']['html'];
-                return $this->getBreakStripeTableItems($content, $index);
+        $inScope = fn($type) => empty($scope) || in_array($type, $scope);
+        foreach ($stripes as $index => $stripe) {
+            if ($stripe['type'] === 'stripe-break' && $inScope('break')) {
+                array_push($items, $this->getBreakStripeHeading($stripe, $index));
             }
-            if (
-                (empty($scope) || strpos($scope, 'textblock') !== false) &&
-                $stripe['type'] === 'stripe-textblock' &&
-                !empty($stripe['content']['html'])
-            ) {
-                $content = $stripe['content']['html'];
-                return $this->getTextblockStripeTableItems($content, $index);
+
+            if ($stripe['type'] === 'stripe-textblock' && $inScope('textblock')) {
+                array_push($items, ...$this->getTextblockStripeHeadings($stripe));
             }
-        }, $stripes, array_keys($stripes));
+        };
 
-        $flatItems = array_merge(...array_filter($items, fn($i) => $i !== NULL));
-
-        return $flatItems;
+        return $items;
     }
 
     /**
@@ -303,55 +306,31 @@ class Renderer
     public function processData($data)
     {
         $themePrefix = $this->theme ? $this->theme . "::" : "";
+        $data['themePrefix'] = $themePrefix;
 
         if (isset($data['stripes'])) {
-            // filter out stripes that don't exist for the theme
+            // Filter out stripes that don't exist for the theme
             $filteredStripes = array_filter(
                 $data['stripes'],
                 fn($s) => $this->engine->exists($themePrefix . 'stripes/' . $s['type'])
             );
 
-            // get an array of indexes
+            // Get an array of indexes
             $indexes = array_keys($filteredStripes);
 
-            // process each stripe when any defined `processStripe[type]` functions
+            // Process each stripe when any defined `processStripe[type]` functions
             $processedStripes = array_map(function ($stripe, $index) {
-                $hook = 'processStripe' . ucwords(preg_replace("/^stripe\-/", '', $stripe['type']));
+                $stripeName = str_replace('stripe-', '', $stripe['type']);
+                $stripeName = ucwords($stripeName, '-');
+                $stripeName = str_replace('-', '', $stripeName);
+                $hook = "processStripe{$stripeName}";
                 return is_callable([$this, $hook]) ? $this->$hook($stripe, $index) : $stripe;
             }, $filteredStripes, $indexes);
 
             $data['stripes'] = $processedStripes;
         }
 
-        $data['themePrefix'] = $themePrefix;
-
         return $data;
-    }
-
-    /**
-     * Process stripe-textblock data
-     *
-     * @param  array $stripe array of data
-     * @return array
-     */
-    public function processStripeTextblock($stripe, $stripeIndex)
-    {
-        if (!empty($stripe['content']['html'])) {
-            // add a unique id to each h1 and h2 tag so they can be anchored to
-            $dom = new DOMDocument();
-            $dom->loadHTML($stripe['content']['html']);
-            foreach (['h1', 'h2'] as $tagName) {
-                $headers = $dom->getElementsByTagName($tagName);
-                foreach ($headers as $index => $header) {
-                    $prefix = 'vssl-stripe--textblock--heading-';
-                    $id = $prefix . $stripeIndex . '-' . $tagName . '-' . $index;
-                    $header->setAttribute('id', $id);
-                }
-            }
-            $stripe['content']['html'] = $dom->saveHTML();
-        }
-
-        return $stripe;
     }
 
     /**
