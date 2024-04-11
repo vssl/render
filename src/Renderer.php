@@ -221,12 +221,14 @@ class Renderer
         if (empty($stripe['heading']['html'])) {
             return null;
         } else {
-            $stripeId = $stripe['id'] ?? 0;
-            return [
+            $heading = [
                 'level' => 1,
                 'headingText' => strip_tags($stripe['heading']['html']),
-                'id' => "vssl-stripe--break-$stripeId--heading"
             ];
+            if (!empty($stripe['heading_id'])) {
+                $heading['id'] = $stripe['heading_id'];
+            }
+            return $heading;
         }
     }
 
@@ -243,29 +245,30 @@ class Renderer
             return null;
         }
 
-        $stripeId = $stripe['id'] ?? 0;
         $dom = new DOMDocument();
         $dom->loadHTML($stripe['content']['html']);
         $xpath = new DOMXPath($dom);
-        $headers = $xpath->query('//h1 | //h2');
+        $headings = $xpath->query('//h1 | //h2');
 
         $listItems = [];
         $h1Count = 0;
         $h2Count = 0;
-        foreach ($headers as $header) {
-            $tagName = $header->tagName;
-            $prefix = "vssl-stripe--textblock-$stripeId--heading";
-            $headerIndex = $tagName === 'h1' ? $h1Count : $h2Count;
-            $id = $prefix . '-' . $tagName . '-' . $headerIndex;
+        foreach ($headings as $heading) {
+            $listItem = [
+                'level' => $heading->tagName === 'h1' ? 1 : 2,
+                'headingText' => $heading->nodeValue,
+            ];
+            if (!empty($heading->id)) {
+                $listItem['id'] = $heading->id;
+            }
 
-            array_push($listItems, [
-                'level' => $tagName === 'h1' ? 1 : 2,
-                'headingText' => $header->nodeValue,
-                'id' => $id
-            ]);
+            array_push($listItems, $listItem);
 
-            if ($tagName === 'h1') $h1Count++;
-            else $h2Count++;
+            if ($heading->tagName === 'h1') {
+                $h1Count++;
+            } else {
+                $h2Count++;
+            }
         }
         return $listItems;
     }
