@@ -2,6 +2,8 @@
 
 namespace Vssl\Render;
 
+use DOMDocument;
+use DOMXPath;
 use League\Plates\Engine;
 
 class Renderer
@@ -82,6 +84,7 @@ class Renderer
         $this->engine->registerFunction('file', [$this, 'file']);
         $this->engine->registerFunction('inline', [$this, 'inline']);
         $this->engine->registerFunction('inlineJson', [$this, 'inlineJson']);
+        $this->engine->registerFunction('getTableOfContents', [$this, 'getTableOfContents']);
     }
 
     /**
@@ -207,6 +210,97 @@ class Renderer
     }
 
     /**
+     * Given a break stripe's content and index within the page, returns an array of list items for rendering in a table of contents
+     *
+     * @param  string $content the html in the textblock stripe as a string
+     * @param  int    $index   the index of the stripe within the page
+     * @return array
+     *
+     */
+    private function getBreakStripeHeading($stripe) {
+        if (empty($stripe['heading']['html'])) {
+            return null;
+        } else {
+            $heading = [
+                'level' => 1,
+                'headingText' => strip_tags($stripe['heading']['html']),
+            ];
+            if (!empty($stripe['heading_id'])) {
+                $heading['id'] = $stripe['heading_id'];
+            }
+            return $heading;
+        }
+    }
+
+    /**
+     * Given a textblock stripe's content and index within the page, returns an array of list items for rendering in a table of contents
+     *
+     * @param  string $content the html in the textblock stripe as a string
+     * @param  int    $index   the index of the stripe within the page
+     * @return array
+     *
+     */
+    private function getTextblockStripeHeadings($stripe) {
+        if (empty($stripe['content']['html'])) {
+            return null;
+        }
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($stripe['content']['html']);
+        $xpath = new DOMXPath($dom);
+        $headings = $xpath->query('//h1 | //h2');
+
+        $listItems = [];
+        $h1Count = 0;
+        $h2Count = 0;
+        foreach ($headings as $heading) {
+            $listItem = [
+                'level' => $heading->tagName === 'h1' ? 1 : 2,
+                'headingText' => $heading->nodeValue,
+            ];
+            if (!empty($heading->id)) {
+                $listItem['id'] = $heading->id;
+            }
+
+            array_push($listItems, $listItem);
+
+            if ($heading->tagName === 'h1') {
+                $h1Count++;
+            } else {
+                $h2Count++;
+            }
+        }
+        return $listItems;
+    }
+
+    /**
+     * Returns a table of contents based on the contents of the page
+     *
+     * @return string
+     */
+    public function getTableOfContents($scope)
+    {
+        if (empty($this->data['stripes'])) {
+            return null;
+        }
+
+        $items = [];
+        $stripes = $this->data['stripes'];
+        $inScope = fn($type) => empty($scope) || in_array($type, $scope);
+        foreach ($stripes as $index => $stripe) {
+            if ($stripe['type'] === 'stripe-break' && $inScope('break')) {
+                array_push($items, $this->getBreakStripeHeading($stripe, $index));
+            }
+
+            if ($stripe['type'] === 'stripe-textblock' && $inScope('textblock')) {
+                array_push($items, ...$this->getTextblockStripeHeadings($stripe));
+            }
+        };
+
+        return $items;
+    }
+
+    /**
      * Process data before its output. This is the last chance to make changes
      * to data before being passed to the actual template files.
      *
@@ -214,17 +308,31 @@ class Renderer
      */
     public function processData($data)
     {
-        $data['themePrefix'] = $this->theme ? $this->theme . "::" : "";
+        $themePrefix = $this->theme ? $this->theme . "::" : "";
+        $data['themePrefix'] = $themePrefix;
+
         if (isset($data['stripes'])) {
-            $data['stripes'] = array_map(function ($stripe) {
-                $hook = 'processStripe' . ucwords(preg_replace("/^stripe\-/", '', $stripe['type']));
-                return is_callable([$this, $hook])
-                    ? $this->$hook($stripe)
-                    : $stripe;
-            }, array_filter($data['stripes'], function ($stripe) use ($data) {
-                return $this->engine->exists($data['themePrefix'] . 'stripes/' . $stripe['type']);
-            }));
+            // Filter out stripes that don't exist for the theme
+            $filteredStripes = array_filter(
+                $data['stripes'],
+                fn($s) => $this->engine->exists($themePrefix . 'stripes/' . $s['type'])
+            );
+
+            // Get an array of indexes
+            $indexes = array_keys($filteredStripes);
+
+            // Process each stripe when any defined `processStripe[type]` functions
+            $processedStripes = array_map(function ($stripe, $index) {
+                $stripeName = str_replace('stripe-', '', $stripe['type']);
+                $stripeName = ucwords($stripeName, '-');
+                $stripeName = str_replace('-', '', $stripeName);
+                $hook = "processStripe{$stripeName}";
+                return is_callable([$this, $hook]) ? $this->$hook($stripe, $index) : $stripe;
+            }, $filteredStripes, $indexes);
+
+            $data['stripes'] = $processedStripes;
         }
+
         return $data;
     }
 
