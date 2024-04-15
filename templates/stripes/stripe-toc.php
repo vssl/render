@@ -15,7 +15,7 @@
         <?php endif ?>
 
           <li>
-            <a href="#<?= $item['id'] ?>">
+            <a href="#<?= empty($item['id']) ? '' : $item['id'] ?>">
               <?= $item['headingText'] ?>
             </a>
           </li>

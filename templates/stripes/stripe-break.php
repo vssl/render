@@ -6,7 +6,9 @@
 
         <?php if (!empty($heading['html'])) : ?>
         <<?= $tag ?>
+            <?php if (!empty($heading_id)) : ?>
             id="<?= $heading_id ?>"
+            <?php endif; ?>
             class="vssl-stripe--break--heading"
             data-heading="<?= strip_tags($heading['html']) ?>"
         >
