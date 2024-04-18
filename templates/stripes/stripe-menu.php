@@ -1,13 +1,10 @@
-<?php $menu = !empty($menu_id) ? $this->getMenuLinks($menu_id) : [] ?>
-
-<?php if (!empty($menu)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
   <div class="vssl-stripe-column">
-    <?php if (count($menu['links'])) : ?>
+    <?php if (count($menu_links)) : ?>
     <ul>
-      <?php foreach($menu['links'] as $key => $link) : ?>
+      <?php foreach($menu_links as $link) : ?>
       <li>
-        <a href="<?= $link['link'] ?>">
+        <a href="<?= !empty($link['url']) ? $link['url'] : '#' ?>">
           <?= $link['title'] ?>
         </a>
       </li>
@@ -16,4 +13,3 @@
     <?php endif; ?>
   </div>
 </div>
-<?php endif; ?>

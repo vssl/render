@@ -85,7 +85,6 @@ class Renderer
         $this->engine->registerFunction('inline', [$this, 'inline']);
         $this->engine->registerFunction('inlineJson', [$this, 'inlineJson']);
         $this->engine->registerFunction('getTableOfContents', [$this, 'getTableOfContents']);
-        $this->engine->registerFunction('getMenuLinks', [$this, 'getMenuLinks']);
     }
 
     /**
@@ -363,20 +362,6 @@ class Renderer
         }
 
         return $stripe;
-    }
-
-    public function getMenuLinks($menuId) {
-        if (empty($this->data['menus'])) {
-            return [];
-        }
-
-        foreach ($this->data['menus'] as $menu) {
-            if ($menu['id'] === $menuId) {
-                return $menu;
-            }
-        }
-
-        return [];
     }
 
     /**
