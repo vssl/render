@@ -60,18 +60,25 @@ const slideEls = galleryEl.querySelectorAll('.vssl-stripe--gallery--slide')
 
 let slideIndex = 0
 const slideCount = slideEls.length
-function moveGallery(next = true) {
-    const prevIndex = slideIndex;
-    slideIndex = next ? slideIndex + 1 : slideIndex - 1
+function setSlideIndex(index) {
+    slideIndex = index
     if (slideIndex >= slideCount) slideIndex = 0
     else if (slideIndex < 0) slideIndex = slideCount - 1
+
     slideEls[slideIndex].dataset.active = true
-    slideEls[prevIndex].dataset.active = false
     currentCounter.innerHTML = slideIndex + 1
+
+    nextSlideIndex = slideIndex + 1 === slideCount ? 0 : slideIndex + 1
+    prevSlideIndex = slideIndex === 0 ? slideCount - 1 : slideIndex - 1
+    slideEls[nextSlideIndex].querySelector('img').removeAttribute('loading')
+    slideEls[prevSlideIndex].querySelector('img').removeAttribute('loading')
+    slideEls[nextSlideIndex].dataset.active = false
+    slideEls[prevSlideIndex].dataset.active = false
 }
 
-nextBtn.addEventListener('click', () => moveGallery(true))
-prevBtn.addEventListener('click', () => moveGallery(false))
+setSlideIndex(0)
+nextBtn.addEventListener('click', () => setSlideIndex(slideIndex + 1))
+prevBtn.addEventListener('click', () => setSlideIndex(slideIndex - 1))
 </script>
 
 <?php endif; ?>
