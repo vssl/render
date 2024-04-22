@@ -34,6 +34,7 @@ $slides = array_values(array_filter($slides, function ($slide) {
                 </div>
                 <?php endforeach; ?>
             </div>
+            <?php if (count($slides) > 1) : ?>
             <div
                 class="vssl-stripe--gallery--controls"
                 style="height: 0px; padding-bottom: 100%;"
@@ -48,9 +49,11 @@ $slides = array_values(array_filter($slides, function ($slide) {
                     <span class="vssl-stripe--gallery--total"><?= count($slides) ?></span>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
+<?php if (count($slides) > 1) : ?>
 <script>
 const galleryEl = document.currentScript.previousElementSibling
 const nextBtn = galleryEl.querySelector('.vssl-stripe--gallery--next')
@@ -80,5 +83,6 @@ setSlideIndex(0)
 nextBtn.addEventListener('click', () => setSlideIndex(slideIndex + 1))
 prevBtn.addEventListener('click', () => setSlideIndex(slideIndex - 1))
 </script>
+<?php endif; ?>
 
 <?php endif; ?>
