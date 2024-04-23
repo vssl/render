@@ -25,6 +25,13 @@ class PageApi
     protected $apiPath;
 
     /**
+     * Configuration for the API.
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
      * A cache adapter for storing results.
      *
      * @var \Journey\Cache\CacheAdapterInterface
@@ -50,16 +57,28 @@ class PageApi
      */
     public function __construct(RequestInterface $request, array $config)
     {
+        $this->config = $config;
+
         $this->cache = $config['cache'] ?? null;
         $this->ttl = $config['cache_ttl'] ?? 0;
 
         $this->host = $request->getUri()->getHost();
         $this->apiPath = '/' . (ltrim($config['base_path'], '/') ?? 'api');
 
+        $this->initClient();
+    }
+
+    /**
+     * Initialize the Guzzle client, allowing for re-initialization later.
+     */
+    private function initClient()
+    {
         $this->http = new Client([
-            'base_uri' => rtrim($config['base_uri'], '/'),
+            'base_uri' => rtrim($this->config['base_uri'], '/'),
             'headers' => [
-                'X-Render-Host' => $request->getUri()->getHost(),
+                'X-Render-Host' => $this->host,
+                'Content-Type' => 'application/json',
+                ...($this->config['headers'] ?? [])
             ]
         ]);
     }
@@ -105,15 +124,16 @@ class PageApi
      * @param string $method
      * @param string $url
      * @param boolean $withPath
+     * @param array $withCache
      * @return \Psr\Http\Message\ResponseInterface|false
      */
-    public function call($method, $url, $withPath = true)
+    public function call($method, $url, $withPath = true, $withCache = true)
     {
         $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
         $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
 
         try {
-            if (empty($this->cache) || !$value = $this->cache->get($cacheKey)) {
+            if (empty($this->cache) || !$withCache || !$value = $this->cache->get($cacheKey)) {
                 $response = $this->http->request(strtoupper($method), $url);
             }
         } catch (ClientException $e) {

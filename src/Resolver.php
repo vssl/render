@@ -39,7 +39,24 @@ class Resolver
         if (!empty($this->config['cache']) && !$this->config['cache'] instanceof CacheAdapterInterface) {
             throw new ResolverException('Cache must implement \Journey\Cache\CacheAdapterInterface.');
         }
+
+        $this->config['headers'] = $this->getAuthHeaders();
         $this->api = new PageApi($request, $this->config);
+    }
+
+    /**
+     * If we have an auth token in cookies, then return that as a request header
+     * on all API calls.
+     *
+     * @return array
+     */
+    public function getAuthHeaders()
+    {
+        $authToken = $_COOKIE['vssl-token'] ?? null;
+        $authExpiry = $_COOKIE['vssl-token-exp'] ?? null;
+        return !empty($authToken) && !empty($authExpiry) && time() < $authExpiry
+            ? ['Authorization' => "Bearer $authToken"]
+            : [];
     }
 
     /**
