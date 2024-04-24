@@ -3,11 +3,13 @@
     <?php if (count($menu_links)) : ?>
     <ul>
       <?php foreach($menu_links as $link) : ?>
-      <li>
-        <a href="<?= !empty($link['url']) ? $link['url'] : '#' ?>">
-          <?= $link['title'] ?>
-        </a>
-      </li>
+        <?php if (!empty($link['url']) && !empty($link['title'])) : ?>
+        <li>
+          <a href="<?= $link['url'] ?>">
+            <?= $link['title'] ?>
+          </a>
+        </li>
+        <?php endif ?>
       <?php endforeach; ?>
     </ul>
     <?php endif; ?>
