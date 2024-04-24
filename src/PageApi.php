@@ -73,14 +73,16 @@ class PageApi
      */
     private function initClient()
     {
-        $this->http = new Client([
-            'base_uri' => rtrim($this->config['base_uri'], '/'),
-            'headers' => [
-                'X-Render-Host' => $this->host,
-                'Content-Type' => 'application/json',
-                ...($this->config['headers'] ?? [])
+        $this->http = new Client(
+            [
+                'base_uri' => rtrim($this->config['base_uri'], '/'),
+                'headers' => [
+                    'X-Render-Host' => $this->host,
+                    'Content-Type' => 'application/json',
+                    ...($this->config['headers'] ?? [])
+                ]
             ]
-        ]);
+        );
     }
 
     /**
@@ -121,6 +123,7 @@ class PageApi
 
     /**
      * Call a particular API endpoint.
+     *
      * @param string $method
      * @param string $url
      * @param boolean $withPath
@@ -132,8 +135,10 @@ class PageApi
         $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
         $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
 
+        $shouldCache = $withCache && !empty($this->cache) && !$this->config['isAuthenticated'];
+
         try {
-            if (empty($this->cache) || !$withCache || !$value = $this->cache->get($cacheKey)) {
+            if (!$shouldCache || !$value = $this->cache->get($cacheKey)) {
                 $response = $this->http->request(strtoupper($method), $url);
             }
         } catch (ClientException $e) {
@@ -144,8 +149,12 @@ class PageApi
 
         if (!isset($response) && !empty($value)) {
             $response = \GuzzleHttp\Psr7\parse_response($value);
-        } elseif (!empty($this->cache) && !empty($response)) {
-            $this->cache->set($cacheKey, \GuzzleHttp\Psr7\str($response), !empty($this->ttl) ? time() + $this->ttl : 0);
+        } elseif ($shouldCache && !empty($response)) {
+            $this->cache->set(
+                $cacheKey,
+                \GuzzleHttp\Psr7\str($response),
+                !empty($this->ttl) ? time() + $this->ttl : 0
+            );
         }
 
         return !empty($response) ? $response : false;
