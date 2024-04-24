@@ -36,10 +36,39 @@ class Resolver
     {
         $this->request = $request;
         $this->config = is_array($config) ? static::config($config) : static::config();
-        if (!empty($this->config['cache']) && !$this->config['cache'] instanceof CacheAdapterInterface) {
-            throw new ResolverException('Cache must implement \Journey\Cache\CacheAdapterInterface.');
+        if (!empty($this->config['cache'])
+            && !$this->config['cache'] instanceof CacheAdapterInterface
+        ) {
+            throw new ResolverException(
+                'Cache must implement \Journey\Cache\CacheAdapterInterface.'
+            );
         }
+
+        $this->setAuthHeaders();
         $this->api = new PageApi($request, $this->config);
+    }
+
+    /**
+     * If we have an auth token in cookies, then add that to the request headers
+     * for all API calls.
+     *
+     * @return array
+     */
+    public function setAuthHeaders()
+    {
+        $authToken = $_COOKIE['vssl-token'] ?? null;
+        $authExpiry = $_COOKIE['vssl-token-exp'] ?? null;
+
+        $this->config['isAuthenticated'] = !empty($authToken)
+            && !empty($authExpiry)
+            && time() < $authExpiry;
+
+        if ($this->config['isAuthenticated']) {
+            $this->config['headers'] = array_merge(
+                $this->config['headers'] ?? [],
+                ['Authorization' => "Bearer $authToken"]
+            );
+        }
     }
 
     /**
@@ -96,8 +125,12 @@ class Resolver
             return [
                 'status' => $status,
                 'data' => $page,
-                'page' => (is_array($page) && $status == 200) ? new Renderer($this->config, $page) : $page,
-                'metadata' => (is_array($page) && $status == 200) ? new Metadata($this->config, $page) : $page,
+                'page' => (is_array($page) && $status == 200)
+                    ? new Renderer($this->config, $page)
+                    : $page,
+                'metadata' => (is_array($page) && $status == 200)
+                    ? new Metadata($this->config, $page)
+                    : $page,
                 'type' => !empty($page['type']) ? $page['type'] : false
             ];
         }
@@ -134,18 +167,21 @@ class Resolver
         static $config;
 
         if (is_array($assign) || !$config) {
-            $config = array_merge([
-                'cache' => null,
-                'cache_ttl' => false,
-                'base_uri' => 'https://api.vssl.io',
-                'base_path' => '/api/v2',
-                'required_fields' => [
-                    'id',
-                    'title',
-                    'stripes'
+            $config = array_merge(
+                [
+                    'cache' => null,
+                    'cache_ttl' => false,
+                    'base_uri' => 'https://api.vssl.io',
+                    'base_path' => '/api/v2',
+                    'required_fields' => [
+                        'id',
+                        'title',
+                        'stripes'
+                    ],
+                    // 'templates' => 'your-directory'
                 ],
-                // 'templates' => 'your-directory'
-            ], $assign);
+                $assign
+            );
         }
         return $config ?: [];
     }
