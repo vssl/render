@@ -45,6 +45,7 @@ class Resolver
         }
 
         $this->setAuthHeaders();
+        $this->setSitePasswordHeader();
         $this->api = new PageApi($request, $this->config);
     }
 
@@ -67,6 +68,24 @@ class Resolver
             $this->config['headers'] = array_merge(
                 $this->config['headers'] ?? [],
                 ['Authorization' => "Bearer $authToken"]
+            );
+        }
+    }
+
+    /**
+     * If we have a cookie for a password-protected site, then add that to the
+     * request headers for all API calls.
+     *
+     * @return array
+     */
+    public function setSitePasswordHeader()
+    {
+        $sitePassword = $_COOKIE['vssl-site-pw'] ?? null;
+
+        if (!empty($sitePassword)) {
+            $this->config['headers'] = array_merge(
+                $this->config['headers'] ?? [],
+                ['Sites-Organization-Password' => $sitePassword]
             );
         }
     }
