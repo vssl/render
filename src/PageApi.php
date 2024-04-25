@@ -140,7 +140,11 @@ class PageApi
 
         try {
             if (!$shouldCache || !$value = $this->cache->get($cacheKey)) {
-                $response = $this->http->request(strtoupper($method), $url, ['json' => $body]);
+                if (!empty($body)) {
+                    $response = $this->http->request(strtoupper($method), $url, ['json' => $body]);
+                } else {
+                    $response = $this->http->request(strtoupper($method), $url);
+                }
             }
         } catch (ClientException $e) {
             $response = $e->getResponse();
