@@ -126,11 +126,12 @@ class PageApi
      *
      * @param string $method
      * @param string $url
+     * @param array $body
      * @param boolean $withPath
      * @param array $withCache
      * @return \Psr\Http\Message\ResponseInterface|false
      */
-    public function call($method, $url, $withPath = true, $withCache = true)
+    public function call($method, $url, $body = null, $withPath = true, $withCache = true)
     {
         $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
         $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
@@ -139,7 +140,7 @@ class PageApi
 
         try {
             if (!$shouldCache || !$value = $this->cache->get($cacheKey)) {
-                $response = $this->http->request(strtoupper($method), $url);
+                $response = $this->http->request(strtoupper($method), $url, ['json' => $body]);
             }
         } catch (ClientException $e) {
             $response = $e->getResponse();
