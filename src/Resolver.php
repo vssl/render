@@ -82,7 +82,9 @@ class Resolver
     {
         $sitePassword = $_COOKIE['vssl-site-pw'] ?? null;
 
-        if (!empty($sitePassword)) {
+        $this->config['hasPassword'] = !empty($sitePassword);
+
+        if ($this->config['hasPassword']) {
             $this->config['headers'] = array_merge(
                 $this->config['headers'] ?? [],
                 ['Sites-Organization-Password' => $sitePassword]

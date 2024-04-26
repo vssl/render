@@ -136,7 +136,10 @@ class PageApi
         $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
         $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
 
-        $shouldCache = $withCache && !empty($this->cache) && !$this->config['isAuthenticated'];
+        $shouldCache = $withCache
+            && !empty($this->cache)
+            && !$this->config['isAuthenticated']
+            && !$this->config['hasPassword'];
 
         try {
             if (!$shouldCache || !$value = $this->cache->get($cacheKey)) {
