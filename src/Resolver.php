@@ -140,23 +140,29 @@ class Resolver
      */
     public function resolve()
     {
-        $response = $this->api->getPage($this->request->getUri()->getPath());
-        if ($response && ($page = $this->decodePage($response))) {
-            $status = $response->getStatusCode();
-            return [
-                'status' => $status,
-                'data' => $page,
-                'page' => (is_array($page) && $status == 200)
-                    ? new Renderer($this->config, $page)
-                    : $page,
-                'metadata' => (is_array($page) && $status == 200)
-                    ? new Metadata($this->config, $page)
-                    : $page,
-                'type' => !empty($page['type']) ? $page['type'] : false
-            ];
+        try {
+            $response = $this->api->getPage($this->request->getUri()->getPath());
+
+            if ($response && ($page = $this->decodePage($response))) {
+                $status = $response->getStatusCode();
+                return [
+                    'status' => $status,
+                    'data' => $page,
+                    'page' => (is_array($page) && $status == 200)
+                        ? new Renderer($this->config, $page)
+                        : $page,
+                    'metadata' => (is_array($page) && $status == 200)
+                        ? new Metadata($this->config, $page)
+                        : $page,
+                    'type' => !empty($page['type']) ? $page['type'] : false
+                ];
+            }
+        } catch(\Exception $e) {
+            $status = 500;
         }
+
         return [
-            'status' => false,
+            'status' => $status ?? false,
             'error' => 'An unknown error occurred',
             'data' => [],
             'type' => false
