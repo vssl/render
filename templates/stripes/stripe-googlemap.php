@@ -59,7 +59,7 @@ function buildMap(config) {
     const mapWrapEl = stripeEl.querySelector('.vssl-stripe--googlemap--map')
     const customMarker = 'https://s3.amazonaws.com/cdn.vssl.io/marker.png'
 
-    const map = new google.maps.Map(mapWrapEl[0], {
+    const map = new google.maps.Map(mapWrapEl, {
         center: config.coordinates,
         zoom: config.zoom,
         styles: config.styles,
