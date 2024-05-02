@@ -220,16 +220,21 @@ class Renderer
     private function getBreakStripeHeading($stripe) {
         if (empty($stripe['heading']['html'])) {
             return null;
-        } else {
-            $heading = [
-                'level' => 1,
-                'headingText' => strip_tags($stripe['heading']['html']),
-            ];
-            if (!empty($stripe['heading_id'])) {
-                $heading['id'] = $stripe['heading_id'];
-            }
-            return $heading;
         }
+
+        $text = strip_tags($stripe['heading']['html']);
+        if (empty($text)) {
+            return null;
+        }
+
+        $heading = [
+            'level' => 1,
+            'headingText' => $text,
+        ];
+        if (!empty($stripe['heading_id'])) {
+            $heading['id'] = $stripe['heading_id'];
+        }
+        return $heading;
     }
 
     /**
@@ -242,7 +247,7 @@ class Renderer
      */
     private function getTextblockStripeHeadings($stripe) {
         if (empty($stripe['content']['html'])) {
-            return null;
+            return [];
         }
 
         $dom = new DOMDocument();
@@ -297,7 +302,7 @@ class Renderer
             }
         };
 
-        return $items;
+        return array_filter($items);
     }
 
     /**
