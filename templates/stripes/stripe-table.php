@@ -1,10 +1,22 @@
+<?php
+$caption = !empty($caption["html"]) ? $this->inline($caption["html"]) : null;
+$headersInFirstRow = !empty($headersInFirstRow) ? $headersInFirstRow : false;
+$headersInFirstColumn = !empty($headersInFirstColumn) ? $headersInFirstColumn : false;
+
+// Ensure each item in the dataset is an array.
+$dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
+foreach ($dataset as $key => $value) {
+    if (!is_array($value)) {
+        $dataset[$key] = [];
+    }
+}
+?>
+
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
   <div class="vssl-stripe-column">
     <table>
-      <?php if (!empty($caption['html'])): ?>
-        <caption>
-          <?= $this->inline($caption['html']) ?>
-        </caption>
+      <?php if (!empty($caption)) : ?>
+        <caption><?= $caption ?></caption>
       <?php endif; ?>
 
       <?php if ($headersInFirstRow && !$headersInFirstColumn): ?>
