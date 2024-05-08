@@ -64,7 +64,7 @@
 <script>
 const stripeEl = document.currentScript.previousElementSibling
 const videoUI = stripeEl.querySelector('.vssl-stripe--header-video--ui')
-const bgVideo = videoUI.querySelector('video')
+const bgVideo = videoUI?.querySelector('video')
 const playButton = stripeEl.querySelector('a.vssl-stripe--header-video--playbtn-wrap')
 const embedWrap = stripeEl.querySelector('.vssl-stripe--header-video--embed')
 
@@ -84,7 +84,7 @@ function close() {
 }
 
 function open() {
-    stripeEl.setAttribute('data-is-video-showing')
+    stripeEl.setAttribute('data-is-video-showing', true)
     embedWrap?.appendChild(embed)
     bgVideo?.play()
 }
