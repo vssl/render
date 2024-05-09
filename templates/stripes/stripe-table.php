@@ -1,48 +1,54 @@
 <?php
 $caption = !empty($caption["html"]) ? $this->inline($caption["html"]) : null;
-$headersInFirstRow = !empty($headersInFirstRow) ? $headersInFirstRow : false;
-$headersInFirstColumn = !empty($headersInFirstColumn) ? $headersInFirstColumn : false;
+$hasHeadersInFirstRow = !empty($hasHeadersInFirstRow) ? $hasHeadersInFirstRow : false;
+$hasHeadersInFirstColumn = !empty($hasHeadersInFirstColumn) ? $hasHeadersInFirstColumn : false;
+$hasAlternatingRows = !empty($hasAlternatingRows) ? $hasAlternatingRows : false;
 
-// Ensure each item in the dataset is an array.
+// Ensure each item in the dataset is an array
 $dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
 foreach ($dataset as $key => $value) {
     if (!is_array($value)) {
         $dataset[$key] = [];
     }
 }
+$dataset = array_filter($dataset);
 ?>
 
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<?php if (!empty($dataset)) : ?>
+<div 
+  class="<?= $this->e($type, 'wrapperClasses') ?>"
+  data-has-alternating-rows="<?= $hasAlternatingRows ? 'true' : 'false' ?>"
+>
   <div class="vssl-stripe-column">
     <table>
       <?php if (!empty($caption)) : ?>
         <caption><?= $caption ?></caption>
       <?php endif; ?>
 
-      <?php if ($headersInFirstRow && !$headersInFirstColumn): ?>
+      <?php if ($hasHeadersInFirstRow && !$hasHeadersInFirstColumn): ?>
         <thead>
-          <?php foreach ($dataset[0] as $index => $item): ?>
+          <?php foreach ($dataset[0] as $item): ?>
             <th><?= $item ?></th>
           <?php endforeach; ?>
         </thead>
       <?php endif; ?>
 
       <tbody>
-        <?php if ($headersInFirstRow && $headersInFirstColumn): ?>
+        <?php if ($hasHeadersInFirstRow && $hasHeadersInFirstColumn): ?>
           <tr>
-            <?php foreach ($dataset[0] as $index => $item): ?>
+            <?php foreach ($dataset[0] as $item): ?>
               <th><?= $item ?></th>
             <?php endforeach; ?>
           </tr>
         <?php endif; ?>
 
         <?php
-          $rows = $headersInFirstRow ? array_slice($dataset, 1) : $dataset;
-          foreach ($rows as $rowIndex => $row):
+          $rows = $hasHeadersInFirstRow ? array_slice($dataset, 1) : $dataset;
+          foreach ($rows as $row):
         ?>
           <tr>
             <?php foreach ($row as $index => $item): ?>
-              <?php $tag = ($index === 0 && $headersInFirstColumn) ? 'th' : 'td'; ?>
+              <?php $tag = ($index === 0 && $hasHeadersInFirstColumn) ? 'th' : 'td'; ?>
               <<?= $tag ?>>
                 <?= $item ?>
               </<?= $tag ?>>
@@ -53,3 +59,4 @@ foreach ($dataset as $key => $value) {
     </table>
   </div>
 </div>
+<?php endif; ?>
