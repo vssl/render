@@ -37,16 +37,16 @@ if (typeof google !== 'undefined') {
 }
 
 function initStripe() {
-    const marker = <?= isset($options['marker']) ? "'" . $options['marker'] . "'" : 'false' ?>
+    const marker = <?= !empty($options['marker']) ? "'" . $options['marker'] . "'" : 'false' ?>
 
-    const coordinates = <?= isset($options['coordinates']) ? "'" . $options['coordinates'] . "'" : 'false' ?>
+    const coordinates = <?= !empty($options['coordinates']) ? "'" . $options['coordinates'] . "'" : 'false' ?>
 
-    const address = <?= isset($address) ? "'$address'" : 'false' ?>
+    const address = <?= !empty($address) ? "'$address'" : 'false' ?>
 
-    const maptype = <?= isset($maptype) ? "'$maptype'" : "'roadmap'" ?>
+    const maptype = <?= !empty($maptype) ? "'$maptype'" : "'roadmap'" ?>
 
     const zoom = parseInt("<?= $zoom ?>", 10)
-    const stylesJson = "<?= isset($options['styles']) ? $options['styles'] : '[]' ?>"
+    const stylesJson = "<?= !empty($options['styles']) ? $options['styles'] : '[]' ?>"
     const styles = maptype === 'roadmap' ? JSON.parse(stylesJson) : []
     const config = { marker, coordinates, address, maptype, zoom, styles }
 
