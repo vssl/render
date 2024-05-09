@@ -370,6 +370,39 @@ class Renderer
     }
 
     /**
+     * Process stripe-table data.
+     *
+     * @param  array $stripe array of data
+     * @return array
+     */
+    public function processStripeTable($stripe)
+    {
+        $stripe['caption'] = !empty($stripe['caption']['html'])
+            ? $this->inline($stripe['caption']["html"])
+            : null;
+        $stripe['hasHeadersInFirstRow'] = !empty($stripe['hasHeadersInFirstRow'])
+            ? $stripe['hasHeadersInFirstRow']
+            : false;
+        $stripe['hasHeadersInFirstColumn'] = !empty($stripe['hasHeadersInFirstColumn'])
+            ? $stripe['hasHeadersInFirstColumn']
+            : false;
+        $stripe['hasAlternatingRows'] = !empty($stripe['hasAlternatingRows'])
+            ? $stripe['hasAlternatingRows']
+            : false;
+
+        $dataset = $stripe['dataset'];
+        // Ensure each item in the dataset is an array
+        $dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
+        foreach ($dataset as $key => $value) {
+            if (!is_array($value)) {
+                $dataset[$key] = [];
+            }
+        }
+        $stripe['dataset'] = array_filter($dataset);
+        return $stripe;
+    }
+
+    /**
      * Render the current data.
      *
      * @return string

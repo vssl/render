@@ -1,21 +1,5 @@
-<?php
-$caption = !empty($caption["html"]) ? $this->inline($caption["html"]) : null;
-$hasHeadersInFirstRow = !empty($hasHeadersInFirstRow) ? $hasHeadersInFirstRow : false;
-$hasHeadersInFirstColumn = !empty($hasHeadersInFirstColumn) ? $hasHeadersInFirstColumn : false;
-$hasAlternatingRows = !empty($hasAlternatingRows) ? $hasAlternatingRows : false;
-
-// Ensure each item in the dataset is an array
-$dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
-foreach ($dataset as $key => $value) {
-    if (!is_array($value)) {
-        $dataset[$key] = [];
-    }
-}
-$dataset = array_filter($dataset);
-?>
-
 <?php if (!empty($dataset)) : ?>
-<div 
+<div
   class="<?= $this->e($type, 'wrapperClasses') ?>"
   data-has-alternating-rows="<?= $hasAlternatingRows ? 'true' : 'false' ?>"
 >
