@@ -14,9 +14,7 @@ $isEmpty = empty($values) || array_reduce($values, function ($arePreviousEmpty, 
               <?php
               $attributeDefinition = array_reduce(
                 $attribute_list,
-                function ($found, $def) use ($key) {
-                    return $key === $def['key'] ? $def : $found;
-                },
+                fn ($found, $def) => $key === $def['key'] ? $def : $found,
                 null
               );
               ?>
