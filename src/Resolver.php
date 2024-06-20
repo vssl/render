@@ -140,8 +140,15 @@ class Resolver
      */
     public function resolve()
     {
+        $query = null;
+        parse_str($this->request->getUri()->getQuery(), $query);
+        $querySuffix = !empty($query['pk']) ? "pk={$query['pk']}" : '';
+
         try {
-            $response = $this->api->getPage($this->request->getUri()->getPath());
+            $response = $this->api->getPage(
+                $this->request->getUri()->getPath(),
+                $querySuffix
+            );
 
             if ($response && ($page = $this->decodePage($response))) {
                 $status = $response->getStatusCode();
@@ -177,6 +184,7 @@ class Resolver
     public function decodePage(ResponseInterface $response)
     {
         $body = (string) $response->getBody();
+
         if ($response->getHeaderLine('Content-Type') == "application/json") {
             $page = json_decode($body, true);
             return !empty($page['exists']) ? $page['page'] : false;

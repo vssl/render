@@ -89,11 +89,12 @@ class PageApi
      * Get a particular page from the API.
      *
      * @param  string $path path of the page
+     * @param  string $additionalQueryParameters query string to append to the request
      * @return array|false
      */
-    public function getPage($path)
+    public function getPage($path, $additionalQueryParameters = '')
     {
-        return $this->call("get", "/pages?slug=" . $path);
+        return $this->call("get", "/pages?slug=" . $path . '&' . $additionalQueryParameters);
     }
 
     /**
