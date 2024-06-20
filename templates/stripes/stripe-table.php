@@ -5,8 +5,10 @@
 >
   <div class="vssl-stripe-column">
     <table>
-      <?php if (!empty($caption['html'])) : ?>
-        <caption><?= $this->inline($caption['html']) ?></caption>
+      <?php if (!empty($caption)) : ?>
+        <caption class="vssl-stripe--table--caption">
+          <?= !empty($caption['html']) ? $this->inline($caption['html']) : $caption ?>
+        </caption>
       <?php endif; ?>
 
       <?php if ($hasHeadersInFirstRow && !$hasHeadersInFirstColumn) : ?>

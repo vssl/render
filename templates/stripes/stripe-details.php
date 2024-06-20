@@ -3,8 +3,7 @@
     <div class="vssl-stripe-column">
         <details<?= !empty($open) && $open ? ' open' : '' ?>>
             <summary class="vssl-stripe--details--summary">
-                <h1 class="vssl-stripe--details--hed"><?= $summary['html'] ?></h1>
-
+                <div class="vssl-stripe--details--hed"><?= $summary['html'] ?></div>
                 <?php if (!empty($subtitle['html'])) : ?>
                 <div class="vssl-stripe--details--subtitle"><?= $subtitle['html'] ?></div>
                 <?php endif; ?>

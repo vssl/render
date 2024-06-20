@@ -4,7 +4,8 @@
         <div class="vssl-stripe--grid--wrap" data-item-count="<?= count($items) ?>">
             <div class="vssl-stripe--grid--items">
                 <?php foreach ($items as $idx => $item) : ?>
-                <div class="vssl-stripe--grid-item">
+                <div <?= empty($item['image']) ? 'data-no-image="true"' : '' ?>
+                    class="vssl-stripe--grid-item">
                     <?php if (!empty($item['image'])) : ?>
                     <div class="vssl-stripe--grid-item--image">
                         <img
