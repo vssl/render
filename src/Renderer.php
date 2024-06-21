@@ -413,6 +413,16 @@ class Renderer
     }
 
     /**
+     * Render the only the stripes from the current data.
+     *
+     * @return string
+     */
+    public function renderStripes()
+    {
+        return $this->engine->render('stripes', $this->processData($this->data));
+    }
+
+    /**
      * Return the rendered page.
      *
      * @return string
