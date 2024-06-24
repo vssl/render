@@ -253,14 +253,14 @@ class Renderer
         $dom = new DOMDocument();
         $dom->loadHTML($stripe['content']['html']);
         $xpath = new DOMXPath($dom);
-        $headings = $xpath->query('//h1 | //h2');
+        $headings = $xpath->query('//h3 | //h4');
 
         $listItems = [];
-        $h1Count = 0;
-        $h2Count = 0;
+        $h3Count = 0;
+        $h4Count = 0;
         foreach ($headings as $heading) {
             $listItem = [
-                'level' => $heading->tagName === 'h1' ? 1 : 2,
+                'level' => $heading->tagName === 'h3' ? 1 : 2,
                 'headingText' => $heading->nodeValue,
             ];
             if (!empty($heading->id)) {
@@ -269,10 +269,10 @@ class Renderer
 
             array_push($listItems, $listItem);
 
-            if ($heading->tagName === 'h1') {
-                $h1Count++;
+            if ($heading->tagName === 'h3') {
+                $h3Count++;
             } else {
-                $h2Count++;
+                $h4Count++;
             }
         }
         return $listItems;
