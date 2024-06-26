@@ -40,8 +40,12 @@ $slides = array_values(array_filter($slides, function ($slide) {
                 style="height: 0px; padding-bottom: 100%;"
             >
                 <div class="vssl-stripe--gallery--buttons">
-                    <div class="vssl-stripe--gallery--button vssl-stripe--gallery--next"></div>
-                    <div class="vssl-stripe--gallery--button vssl-stripe--gallery--prev"></div>
+                    <div class="vssl-stripe--gallery--button vssl-stripe--gallery--next">
+                    <span class="vssl-icon">&rarr;</span>
+                </div>
+                <div class="vssl-stripe--gallery--button vssl-stripe--gallery--prev">
+                    <span class="vssl-icon">&larr;</span>
+                </div>
                 </div>
                 <div class="vssl-stripe--gallery--counter">
                     <span class="vssl-stripe--gallery--current">1</span>
@@ -60,6 +64,7 @@ const nextBtn = galleryEl.querySelector('.vssl-stripe--gallery--next')
 const prevBtn = galleryEl.querySelector('.vssl-stripe--gallery--prev')
 const currentCounter = galleryEl.querySelector('.vssl-stripe--gallery--current')
 const slideEls = galleryEl.querySelectorAll('.vssl-stripe--gallery--slide')
+const controls = galleryEl.querySelector('.vssl-stripe--gallery--controls')
 
 let slideIndex = 0
 const slideCount = slideEls.length
@@ -77,6 +82,12 @@ function setSlideIndex(index) {
     slideEls[prevSlideIndex].querySelector('img').removeAttribute('loading')
     slideEls[nextSlideIndex].dataset.active = false
     slideEls[prevSlideIndex].dataset.active = false
+
+    childImage = slideEls[slideIndex].querySelector('img')
+    ratio = (childImage?.clientHeight || 0) / (childImage?.clientWidth || 1)
+    controls.style = ratio
+      ? `height: 0; padding-bottom: ${ratio * 100}%;`
+      : ''
 }
 
 setSlideIndex(0)
