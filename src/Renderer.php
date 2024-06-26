@@ -390,7 +390,7 @@ class Renderer
             ? $stripe['hasAlternatingRows']
             : false;
 
-        $dataset = $stripe['dataset'];
+        $dataset = $stripe['dataset'] ?? [];
         // Ensure each item in the dataset is an array
         $dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
         foreach ($dataset as $key => $value) {
