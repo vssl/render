@@ -245,7 +245,8 @@ class Renderer
      * @return array
      *
      */
-    private function getTextblockStripeHeadings($stripe) {
+    private function getTextblockStripeHeadings($stripe)
+    {
         if (empty($stripe['content']['html'])) {
             return [];
         }
@@ -253,14 +254,14 @@ class Renderer
         $dom = new DOMDocument();
         $dom->loadHTML($stripe['content']['html']);
         $xpath = new DOMXPath($dom);
-        $headings = $xpath->query('//h1 | //h2');
+        $headings = $xpath->query('//h1 | //h2 | //h3 | //h4');
 
         $listItems = [];
-        $h1Count = 0;
-        $h2Count = 0;
         foreach ($headings as $heading) {
             $listItem = [
-                'level' => $heading->tagName === 'h1' ? 1 : 2,
+                'level' => $heading->tagName === 'h1' || $heading->tagName === 'h3'
+                    ? 1
+                    : 2,
                 'headingText' => $heading->nodeValue,
             ];
             if (!empty($heading->id)) {
@@ -268,12 +269,6 @@ class Renderer
             }
 
             array_push($listItems, $listItem);
-
-            if ($heading->tagName === 'h1') {
-                $h1Count++;
-            } else {
-                $h2Count++;
-            }
         }
         return $listItems;
     }
@@ -283,15 +278,16 @@ class Renderer
      *
      * @return string
      */
-    public function getTableOfContents($scope)
+    public function getTableOfContents($scope = ['break', 'textblock'])
     {
         if (empty($this->data['stripes'])) {
             return null;
         }
+        $scope = !empty($scope) ? $scope : [];
 
         $items = [];
         $stripes = $this->data['stripes'];
-        $inScope = fn($type) => empty($scope) || in_array($type, $scope);
+        $inScope = fn($type) => in_array($type, $scope);
         foreach ($stripes as $index => $stripe) {
             if ($stripe['type'] === 'stripe-break' && $inScope('break')) {
                 array_push($items, $this->getBreakStripeHeading($stripe, $index));
@@ -399,6 +395,20 @@ class Renderer
             }
         }
         $stripe['dataset'] = array_filter($dataset);
+        return $stripe;
+    }
+
+    /**
+     * Process stripe-toc data.
+     *
+     * @param  array $stripe array of data
+     * @return array
+     */
+    public function processStripeToc($stripe)
+    {
+        $allowedScopes = $stripe['allowed_scopes'] ?? ['break', 'textblock'];
+        $scope = $stripe['scope'] ?? $allowedScopes ?? [];
+        $stripe['toc'] = $this->getTableOfContents(array_intersect($allowedScopes, $scope));
         return $stripe;
     }
 

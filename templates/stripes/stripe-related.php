@@ -35,4 +35,4 @@ $links = array_values(array_filter($links, function ($link) {
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;

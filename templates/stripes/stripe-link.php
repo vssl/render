@@ -1,7 +1,7 @@
 <?php if (!empty($url['html']) || (!empty($url) && is_string($url))) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
-        <div class="vssl-stripe--link--card">
+        <div class="vssl-stripe--link--card vssl-stripe--card">
             <?php if (!empty($image)) : ?>
             <div class="vssl-stripe--link--thumbnail">
                 <a href="<?= !empty($url['html'])
@@ -46,4 +46,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;
