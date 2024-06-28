@@ -5,7 +5,7 @@
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--file--card vssl-stripe--card">
             <div class="vssl-stripe--file--info">
-                <div class="vssl-stripe--file--icon"></div>
+                <div class="vssl-stripe--file--file vssl-stripe--file--icon"></div>
                 
                 <div class="vssl-stripe--file--text">
                     <?php if (!empty($fileExtension)) : ?>

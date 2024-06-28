@@ -1,7 +1,10 @@
 <?php if (!empty($dataset)) : ?>
 <div
   class="<?= $this->e($type, 'wrapperClasses') ?>"
+  data-caption-position="<?= $captionPosition === 'above' ? 'above' : 'below' ?>"
   data-has-alternating-rows="<?= $hasAlternatingRows ? 'true' : 'false' ?>"
+  data-has-headers-in-first-row="<?= $hasHeadersInFirstRow ? 'true' : 'false' ?>"
+  data-has-headers-in-first-column="<?= $hasHeadersInFirstColumn ? 'true' : 'false' ?>"
 >
   <div class="vssl-stripe-column">
     <table>
@@ -13,9 +16,11 @@
 
       <?php if ($hasHeadersInFirstRow && !$hasHeadersInFirstColumn) : ?>
         <thead>
-          <?php foreach ($dataset[0] as $item) : ?>
-            <th><?= $item ?></th>
-          <?php endforeach; ?>
+          <tr>
+            <?php foreach ($dataset[0] as $item) : ?>
+              <th><?= $item ?></th>
+            <?php endforeach; ?>
+          </tr>
         </thead>
       <?php endif; ?>
 
@@ -47,4 +52,4 @@
     </table>
   </div>
 </div>
-<?php endif; ?>
+<?php endif;

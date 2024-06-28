@@ -2,8 +2,8 @@
 $slides = array_values(array_filter($slides, function ($slide) {
     return !empty($slide['image']);
 }));
-?>
-<?php if (count($slides)) : ?>
+
+if (count($slides)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>">
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--gallery--wrap" data-slide-count="<?= count($slides) ?>">
@@ -57,6 +57,7 @@ $slides = array_values(array_filter($slides, function ($slide) {
         </div>
     </div>
 </div>
+
 <?php if (count($slides) > 1) : ?>
 <script>
 const galleryEl = document.currentScript.previousElementSibling
@@ -96,4 +97,4 @@ prevBtn.addEventListener('click', () => setSlideIndex(slideIndex - 1))
 </script>
 <?php endif; ?>
 
-<?php endif; ?>
+<?php endif;
