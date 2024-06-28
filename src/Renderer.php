@@ -407,7 +407,7 @@ class Renderer
     }
 
     /**
-     * Process stripe-table data.
+     * Process stripe-toc data.
      *
      * @param  array $stripe array of data
      * @return array
