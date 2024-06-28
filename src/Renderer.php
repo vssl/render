@@ -257,8 +257,6 @@ class Renderer
         $headings = $xpath->query('//h1 | //h2 | //h3 | //h4');
 
         $listItems = [];
-        $h1Count = 0;
-        $h2Count = 0;
         foreach ($headings as $heading) {
             $listItem = [
                 'level' => $heading->tagName === 'h1' || $heading->tagName === 'h3'
@@ -271,12 +269,6 @@ class Renderer
             }
 
             array_push($listItems, $listItem);
-
-            if ($heading->tagName === 'h1') {
-                $h1Count++;
-            } else {
-                $h2Count++;
-            }
         }
         return $listItems;
     }
