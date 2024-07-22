@@ -5,7 +5,6 @@
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
     <div class="vssl-stripe-column">
-        <pre><?= $variation ?></pre>
         <div class="vssl-stripe--file--card vssl-stripe--card">
             <div class="vssl-stripe--file--info">
                 <div class="vssl-stripe--file--icon"></div>
