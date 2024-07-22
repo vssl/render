@@ -1,5 +1,7 @@
 <?php if (!empty($url['html']) || (!empty($url) && is_string($url))) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--link--card vssl-stripe--card">
             <?php if (!empty($image)) : ?>

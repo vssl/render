@@ -17,7 +17,9 @@ function vsslStripeMenuLinkList($links, $depth = 1)
 }
 
 if (count($menu_links)) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
   <div class="vssl-stripe-column">
     <nav>
       <?php if (!empty($menu_label) && !empty($menu_show_label) && $menu_show_label) : ?>

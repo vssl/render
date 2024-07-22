@@ -1,6 +1,8 @@
 <?php $tag = !empty($heading_tag) ? $heading_tag : 'h2' ?>
 
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <hr />
 

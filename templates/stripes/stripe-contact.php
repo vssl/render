@@ -1,4 +1,7 @@
-<div<?= (!empty($headshot) ? ' data-has-headshot="true"' : '') ?> class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($headshot) ? ' data-has-headshot="true"' : '';
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--contact--card vssl-stripe--card">
             <?php if (!empty($headshot)): ?>

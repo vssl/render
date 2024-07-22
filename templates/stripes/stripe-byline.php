@@ -1,5 +1,7 @@
 <?php if (!empty($author['html']) || !empty($date['html'])) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--byline-fieldwrap">
             <?php if (!empty($author['html'])) : ?>
@@ -18,4 +20,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;

@@ -1,5 +1,7 @@
 <?php if (count($items)) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--grid--wrap" data-item-count="<?= count($items) ?>">
             <div class="vssl-stripe--grid--items">
@@ -8,8 +10,7 @@
                     class="vssl-stripe--grid-item">
                     <?php if (!empty($item['image'])) : ?>
                     <div class="vssl-stripe--grid-item--image">
-                        <img
-                            src="<?= $this->image($item['image'], $image_style ?? null) ?>"
+                        <img src="<?= $this->image($item['image'], $image_style ?? null) ?>"
                             alt="<?= !empty($item['alt']['html'])
                                 ? htmlspecialchars(strip_tags($item['alt']['html']), ENT_QUOTES, 'UTF-8')
                                 : '' ?>"
@@ -22,7 +23,8 @@
                         <?php if (!empty($item['subhed']['html'])) : ?>
                         <h4 class="vssl-stripe--grid-item--subhed">
                             <?php if (!empty($item['url'])) : ?>
-                            <a tabindex="-1" href="<?= $item['url'] ?>"><?= $this->inline($item['subhed']['html']) ?></a>
+                            <a tabindex="-1" href="<?= $item['url'] ?>"
+                                ><?= $this->inline($item['subhed']['html']) ?></a>
                             <?php else : ?>
                             <?= $this->inline($item['subhed']['html']) ?>
                             <?php endif; ?>
@@ -39,10 +41,8 @@
 
                     <?php if (!empty($item['url'])) : ?>
                     <div class="vssl-stripe--grid-item--button">
-                        <a
-                            class="vssl-button"
-                            href="<?= $item['url'] ?>"
-                        ><?= $item['btntxt'] ?? 'Learn More' ?></a>
+                        <a class="vssl-button" href="<?= $item['url'] ?>"
+                            ><?= $item['btntxt'] ?? 'Learn More' ?></a>
                     </div>
                     <?php endif; ?>
                 </div>

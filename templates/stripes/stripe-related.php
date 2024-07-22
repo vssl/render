@@ -4,7 +4,9 @@ $links = array_values(array_filter($links, function ($link) {
 }));
 ?>
 <?php if (count($links)) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <?php if (!empty($relatedLabel['html'])) : ?>
         <h2 class="vssl-stripe--related--label"><?= $relatedLabel['html'] ?></h2>

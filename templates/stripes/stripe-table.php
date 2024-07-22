@@ -1,11 +1,11 @@
 <?php if (!empty($dataset)) : ?>
-<div
-  class="<?= $this->e($type, 'wrapperClasses') ?>"
-  data-caption-position="<?= $captionPosition === 'above' ? 'above' : 'below' ?>"
-  data-has-alternating-rows="<?= $hasAlternatingRows ? 'true' : 'false' ?>"
-  data-has-headers-in-first-row="<?= $hasHeadersInFirstRow ? 'true' : 'false' ?>"
-  data-has-headers-in-first-column="<?= $hasHeadersInFirstColumn ? 'true' : 'false' ?>"
->
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo "data-caption-position=\"{($captionPosition === 'above' ? 'above' : 'below')}\"";
+    echo "data-has-alternating-rows=\"{($hasAlternatingRows ? 'true' : 'false')}\"";
+    echo "data-has-headers-in-first-row=\"{($hasHeadersInFirstRow ? 'true' : 'false')}\"";
+    echo "data-has-headers-in-first-column=\"{($hasHeadersInFirstColumn ? 'true' : 'false')}\"";
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
   <div class="vssl-stripe-column">
     <table>
       <?php if (!empty($caption)) : ?>

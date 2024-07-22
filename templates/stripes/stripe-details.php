@@ -1,5 +1,7 @@
 <?php if (!empty($summary['html']) && !empty($content['html'])) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <details<?= !empty($open) && $open ? ' open' : '' ?>>
             <summary class="vssl-stripe--details--summary">
@@ -12,4 +14,4 @@
         </details>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;

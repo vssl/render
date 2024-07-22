@@ -1,5 +1,7 @@
 <?php if (!empty($toc)) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
   <div class="vssl-stripe-column">
     <nav class="vssl-stripe--toc--nav">
       <h4 class="vssl-stripe--toc--title">

@@ -195,7 +195,7 @@ class Renderer
      */
     public function inline($str, $allowed_tags = '<a><b><strong><i><em>')
     {
-        return strip_tags($str, $allowed_tags);
+        return !empty($str) ? strip_tags($str, $allowed_tags) : null;
     }
 
     /**

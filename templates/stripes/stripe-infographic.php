@@ -1,19 +1,16 @@
 <?php if (!empty($image)) : ?>
-<div
-    class="<?= $this->e($type, 'wrapperClasses') ?>"
-    <?= !isset($is_enlargeable) || $is_enlargeable ? 'data-is-enlargeable="true"' : '' ?>
->
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !isset($is_enlargeable) || $is_enlargeable ? ' data-is-enlargeable="true"' : '';
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <?php if (!empty($title['html'])) : ?>
         <div class="vssl-stripe--infographic--title"><?= $this->inline($title['html']) ?></div>
         <?php endif; ?>
 
         <div class="vssl-stripe--infographic--image">
-            <img
-                src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
-                alt="<?= $image ?>"
-                loading="lazy"
-            />
+            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
+                alt="<?= $image ?>" loading="lazy" />
         </div>
         <?php if (!empty($caption['html']) || !empty($credit['html'])) : ?>
         <div class="vssl-stripe--infographic--meta">
@@ -35,15 +32,13 @@
     </div>
     <div class="vssl-stripe--infographic--lightbox">
         <div class="vssl-stripe--infographic--image">
-            <img
-                src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
-                alt="<?= $image ?>"
-                loading="lazy"
-            />
+            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
+                alt="<?= $image ?>" loading="lazy" />
         </div>
         <button type="button" class="vssl-stripe--infographic--collapse">Close</button>
     </div>
 </div>
+
 <script>
 const infographicEl = document.currentScript.previousElementSibling
 const enlargener = infographicEl.querySelector('.vssl-stripe--infographic--enlarge')
@@ -62,10 +57,12 @@ function onCollapse() {
 }
 
 function onInfographicKeyup(e) {
-    if (e.key === 'Escape') onCollapse()
+    if (e.key === 'Escape') {
+        onCollapse()
+    }
 }
 
 enlargener.addEventListener('click', onEnlarge)
 collapser.addEventListener('click', onCollapse)
 </script>
-<?php endif; ?>
+<?php endif;

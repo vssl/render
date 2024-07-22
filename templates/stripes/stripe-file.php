@@ -1,11 +1,14 @@
 <?php if (!empty($file)) :
     $fileExtension = !empty($file['file']) ? strtoupper(pathinfo($file['file'], PATHINFO_EXTENSION)) : null;
     ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
+        <pre><?= $variation ?></pre>
         <div class="vssl-stripe--file--card vssl-stripe--card">
             <div class="vssl-stripe--file--info">
-                <div class="vssl-stripe--file--file vssl-stripe--file--icon"></div>
+                <div class="vssl-stripe--file--icon"></div>
                 
                 <div class="vssl-stripe--file--text">
                     <?php if (!empty($fileExtension)) : ?>
@@ -38,4 +41,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;

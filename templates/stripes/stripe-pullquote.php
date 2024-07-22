@@ -1,4 +1,7 @@
-<div<?= (!empty($image) ? ' data-has-image="true"' : '') ?> class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($image) ? ' data-has-image="true"' : '';
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <?php if (!empty($image)): ?>
     <div
         class="vssl-stripe--pullquote--background"

@@ -1,5 +1,10 @@
-<?php if (!empty($first['html']) || !empty($second['html']) || (!empty($btn) && !empty($btntxt) && !empty($btnurl))): ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<?php if (!empty($first['html'])
+    || !empty($second['html'])
+    || (!empty($btn) && !empty($btntxt) && !empty($btnurl))
+): ?>
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--cta--card vssl-stripe--card">
             <div class="vssl-stripe--cta--text">
@@ -20,4 +25,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;

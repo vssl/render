@@ -1,9 +1,9 @@
-<header
-    <?= (!empty($image) ? ' data-has-image="true"' : '') ?>
-    <?= (!empty($videoEmbed) ? ' data-has-video="true"' : '') ?>
-    <?= (!empty($inset) || !empty($bgVideoUrl) ? ' data-has-inset="true"' : '') ?>
-    class="vssl-stripe--header <?= $this->e($type, 'wrapperClasses') ?>"
->
+<header class="vssl-stripe--header <?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($image) ? ' data-has-image="true"' : '';
+    echo !empty($videoEmbed) ? ' data-has-video="true"' : '';
+    echo !empty($inset) || !empty($bgVideoUrl) ? ' data-has-inset="true"' : '';
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <?php if (!empty($image)) : ?>
     <div class="vssl-stripe--header--background" style="background-image: url('<?= $this->image($image) ?>');"></div>
     <?php endif; ?>
@@ -61,6 +61,7 @@
         <?php endif; ?>
     </div>
 </header>
+
 <script>
 const stripeEl = document.currentScript.previousElementSibling
 const videoUI = stripeEl.querySelector('.vssl-stripe--header-video--ui')
@@ -72,8 +73,11 @@ let embed = null;
 let isEmbedLoaded = false;
 
 function toggle() {
-    if (isEmbedLoaded) close()
-    else open()
+    if (isEmbedLoaded) {
+        close()
+    } else {
+        open()
+    }
     isEmbedLoaded = !isEmbedLoaded
 }
 

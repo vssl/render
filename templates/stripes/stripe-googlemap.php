@@ -1,5 +1,7 @@
 <?php if ($address): ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>">
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--googlemap--embed">
             <div id="map-<?= $weight ?>" class="vssl-stripe--googlemap--map">
@@ -50,9 +52,13 @@ function initStripe() {
     const styles = maptype === 'roadmap' ? JSON.parse(stylesJson) : []
     const config = { marker, coordinates, address, maptype, zoom, styles }
 
-    if (coordinates) buildMap(config)
-    else if (address) geocode(config)
-    else console.warn('No coordinates or address set for Google Maps API. Doing nothing.')
+    if (coordinates) {
+        buildMap(config)
+    } else if (address) {
+        geocode(config)
+    } else {
+        console.warn('No coordinates or address set for Google Maps API. Doing nothing.')
+    }
 }
 
 function buildMap(config) {
@@ -89,4 +95,4 @@ embedEl.addEventListener('click', function() {
     this.classList.add('is-engaged')
 })
 </script>
-<?php endif; ?>
+<?php endif;
