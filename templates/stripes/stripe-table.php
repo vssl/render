@@ -1,9 +1,16 @@
-<?php if (!empty($dataset)) : ?>
+<?php if (!empty($dataset)) :
+  $dataAttributes = [
+    'captionPosition' => !empty($captionPosition) && $captionPosition === 'above' ? $captionPosition : 'below',
+    'hasAlternatingRows' => !empty($hasAlternatingRows) && $hasAlternatingRows ? 'true' : 'false',
+    'hasHeadersInFirstRow' => !empty($hasHeadersInFirstRow) && $hasHeadersInFirstRow ? 'true' : 'false',
+    'hasHeadersInFirstColumn' => !empty($hasHeadersInFirstColumn) && $hasHeadersInFirstColumn ? 'true' : 'false',
+  ];
+  ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
-    echo "data-caption-position=\"{($captionPosition === 'above' ? 'above' : 'below')}\"";
-    echo "data-has-alternating-rows=\"{($hasAlternatingRows ? 'true' : 'false')}\"";
-    echo "data-has-headers-in-first-row=\"{($hasHeadersInFirstRow ? 'true' : 'false')}\"";
-    echo "data-has-headers-in-first-column=\"{($hasHeadersInFirstColumn ? 'true' : 'false')}\"";
+    echo " data-caption-position=\"{$dataAttributes['captionPosition']}\"";
+    echo " data-has-alternating-rows=\"{$dataAttributes['hasAlternatingRows']}\"";
+    echo " data-has-headers-in-first-row=\"{$dataAttributes['hasHeadersInFirstRow']}\"";
+    echo " data-has-headers-in-first-column=\"{$dataAttributes['hasHeadersInFirstColumn']}\"";
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
   <div class="vssl-stripe-column">
