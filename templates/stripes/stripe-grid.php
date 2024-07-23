@@ -22,12 +22,7 @@
                     <div class="vssl-stripe--grid-item--text">
                         <?php if (!empty($item['subhed']['html'])) : ?>
                         <h4 class="vssl-stripe--grid-item--subhed">
-                            <?php if (!empty($item['url'])) : ?>
-                            <a tabindex="-1" href="<?= $item['url'] ?>"
-                                ><?= $this->inline($item['subhed']['html']) ?></a>
-                            <?php else : ?>
                             <?= $this->inline($item['subhed']['html']) ?>
-                            <?php endif; ?>
                         </h4>
                         <?php endif; ?>
 
@@ -51,4 +46,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif;
