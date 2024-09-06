@@ -1,47 +1,54 @@
-<?php if (!empty($url['html']) || (!empty($url) && is_string($url))) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
-    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
-?>>
+<?php if (!empty($url["html"]) || (!empty($url) && is_string($url))): ?>
+<div class="<?= $this->e($type, "wrapperClasses") ?>"<?php echo !empty(
+  $variation
+)
+  ? " data-variation=\"{$variation}\""
+  : ""; ?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--link--card vssl-stripe--card">
-            <?php if (!empty($image)) : ?>
+            <?php if (!empty($image)): ?>
             <div class="vssl-stripe--link--thumbnail">
-                <a href="<?= !empty($url['html'])
-                    ? $this->inline($url['html'])
-                    : (!empty($url) && is_string($url) ? $url : '')
-                ?>" tabindex="-1">
-                    <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
-                        alt="<?= !empty($alt['html'])
-                            ? htmlspecialchars(strip_tags($alt['html']), ENT_QUOTES, 'UTF-8')
-                            : (!empty($alt) && is_string($alt) ? $alt : '') ?>"
-                        loading="lazy" />
+                <a href="<?= !empty($url["html"])
+                  ? $this->inline($url["html"])
+                  : (!empty($url) && is_string($url)
+                    ? $url
+                    : "") ?>" tabindex="-1">
+                    <img src="<?= $this->image(
+                      $image,
+                      !empty($image_style) ? $image_style : null
+                    ) ?>"
+                      alt="<?= $alt ?? "" ?>"
+                      loading="lazy"
+                    />
                 </a>
             </div>
             <?php endif; ?>
 
             <div class="vssl-stripe--link--text">
                 <div class="vssl-stripe--link--info">
-                    <?php if (!empty($title['html'])) : ?>
+                    <?php if (!empty($title["html"])): ?>
                     <h3 class="vssl-stripe--link--title">
-                        <a href="<?=
-                            !empty($url['html'])
-                                ? $this->inline($url['html'])
-                                : (!empty($url) && is_string($url) ? $url : '')
-                        ?>"><?= $this->inline($title['html']) ?></a>
+                        <a href="<?= !empty($url["html"])
+                          ? $this->inline($url["html"])
+                          : (!empty($url) && is_string($url)
+                            ? $url
+                            : "") ?>"><?= $this->inline($title["html"]) ?></a>
                     </h3>
                     <?php endif; ?>
 
-                    <?php if (!empty($description['html'])) : ?>
+                    <?php if (!empty($description["html"])): ?>
                     <p class="vssl-stripe--link--description">
-                        <?= $this->inline($description['html']) ?>
+                        <?= $this->inline($description["html"]) ?>
                     </p>
                     <?php endif; ?>
                 </div>
 
                 <div class="vssl-stripe--link--url">
                     <?= parse_url(
-                        !empty($url) && is_string($url) ? $url : strip_tags($url['html']),
-                        PHP_URL_HOST
+                      !empty($url) && is_string($url)
+                        ? $url
+                        : strip_tags($url["html"]),
+                      PHP_URL_HOST
                     ) ?>
                 </div>
             </div>

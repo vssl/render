@@ -1,25 +1,36 @@
-<?php if (!empty($image)) : ?>
-<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
-    echo !isset($is_enlargeable) || $is_enlargeable ? ' data-is-enlargeable="true"' : '';
-    echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+<?php if (!empty($image)): ?>
+<div class="<?= $this->e($type, "wrapperClasses") ?>"<?php
+echo !isset($is_enlargeable) || $is_enlargeable
+  ? ' data-is-enlargeable="true"'
+  : "";
+echo !empty($variation) ? " data-variation=\"{$variation}\"" : "";
 ?>>
     <div class="vssl-stripe-column">
-        <?php if (!empty($title['html'])) : ?>
-        <div class="vssl-stripe--infographic--title"><?= $this->inline($title['html']) ?></div>
+        <?php if (!empty($title["html"])): ?>
+        <div class="vssl-stripe--infographic--title"><?= $this->inline(
+          $title["html"]
+        ) ?></div>
         <?php endif; ?>
 
         <div class="vssl-stripe--infographic--image">
-            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
-                alt="<?= $image ?>" loading="lazy" />
+            <img src="<?= $this->image(
+              $image,
+              !empty($image_style) ? $image_style : null
+            ) ?>"
+                alt="<?= $image_alt ?? ($image ?? "") ?>" loading="lazy" />
         </div>
-        <?php if (!empty($caption['html']) || !empty($credit['html'])) : ?>
+        <?php if (!empty($caption["html"]) || !empty($credit["html"])): ?>
         <div class="vssl-stripe--infographic--meta">
-            <?php if (!empty($caption['html'])) : ?>
-            <div class="vssl-stripe--infographic--caption"><?= $this->inline($caption['html']) ?></div>
+            <?php if (!empty($caption["html"])): ?>
+            <div class="vssl-stripe--infographic--caption"><?= $this->inline(
+              $caption["html"]
+            ) ?></div>
             <?php endif; ?>
 
-            <?php if (!empty($credit['html'])) : ?>
-            <div class="vssl-stripe--infographic--credit"><?= $this->inline($credit['html']) ?></div>
+            <?php if (!empty($credit["html"])): ?>
+            <div class="vssl-stripe--infographic--credit"><?= $this->inline(
+              $credit["html"]
+            ) ?></div>
             <?php endif; ?>
         </div>
         <?php endif; ?>
@@ -32,7 +43,10 @@
     </div>
     <div class="vssl-stripe--infographic--lightbox">
         <div class="vssl-stripe--infographic--image">
-            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
+            <img src="<?= $this->image(
+              $image,
+              !empty($image_style) ? $image_style : null
+            ) ?>"
                 alt="<?= $image ?>" loading="lazy" />
         </div>
         <button type="button" class="vssl-stripe--infographic--collapse">Close</button>
