@@ -43,11 +43,14 @@ echo !empty($variation) ? " data-variation=\"{$variation}\"" : "";
     </div>
     <div class="vssl-stripe--infographic--lightbox">
         <div class="vssl-stripe--infographic--image">
-            <img src="<?= $this->image(
-              $image,
-              !empty($image_style) ? $image_style : null
-            ) ?>"
-                alt="<?= $image ?>" loading="lazy" />
+            <img
+              src="<?= $this->image(
+                $image,
+                !empty($image_style) ? $image_style : null
+              ) ?>"
+              alt="<?= $image_alt ?? ($image ?? "") ?>"
+              loading="lazy"
+            />
         </div>
         <button type="button" class="vssl-stripe--infographic--collapse">Close</button>
     </div>
