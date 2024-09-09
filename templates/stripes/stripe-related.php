@@ -27,8 +27,7 @@ $links = array_values(
                               $link["page"]["image"],
                               !empty($image_style) ? $image_style : null
                             ) ?>"
-                            alt="<?= $link["page"]["image_alt"] ??
-                              $link["page"]["image"] ?>"
+                            alt="<?= $link["page"]["image_alt"] ?? "" ?>"
                             loading="lazy"
                         />
                         <?php endif; ?>
