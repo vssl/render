@@ -21,7 +21,7 @@ if (count($slides)): ?>
                           $slide["image"],
                           !empty($image_style) ? $image_style : null
                         ) ?>"
-                            alt="<?= $slide["alt"] ?? "" ?>
+                            alt="<?= $slide["image_alt"] ?? "" ?>
                             loading="lazy"
                         />
                     </div>

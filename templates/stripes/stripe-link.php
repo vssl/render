@@ -17,7 +17,7 @@
                       $image,
                       !empty($image_style) ? $image_style : null
                     ) ?>"
-                      alt="<?= $alt ?? "" ?>"
+                      alt="<?= $image_alt ?? "" ?>"
                       loading="lazy"
                     />
                 </a>
