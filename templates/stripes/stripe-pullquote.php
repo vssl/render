@@ -2,10 +2,9 @@
     echo !empty($image) ? ' data-has-image="true"' : '';
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
-    <?php if (!empty($image)): ?>
-    <div
-        class="vssl-stripe--pullquote--background"
-        style="background-image: url('<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>');"
+    <?php if (!empty($image)) : ?>
+    <div class="vssl-stripe--pullquote--background"
+        style="background-image: url('<?= $this->image($image, $image_style ?? null) ?>');"
     ></div>
     <?php endif; ?>
 

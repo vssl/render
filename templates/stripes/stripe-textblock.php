@@ -1,4 +1,4 @@
-<?php if (!empty($content['html'])): ?>
+<?php if (!empty($content['html'])) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>

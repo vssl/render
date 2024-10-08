@@ -5,16 +5,15 @@
 ?>>
     <?php if (!empty($image)) : ?>
     <div class="vssl-stripe--header--background"
-        style="background-image: url('<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>');"
+        style="background-image: url('<?= $this->image($image, $image_style ?? null) ?>');"
     ></div>
     <?php endif; ?>
 
     <div class="vssl-stripe-column">
         <?php if (!empty($featured_image)) : ?>
         <div class="vssl-stripe--header--featured">
-            <img alt="<?= $featured_image_alt ?? '' ?>"
-                src="<?= $this->image($featured_image, !empty($featured_image_style) ? $featured_image_style : null) ?>"
-            />
+            <img src="<?= $this->image($featured_image, $featured_image_style ?? null) ?>"
+                alt="<?= $featured_image_alt ?? '' ?>" />
         </div>
         <?php endif; ?>
 

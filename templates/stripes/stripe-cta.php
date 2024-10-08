@@ -1,7 +1,7 @@
 <?php if (!empty($first['html'])
     || !empty($second['html'])
     || (!empty($btn) && !empty($btntxt) && !empty($btnurl))
-): ?>
+) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
@@ -17,7 +17,7 @@
                 <?php endif; ?>
             </div>
 
-            <?php if (!empty($btn) && !empty($btntxt) && !empty($btnurl)): ?>
+            <?php if (!empty($btn) && !empty($btntxt) && !empty($btnurl)) : ?>
             <div class="vssl-stripe--cta--button">
                 <a href="<?= $btnurl ?>" class="vssl-button"><?= $btntxt ?></a>
             </div>

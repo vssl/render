@@ -1,4 +1,4 @@
-<?php if ($address): ?>
+<?php if ($address) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>

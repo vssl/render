@@ -9,8 +9,9 @@
         <?php endif; ?>
 
         <div class="vssl-stripe--infographic--image">
-            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
-                alt="<?= $image ?>" loading="lazy" />
+            <img src="<?= $this->image($image, $image_style ?? null) ?>"
+                alt="<?= $image_alt ?? '' ?>"
+                loading="lazy" />
         </div>
         <?php if (!empty($caption['html']) || !empty($credit['html'])) : ?>
         <div class="vssl-stripe--infographic--meta">
@@ -24,7 +25,7 @@
         </div>
         <?php endif; ?>
 
-        <?php if (!isset($is_enlargeable) || $is_enlargeable): ?>
+        <?php if (!isset($is_enlargeable) || $is_enlargeable) : ?>
         <div class="vssl-stripe--infographic--actions">
             <button type="button" class="vssl-stripe--infographic--enlarge">Enlarge</button>
         </div>
@@ -32,8 +33,9 @@
     </div>
     <div class="vssl-stripe--infographic--lightbox">
         <div class="vssl-stripe--infographic--image">
-            <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
-                alt="<?= $image ?>" loading="lazy" />
+            <img src="<?= $this->image($image, $image_style ?? null) ?>"
+                alt="<?= $image_alt ?? '' ?>"
+                loading="lazy" />
         </div>
         <button type="button" class="vssl-stripe--infographic--collapse">Close</button>
     </div>

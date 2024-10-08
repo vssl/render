@@ -4,37 +4,35 @@
 ?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--contact--card vssl-stripe--card">
-            <?php if (!empty($headshot)): ?>
+            <?php if (!empty($headshot)) : ?>
             <div class="vssl-stripe--contact--headshot">
-                <img
-                    src="<?= $this->image($headshot, !empty($image_style) ? $image_style : 'headshot') ?>"
-                    alt="Contact Headshot"
-                    loading="lazy"
-                />
+                <img src="<?= $this->image($headshot, $image_style ?? 'headshot') ?>"
+                    alt="<?= $headshot_alt ?? 'Contact Headshot' ?>"
+                    loading="lazy" />
             </div>
             <?php endif; ?>
 
             <div class="vssl-stripe--contact--info">
-                <?php if (!empty($name['html'])): ?>
+                <?php if (!empty($name['html'])) : ?>
                 <h3 class="vssl-stripe--contact--name"><?= $this->inline($name['html']) ?></h3>
                 <?php endif; ?>
 
-                <?php if (!empty($jobtitle['html'])): ?>
+                <?php if (!empty($jobtitle['html'])) : ?>
                 <div class="vssl-stripe--contact--jobtitle"><?= $this->inline($jobtitle['html']) ?></div>
                 <?php endif; ?>
 
-                <?php if (!empty($email['html'])): ?>
+                <?php if (!empty($email['html'])) : ?>
                 <div class="vssl-stripe--contact--email">
                     <a href="mailto:<?= strip_tags($email['html']) ?>"><?= strip_tags($email['html']) ?></a>
                 </div>
                 <?php endif; ?>
 
-                <?php if (!empty($phone['html'])): ?>
+                <?php if (!empty($phone['html'])) : ?>
                 <div class="vssl-stripe--contact--phone"><?= $this->inline($phone['html']) ?></div>
                 <?php endif; ?>
             </div>
 
-            <?php if (!empty($btn) && !empty($btntxt) && !empty($btnurl)): ?>
+            <?php if (!empty($btn) && !empty($btntxt) && !empty($btnurl)) : ?>
                 <div class="vssl-stripe--contact--button">
                     <a href="<?= $btnurl ?>" class="vssl-button"><?= $btntxt ?></a>
                 </div>

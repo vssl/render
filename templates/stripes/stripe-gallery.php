@@ -1,7 +1,5 @@
 <?php
-$slides = array_values(
-    array_filter($slides, fn ($slide) => !empty($slide['image']))
-);
+$slides = array_values(array_filter($slides, fn($slide) => !empty($slide['image'])));
 
 if (count($slides)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
@@ -10,18 +8,17 @@ if (count($slides)) : ?>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--gallery--wrap" data-slide-count="<?= count($slides) ?>">
             <div class="vssl-stripe--gallery--slides">
-                <?php foreach ($slides as $idx => $slide) : ?>
+                <?php foreach ($slides as $slide) : ?>
                 <div class="vssl-stripe--gallery--slide">
                     <div class="vssl-stripe--gallery--image">
-                        <img src="<?= $this->image($slide['image'], !empty($image_style) ? $image_style : null) ?>"
-                            alt="<?= !empty($slide['alt']['html'])
-                                ? htmlspecialchars(strip_tags($slide['alt']['html']), ENT_QUOTES, 'UTF-8')
-                                : ''
-                            ?>"
-                            loading="lazy"
-                        />
+                        <img src="<?= $this->image($slide['image'], $image_style ?? null) ?>"
+                            alt="<?= $slide['image_alt'] ?? '' ?>"
+                            loading="lazy" />
                     </div>
-                    <?php if (!empty($slide['caption']['html']) || !empty($slide['credit']['html']) || count($slides) > 1) : ?>
+                    <?php if (!empty($slide['caption']['html']) ||
+                        !empty($slide['credit']['html']) ||
+                        count($slides) > 1
+                    ) : ?>
                     <div class="vssl-stripe--gallery--meta">
                         <?php if (!empty($slide['caption']['html'])) : ?>
                         <div class="vssl-stripe--gallery--caption"><?= $this->inline($slide['caption']['html']) ?></div>
