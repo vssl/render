@@ -11,11 +11,11 @@
                 
                 <div class="vssl-stripe--file--text">
                     <?php if (!empty($fileExtension)) : ?>
-                    <div class="vssl-stripe--file--extenstion">
+                    <div class="vssl-stripe--file--extension">
                         <?= $fileExtension ?>
                     </div>
                     <?php endif; ?>
-                
+
                     <?php if (!empty($filename['html'])) : ?>
                     <div class="vssl-stripe--file--filename">
                         <p><?= $this->inline($filename['html']) ?></p>
