@@ -6,7 +6,7 @@
         <div class="vssl-stripe--contact--card vssl-stripe--card">
             <?php if (!empty($headshot)) : ?>
             <div class="vssl-stripe--contact--headshot">
-                <img src="<?= $this->image($headshot, !empty($image_style) ? $image_style : 'headshot') ?>"
+                <img src="<?= $this->image($headshot, $image_style ?? 'headshot') ?>"
                     alt="<?= $headshot_alt ?? 'Contact Headshot' ?>"
                     loading="lazy" />
             </div>

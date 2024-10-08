@@ -1,14 +1,16 @@
 <?php if (!empty($url['html']) || (!empty($url) && is_string($url))) : ?>
-<div class="<?= $this->e($type, "wrapperClasses") ?>"<?php
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
   echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--link--card vssl-stripe--card">
             <?php if (!empty($image)) : ?>
             <div class="vssl-stripe--link--thumbnail">
-                <a tabindex="-1" href="<?= !empty($url['html']) ? $this->inline($url['html'])
-                    : (!empty($url) && is_string($url) ? $url : '') ?>">
-                    <img src="<?= $this->image($image, !empty($image_style) ? $image_style : null) ?>"
+                <a tabindex="-1" href="<?= !empty($url['html'])
+                    ? $this->inline($url['html'])
+                    : (!empty($url) && is_string($url) ? $url : '')
+                ?>">
+                    <img src="<?= $this->image($image, $image_style ?? null) ?>"
                         alt="<?= $image_alt ?? '' ?>"
                         loading="lazy" />
                 </a>
@@ -21,7 +23,7 @@
                     <h3 class="vssl-stripe--link--title">
                         <a href="<?= !empty($url['html'])
                             ? $this->inline($url['html'])
-                            : (!empty($url) && is_string($url) ? $url : "") ?>"
+                            : (!empty($url) && is_string($url) ? $url : '') ?>"
                         ><?= $this->inline($title['html']) ?></a>
                     </h3>
                     <?php endif; ?>

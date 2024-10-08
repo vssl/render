@@ -1,5 +1,5 @@
 <?php if (count($items)) : ?>
-<div class="<?= $this->e($type, "wrapperClasses") ?>"<?php
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
     <div class="vssl-stripe-column">

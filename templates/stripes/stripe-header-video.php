@@ -1,4 +1,4 @@
-<header class="vssl-stripe--header <?= $this->e($type,"wrapperClasses") ?>"<?php
+<header class="vssl-stripe--header <?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($image) ? ' data-has-image="true"' : '';
     echo !empty($videoEmbed) ? ' data-has-video="true"' : '';
     echo !empty($inset) || !empty($bgVideoUrl) ? ' data-has-inset="true"' : '';
@@ -25,7 +25,7 @@
             <div class="vssl-stripe--header-video--ui">
                 <?php if (!empty($bgVideoUrl)) : ?>
                 <video loop autoplay muted playsinline<?php
-                    echo !empty($inset) ? 'poster="' . $this->image($inset, $image_style ?? null) . '"' : '';
+                    echo !empty($inset) ? ' poster="' . $this->image($inset, $image_style ?? null) . '"' : '';
                 ?>>
                     <source src="<?= $bgVideoUrl ?>" type="video/mp4">
                     <?php if (!empty($inset)) : ?>
@@ -53,7 +53,7 @@
             <?php if (!empty($videoEmbed)) : ?>
             <div id="<?= 'video--' . $id ?>"
                 class="vssl-stripe--header-video--embed"
-                data-video-embed="<?= htmlspecialchars(json_encode(["code" => $videoEmbed]), ENT_QUOTES) ?>"
+                data-video-embed="<?= htmlspecialchars(json_encode(['code' => $videoEmbed]), ENT_QUOTES) ?>"
             ></div>
             <?php endif; ?>
         </div>

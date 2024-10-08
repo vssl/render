@@ -11,7 +11,7 @@ if (count($slides)) : ?>
                 <?php foreach ($slides as $slide) : ?>
                 <div class="vssl-stripe--gallery--slide">
                     <div class="vssl-stripe--gallery--image">
-                        <img src="<?= $this->image($slide['image'], !empty($image_style) ? $image_style : null) ?>"
+                        <img src="<?= $this->image($slide['image'], $image_style ?? null) ?>"
                             alt="<?= $slide['image_alt'] ?? '' ?>"
                             loading="lazy" />
                     </div>

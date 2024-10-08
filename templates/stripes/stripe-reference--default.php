@@ -4,9 +4,9 @@
     <div class="vssl-stripe--reference--card vssl-stripe--card">
         <?php if (!empty($referencePage['image'])) : ?>
         <div class="vssl-stripe--reference--image">
-            <a href="<?= $referencePage["slug"] ?>" tabindex="-1">
+            <a href="<?= $referencePage['slug'] ?>" tabindex="-1">
                 <img class="vssl-stripe--reference--thumbnail"
-                    src="<?= $this->image($referencePage['image'], !empty($image_style) ? $image_style : null) ?>"
+                    src="<?= $this->image($referencePage['image'], $image_style ?? null) ?>"
                     alt="<?= $referencePage['image_alt'] ?? '' ?>"
                     loading="lazy" />
             </a>

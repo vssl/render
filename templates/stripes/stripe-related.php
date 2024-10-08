@@ -1,9 +1,9 @@
 <?php
 $links = array_values(array_filter($links, function ($link) {
-    return !empty($link["page_id"]);
+    return !empty($link['page_id']);
 })); ?>
 <?php if (count($links)) : ?>
-<div class="<?= $this->e($type, "wrapperClasses") ?>"<?php
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
     <div class="vssl-stripe-column">
