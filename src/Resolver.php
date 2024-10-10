@@ -58,7 +58,12 @@ class Resolver
     public function setAuthHeaders()
     {
         $authToken = $_COOKIE['vssl-token'] ?? null;
-        $authExpiry = $_COOKIE['vssl-token-exp'] ?? null;
+        if (!empty($authToken)) {
+            $tokenParts = explode('.', $authToken);
+            $payload = base64_decode($tokenParts[1]);
+            $payloadData = json_decode($payload, true);
+            $authExpiry = $payloadData['exp'] ?? 0;
+        }
 
         $this->config['isAuthenticated'] = !empty($authToken)
             && !empty($authExpiry)
