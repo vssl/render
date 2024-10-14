@@ -60,7 +60,7 @@ class Resolver
         $authToken = $_COOKIE['vssl-token'] ?? null;
         if (!empty($authToken)) {
             $tokenParts = explode('.', $authToken);
-            $payload = base64_decode($tokenParts[1]);
+            $payload = !empty($tokenParts[1]) ? base64_decode($tokenParts[1]) : '{}';
             $payloadData = json_decode($payload, true);
             $authExpiry = $payloadData['exp'] ?? 0;
         }
