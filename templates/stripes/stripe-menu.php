@@ -21,89 +21,91 @@ if (count($menu_links)) : ?>
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
     echo !isset($collapsible) || $collapsible ? " data-collapsible=\"true\"" : '';
     echo !isset($convert_first_level_link_to_button) || $convert_first_level_link_to_button
-      ? " data-with-first-level-links-as-buttons=\"true\""
-      : '';
+        ? " data-with-first-level-links-as-buttons=\"true\""
+        : '';
 ?>>
-  <div class="vssl-stripe-column">
-    <nav>
-      <?php if (!empty($menu_label) && !empty($menu_show_label) && $menu_show_label) : ?>
-      <h2 class="vssl-stripe--menu--title"><?= $menu_label ?></h2>
-      <?php endif; ?>
-      <?= vsslStripeMenuLinkList($menu_links) ?>
-    </nav>
-  </div>
+    <div class="vssl-stripe-column">
+        <nav>
+            <?php if (!empty($menu_label) && !empty($menu_show_label) && $menu_show_label) : ?>
+            <h2 class="vssl-stripe--menu--title"><?= $menu_label ?></h2>
+            <?php endif; ?>
+            <?= vsslStripeMenuLinkList($menu_links) ?>
+        </nav>
+    </div>
 
-  <script>
-  const menuEl = document.currentScript.parentElement
+    <script>
+    (function () {
+        const menuEl = document.currentScript.parentElement
 
-  // Collapsible menu
-  if (menuEl.getAttribute('data-collapsible')) {
-    const menuElIndex = Array.from(menuEl.parentElement.children).indexOf(menuEl)
-    const firstLevel = menuEl.querySelectorAll('.vssl-stripe--menu--listitem[data-depth="1"]')
+        // Collapsible menu
+        if (menuEl.getAttribute('data-collapsible')) {
+            const menuElIndex = Array.from(menuEl.parentElement.children).indexOf(menuEl)
+            const firstLevel = menuEl.querySelectorAll('.vssl-stripe--menu--listitem[data-depth="1"]')
 
-    if (firstLevel && firstLevel.length) {
-      firstLevel.forEach((item, index) => {
-        const nested = item.querySelector('ul[data-depth="2"]')
+            if (firstLevel && firstLevel.length) {
+                firstLevel.forEach((item, index) => {
+                    const nested = item.querySelector('ul[data-depth="2"]')
 
-        if (nested) {
-          const linkNumbers = `${menuElIndex}-${index}`
-          nested.id = `vssl-stripe-menu-${linkNumbers}`
-          nested.setAttribute('hidden', 'true')
+                    if (nested) {
+                        const linkNumbers = `${menuElIndex}-${index}`
+                        nested.id = `vssl-stripe-menu-${linkNumbers}`
+                        nested.setAttribute('hidden', 'true')
 
-          let ariaLabel = 'menu'
-          let link = item.querySelector('.vssl-stripe--menu--link[data-depth="1"]')
+                        let ariaLabel = 'menu'
+                        let link = item.querySelector('.vssl-stripe--menu--link[data-depth="1"]')
 
-          // Set up button (whether or not it replaces link).
-          let button = document.createElement('button')
-          button.classList.add('vssl-stripe--menu--button')
-          button.setAttribute('aria-expanded', 'false')
-          button.setAttribute('aria-controls', `vssl-stripe-menu-${linkNumbers}`)
+                        // Set up button (whether or not it replaces link).
+                        let button = document.createElement('button')
+                        button.classList.add('vssl-stripe--menu--button')
+                        button.setAttribute('aria-expanded', 'false')
+                        button.setAttribute('aria-controls', `vssl-stripe-menu-${linkNumbers}`)
 
-          // Convert link to button.
-          if (menuEl.getAttribute('data-with-first-level-links-as-buttons')) {
-            button.classList.add('vssl-stripe--menu--link')
-            button.appendChild(link.querySelector('.vssl-stripe--menu--link--text'))
-            button.setAttribute('data-depth', '1')
-            link.replaceWith(button)
-            link = button
-            ariaLabel += ' for ' + link.innerText
-          } else {
-            button.classList.add('vssl-stripe--menu--expand-button')
-            link.parentNode.insertBefore(button, link.nextSibling);
-          }
+                        // Convert link to button.
+                        if (menuEl.getAttribute('data-with-first-level-links-as-buttons')) {
+                            button.classList.add('vssl-stripe--menu--link')
+                            button.appendChild(link.querySelector('.vssl-stripe--menu--link--text'))
+                            button.setAttribute('data-depth', '1')
+                            link.replaceWith(button)
+                            link = button
+                            ariaLabel += ' for ' + link.innerText
+                        } else {
+                            button.classList.add('vssl-stripe--menu--expand-button')
+                            link.parentNode.insertBefore(button, link.nextSibling);
+                        }
 
-          button.setAttribute('aria-label', `Expand ${ariaLabel}`)
+                        button.setAttribute('aria-label', `Expand ${ariaLabel}`)
 
-          // Add arrow to link/button.
-          const icon = document.createElement('span')
-          icon.classList.add('vssl-stripe--menu--expand-icon')
-          icon.setAttribute('aria-hidden', 'true')
-          button.appendChild(icon)
+                        // Add arrow to link/button.
+                        const icon = document.createElement('span')
+                        icon.classList.add('vssl-stripe--menu--expand-icon')
+                        icon.setAttribute('aria-hidden', 'true')
+                        button.appendChild(icon)
 
-          // Add click event to open/close nested menu.
-          button.addEventListener('click', (e) => {
-            e.preventDefault()
-            if (nested.getAttribute('hidden')) {
-              nested.removeAttribute('hidden')
-              button.setAttribute('aria-label', `Collapse ${ariaLabel}`)
-              button.setAttribute('aria-expanded', 'true')
-              window.dispatchEvent(new CustomEvent('vssl-stripe-menu-open'))
-            } else {
-              nested.setAttribute('hidden', 'true')
-              button.setAttribute('aria-label', `Expand ${ariaLabel}`)
-              button.setAttribute('aria-expanded', 'false')
-              window.dispatchEvent(new CustomEvent('vssl-stripe-menu-close'))
+                        // Add click event to open/close nested menu.
+                        button.addEventListener('click', (e) => {
+                            e.preventDefault()
+                            if (nested.getAttribute('hidden')) {
+                                nested.removeAttribute('hidden')
+                                button.setAttribute('aria-label', `Collapse ${ariaLabel}`)
+                                button.setAttribute('aria-expanded', 'true')
+                                window.dispatchEvent(new CustomEvent('vssl-stripe-menu-open'))
+                            } else {
+                                nested.setAttribute('hidden', 'true')
+                                button.setAttribute('aria-label', `Expand ${ariaLabel}`)
+                                button.setAttribute('aria-expanded', 'false')
+                                window.dispatchEvent(new CustomEvent('vssl-stripe-menu-close'))
+                            }
+                            window.dispatchEvent(new CustomEvent('vssl-stripe-menu-resize'))
+                        })
+                    }
+                })
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    window.dispatchEvent(new CustomEvent('vssl-stripe-menu-resize'))
+                })
             }
-            window.dispatchEvent(new CustomEvent('vssl-stripe-menu-resize'))
-          })
         }
-      })
-
-      document.addEventListener('DOMContentLoaded', function() {
-        window.dispatchEvent(new CustomEvent('vssl-stripe-menu-resize'))
-      })
-    }
-  }
-  </script>
+    })()
+    </script>
 </div>
 <?php endif;
