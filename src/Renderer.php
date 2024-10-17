@@ -82,6 +82,7 @@ class Renderer
         $this->engine->registerFunction('wrapperClasses', [$this, 'wrapperClasses']);
         $this->engine->registerFunction('image', [$this, 'image']);
         $this->engine->registerFunction('file', [$this, 'file']);
+        $this->engine->registerFunction('block', [$this, 'block']);
         $this->engine->registerFunction('inline', [$this, 'inline']);
         $this->engine->registerFunction('inlineJson', [$this, 'inlineJson']);
         $this->engine->registerFunction('getTableOfContents', [$this, 'getTableOfContents']);
@@ -187,6 +188,20 @@ class Renderer
     }
 
     /**
+     * Strip most tags from output stored by the editor, but permit some block level.
+     *
+     * @param  string $str           Output
+     * @param  string $allowed_tags  Permitted HTML tags
+     * @return string
+     */
+    public function block(
+        $str,
+        $allowed_tags = '<p><div><ul><ol><li><a><b><strong><i><em>'
+    ) {
+        return !empty($str) ? strip_tags($str, $allowed_tags) : null;
+    }
+
+    /**
      * Strip most tags from output stored by the inline editor.
      *
      * @param  string $str           Output
@@ -217,7 +232,8 @@ class Renderer
      * @return array
      *
      */
-    private function getBreakStripeHeading($stripe) {
+    private function getBreakStripeHeading($stripe)
+    {
         if (empty($stripe['heading']['html'])) {
             return null;
         }

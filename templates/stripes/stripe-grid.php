@@ -20,19 +20,19 @@
                         count($items) > 1
                     ) : ?>
                     <div class="vssl-stripe--grid-item--text">
-                        <?php if (!empty($item["subhed"]["html"])) : ?>
-                        <h4 class="vssl-stripe--grid-item--subhed"><?= $this->inline($item["subhed"]["html"]) ?></h4>
+                        <?php if (!empty($item['subhed']['html'])) : ?>
+                        <h4 class="vssl-stripe--grid-item--subhed"><?= $this->inline($item['subhed']['html']) ?></h4>
                         <?php endif; ?>
 
                         <?php if (!empty($item['desc']['html'])) : ?>
-                        <div class="vssl-stripe--grid-item--desc"><?= $this->inline($item['desc']['html']) ?></div>
+                        <div class="vssl-stripe--grid-item--desc"><?= $this->block($item['desc']['html']) ?></div>
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
 
                     <?php if (!empty($item['url'])) : ?>
                     <div class="vssl-stripe--grid-item--button">
-                        <a class="vssl-button" href="<?= $item['url'] ?>"><?= $item["btntxt"] ?? "Learn More" ?></a>
+                        <a class="vssl-button" href="<?= $item['url'] ?>"><?= $item['btntxt'] ?? 'Learn More' ?></a>
                     </div>
                     <?php endif; ?>
                 </div>
