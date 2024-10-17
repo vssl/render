@@ -65,9 +65,7 @@ if (count($slides)) : ?>
         let slideIndex = 0
         const slideCount = slideEls.length
         function setSlideIndex(index) {
-            slideIndex = index
-            if (slideIndex >= slideCount) slideIndex = 0
-            else if (slideIndex < 0) slideIndex = slideCount - 1
+            slideIndex = index >= slideCount ? 0 : index < 0 ? slideCount - 1 : index
     
             slideEls[slideIndex].dataset.active = true
             currentCounter.innerHTML = slideIndex + 1
@@ -79,7 +77,7 @@ if (count($slides)) : ?>
             slideEls[nextSlideIndex].dataset.active = false
             slideEls[prevSlideIndex].dataset.active = false
     
-            childImage = slideEls[slideIndex].querySelector('img')
+            childImage = slideEls[slideIndex].querySelector('.vssl-stripe--gallery--image')
             ratio = (childImage?.clientHeight || 0) / (childImage?.clientWidth || 1)
             controls.style = ratio
             ? `height: 0; padding-bottom: ${ratio * 100}%;`
@@ -94,4 +92,3 @@ if (count($slides)) : ?>
     <?php endif; ?>
 </div>
 <?php endif;
-
