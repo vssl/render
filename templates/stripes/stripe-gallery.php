@@ -43,9 +43,9 @@ if (count($slides)) : ?>
                     </div>
                 </div>
                 <div class="vssl-stripe--gallery--counter">
-                    <span class="vssl-stripe--gallery--current">1</span>
-                    <span class="vssl-stripe--gallery--of">/</span>
-                    <span class="vssl-stripe--gallery--total"><?= count($slides) ?></span>
+                    <span class="vssl-stripe--gallery--current">1</span
+                    ><span class="vssl-stripe--gallery--of">/</span
+                    ><span class="vssl-stripe--gallery--total"><?= count($slides) ?></span>
                 </div>
             </div>
             <?php endif; ?>
