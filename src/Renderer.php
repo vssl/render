@@ -405,12 +405,40 @@ class Renderer
         $dataset = $stripe['dataset'] ?? [];
         // Ensure each item in the dataset is an array
         $dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
-        foreach ($dataset as $key => $value) {
-            if (!is_array($value)) {
-                $dataset[$key] = [];
+        $colspans = $stripe['colspans'] ?? [];
+
+        $getColspan = function($x, $y) use ($colspans) {
+            foreach ($colspans as $span) {
+                if ($span['x'] === $x && $span['y'] === $y) {
+                    return $span['span'];
+                }
+            }
+            return 1;
+        };
+
+        $tableData = [];
+        foreach ($dataset as $rowIndex => $row) {
+            array_push($tableData, []);
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $spanBuffer = 0;
+            foreach ($row as $columnIndex => $text) {
+                if ($spanBuffer > 0) {
+                    $spanBuffer--;
+                } else {
+                    $colspan = $getColspan($columnIndex, $rowIndex, $colspans);
+                    array_push($tableData[$rowIndex], [
+                        'text' => $text,
+                        'colspan' => $colspan
+                    ]);
+                    $spanBuffer = $colspan - 1;
+                }
             }
         }
-        $stripe['dataset'] = array_filter($dataset);
+
+        $stripe['tableData'] = array_filter($tableData);
         return $stripe;
     }
 
