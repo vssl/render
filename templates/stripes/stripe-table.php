@@ -46,7 +46,7 @@
         ?>
           <tr>
             <?php foreach ($row as $index => $item) : ?>
-              <?php $tag = ($index === 0 && $hasHeadersInFirstColumn) ? 'th' : 'td'; ?>
+              <?php $tag = ($index === 0 && $hasHeadersInFirstColumn) || ($item['isAdditionalHeader']) ? 'th' : 'td'; ?>
               <<?= $tag ?> colspan="<?= $item['colspan'] ?? 1 ?>">
                 <?= $item['text'] ?>
               </<?= $tag ?>>

@@ -417,6 +417,8 @@ class Renderer
             $colspansMap[$colspan['y']][$colspan['x']] = $colspan['span'];
         }
 
+        $additionalHeaderRows = explode(',', $stripe['additionalHeaderRows'] ?? '');
+
         // Create a new tableData array to hold references to the original dataset data, along with the associated `colspan` value
         $tableData = [];
         foreach ($dataset as $rowIndex => $row) {
@@ -437,9 +439,11 @@ class Renderer
 
                 // Otherwise, get the colspan from our above map
                 $colspan = $colspansMap[$rowIndex][$columnIndex] ?? 1;
+                $isAddtionalHeader = in_array($rowIndex + 1, $additionalHeaderRows);
                 array_push($tableData[$rowIndex], [
                     'text' => $text,
-                    'colspan' => $colspan
+                    'colspan' => $colspan,
+                    'isAdditionalHeader' => $isAddtionalHeader
                 ]);
 
                 // Update the buffer (by default, colspan is 1 and so the buffer is 0)
