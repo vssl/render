@@ -417,7 +417,12 @@ class Renderer
             $colspansMap[$colspan['y']][$colspan['x']] = $colspan['span'];
         }
 
-        $additionalHeaderRows = explode(',', $stripe['additionalHeaderRows'] ?? '');
+        $additionalHeaderRows = is_array($stripe['additionalHeaderRows'] ?? null)
+            ? $stripe['additionalHeaderRows']
+            : [];
+        $additionalHeaderColumns = is_array($stripe['additionalHeaderColumns'] ?? null)
+            ? $stripe['additionalHeaderColumns']
+            : [];
 
         // Create a new tableData array to hold references to the original dataset data, along with the associated `colspan` value
         $tableData = [];
@@ -439,7 +444,9 @@ class Renderer
 
                 // Otherwise, get the colspan from our above map
                 $colspan = $colspansMap[$rowIndex][$columnIndex] ?? 1;
-                $isAddtionalHeader = in_array($rowIndex + 1, $additionalHeaderRows);
+                $isAddtionalHeader = in_array($rowIndex, $additionalHeaderRows)
+                    || in_array($columnIndex, $additionalHeaderColumns);
+
                 array_push($tableData[$rowIndex], [
                     'text' => $text,
                     'colspan' => $colspan,
