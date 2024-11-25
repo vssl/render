@@ -405,12 +405,60 @@ class Renderer
         $dataset = $stripe['dataset'] ?? [];
         // Ensure each item in the dataset is an array
         $dataset = !empty($dataset) && is_array($dataset) ? $dataset : [[]];
-        foreach ($dataset as $key => $value) {
-            if (!is_array($value)) {
-                $dataset[$key] = [];
+
+        // The colspans property is an array of objects with `x`, `y`, and `span` properties
+        // (e.g. `[{ x: 0, y: 0, span: 2 }, { x: 1, y: 2, span: 4 }]`)
+        $colspans = $stripe['colspans'] ?? [];
+
+        // We make an array of arrays so that the span values can be accessed directly
+        // (e.g. `$colspansMap[0][0] === 2`)
+        $colspansMap = array_pad([], count($dataset), []);
+        foreach ($colspans as $colspan) {
+            $colspansMap[$colspan['y']][$colspan['x']] = $colspan['span'];
+        }
+
+        $additionalHeaderRows = is_array($stripe['additionalHeaderRows'] ?? null)
+            ? $stripe['additionalHeaderRows']
+            : [];
+        $additionalHeaderColumns = is_array($stripe['additionalHeaderColumns'] ?? null)
+            ? $stripe['additionalHeaderColumns']
+            : [];
+
+        // Create a new tableData array to hold references to the original dataset data, along with the associated `colspan` value
+        $tableData = [];
+        foreach ($dataset as $rowIndex => $row) {
+            // Push a nested array for each row in the dataset
+            array_push($tableData, []);
+            if (!is_array($row)) {
+                continue;
+            }
+
+            // This buffer will be used when a cell has a colspan value greater than 1
+            $spanBuffer = 0;
+            foreach ($row as $columnIndex => $text) {
+                // If we have a buffer value, decrement and skip this row index ($text should be empty anyways)
+                if ($spanBuffer) {
+                    $spanBuffer--;
+                    continue;
+                }
+
+                // Otherwise, get the colspan from our above map
+                $colspan = $colspansMap[$rowIndex][$columnIndex] ?? 1;
+                $isAddtionalHeader = in_array($rowIndex, $additionalHeaderRows)
+                    || in_array($columnIndex, $additionalHeaderColumns);
+
+                array_push($tableData[$rowIndex], [
+                    'text' => $text,
+                    'colspan' => $colspan,
+                    'isAdditionalHeader' => $isAddtionalHeader
+                ]);
+
+                // Update the buffer (by default, colspan is 1 and so the buffer is 0)
+                $spanBuffer = $colspan - 1;
             }
         }
-        $stripe['dataset'] = array_filter($dataset);
+
+        $stripe['tableData'] = array_filter($tableData);
         return $stripe;
     }
 
