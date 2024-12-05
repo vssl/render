@@ -1,5 +1,4 @@
 <?php if (!empty($referencePages)) : ?>
-
     <?php
         // Replace everything after the last "/" with "stripe-reference"
         $reference_template = preg_replace(
