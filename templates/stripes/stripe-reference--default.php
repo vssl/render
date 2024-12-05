@@ -1,4 +1,3 @@
-
 <?php if (!empty($referencePage)) : ?>
 <div class="vssl-stripe-column">
     <div class="vssl-stripe--reference--card vssl-stripe--card">
@@ -15,7 +14,7 @@
 
         <div class="vssl-stripe--reference--text">
             <div class="vssl-stripe--reference--page-info">
-                <? if (!empty($$referencePage['title'])) : ?>
+                <? if (!empty($referencePage['title'])) : ?>
                 <h3 class="vssl-stripe--reference--title">
                     <a href="<?= $referencePage['slug'] ?>"><?= $this->inline($referencePage['title']) ?></a>
                 </h3>
