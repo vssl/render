@@ -9,6 +9,7 @@
     ?>
     <div
         class="vssl-stripe vssl-stripe--reference-list"
+        data-stripe-index="<?= $stripe_index ?? 0 ?>"
         data-item-count="<?= count($referencePages) ?? 0 ?>"
         data-paginate="<?= !empty($paginate) && $paginate ?>"
         data-max-items="<?= (!empty($max_items) ? $max_items : null) ?? 100 ?>"
@@ -50,7 +51,7 @@
             const paginationEl = listEl.querySelector('.vssl-stripe--reference-list--pagination')
             const prev = paginationEl.querySelector('.previous a')
             const next = paginationEl.querySelector('.next a')
-            const { itemCount, maxItems } = listEl.dataset
+            const { itemCount, maxItems, stripeIndex } = listEl.dataset
             const pageCount = Math.ceil(itemCount / maxItems)
 
             const pageLinks = [];
@@ -76,39 +77,12 @@
                 linkEl.addEventListener('click', onClickNumber)
             }
 
-            updateUI()
-
-            function updateUI() {
-                const currentEl = paginationEl.querySelector('.current')
-                const currentPageNumber = +currentEl.textContent
-
-                let visiblePageNumbers
-                if (pageLinks.length > 5) {
-                    if (currentPageNumber <= 3) {
-                        visiblePageNumbers = pageNumbers.slice(0, 5)
-                    } else if (currentPageNumber >= pageLinks.length - 2) {
-                        visiblePageNumbers = pageNumbers.slice(-5)
-                    } else {
-                        visiblePageNumbers = pageNumbers.slice(
-                            currentPageNumber - 3,
-                            currentPageNumber + 2
-                        )
-                    }
-                }
-
-                for (const link of pageLinks) {
-                    const show = visiblePageNumbers.includes(+link.textContent)
-                    link.style = 'display: ' + (show ? 'inline-block' : 'none')
-                }
-
-                for (const page of pageNumbers) {
-                    for (let i = 0; i < +maxItems; i++) {
-                        const index = i + (page - 1) * +maxItems;
-                        const item = referenceListItems[index]
-                        if (!item) continue
-                        const show = currentPageNumber === page
-                        item.style = show ? 'display: initial' : 'display: none'
-                    }
+            function goToPage(page) {
+                const url = new URL(window.location)
+                const index =
+                url.searchParams.set('p' + stripeIndex, page)
+                if (url.href !== window.location.href) {
+                    window.location = url
                 }
             }
 
@@ -117,10 +91,8 @@
                 e.stopPropagation()
                 const currentEl = paginationEl.querySelector('.current')
                 if (+currentEl.textContent > 1) {
-                    currentEl.classList.remove('current')
-                    currentEl.previousSibling.classList.add('current')
+                  goToPage(+currentEl.previousSibling.textContent)
                 }
-                updateUI()
             }
 
             function onClickNext(e) {
@@ -128,25 +100,19 @@
                 e.stopPropagation()
                 const currentEl = paginationEl.querySelector('.current')
                 if (+currentEl.textContent < pageNumbers.length) {
-                    currentEl.classList.remove('current')
-                    currentEl.nextSibling.classList.add('current')
+                  goToPage(+currentEl.nextSibling.textContent)
                 }
-                updateUI()
             }
 
             function onClickNumber(e) {
                 e.preventDefault()
                 e.stopPropagation()
-
                 const item = e.target.tagName.toLowerCase() === 'li'
                     ? e.target
                     : e.target?.parentElement
-                if (!item) return;
-
-                const currentEl = paginationEl.querySelector('.current')
-                currentEl?.classList.remove('current')
-                item.classList.add('current')
-                updateUI()
+                if (item) {
+                  goToPage(item.textContent)
+                }
             }
         })()
         </script>
