@@ -90,7 +90,7 @@ class PageApi
      *
      * @param  string $path path of the page
      * @param  string $additionalQueryParameters query string to append to the request
-     * @return array|false
+     * @return \Psr\Http\Message\ResponseInterface|false
      */
     public function getPage($path, $additionalQueryParameters = '')
     {
@@ -101,7 +101,7 @@ class PageApi
      * Get a particular page from the API.
      *
      * @param  integer $id  unique id of page to fetch data for.
-     * @return array|false
+     * @return \Psr\Http\Message\ResponseInterface|false
      */
     public function getPageById($id)
     {
@@ -112,7 +112,7 @@ class PageApi
      * Get a set of pages from the API.
      *
      * @param  array $ids unique ids of pages to fetch data for.
-     * @return array|false
+     * @return \Psr\Http\Message\ResponseInterface|false
      */
     public function getPagesById($ids)
     {
