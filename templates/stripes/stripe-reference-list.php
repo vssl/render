@@ -1,4 +1,4 @@
-<?php if (!empty($referencePages)) : ?>
+<?php if (!empty($reference_pages)) : ?>
     <?php
         // Replace everything after the last "/" with "stripe-reference"
         $reference_template = preg_replace(
@@ -10,18 +10,18 @@
     <div
         class="vssl-stripe vssl-stripe--reference-list"
         data-stripe-index="<?= $stripe_index ?? 0 ?>"
-        data-item-count="<?= count($referencePages) ?? 0 ?>"
+        data-item-count="<?= $reference_pages_total ?? 0 ?>"
         data-paginate="<?= !empty($paginate) && $paginate ?>"
         data-max-items="<?= (!empty($max_items) ? $max_items : null) ?? 100 ?>"
     >
         <?php
-            foreach ($referencePages as $referencePage) {
+            foreach ($reference_pages as $reference_page) {
                 $reference_vars = array_merge(
                     get_defined_vars(),
                     [
                         'type' => 'stripe-reference',
                         'template_name' => $reference_template,
-                        'referencePage' => $referencePage
+                        'reference_page' => $reference_page
                     ]
                 );
                 $this->insert($reference_template, $reference_vars);
