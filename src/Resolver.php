@@ -148,6 +148,20 @@ class Resolver
         $pageSlug = $this->request->getUri()->getPath();
         $queryParams = $this->request->getQueryParams();
 
+        // Find each query param that is a `p` followed by a number
+        $paginateParams = array_filter($queryParams, function ($key) {
+            return preg_match('/^p\d+$/', $key);
+        }, ARRAY_FILTER_USE_KEY);
+
+        // Add paginate params to the request in the `s` query param (see below)
+        if (!empty($paginateParams)) {
+            $queryParams['s'] ??= [];
+            foreach ($paginateParams as $key => $value) {
+                $stripeIndex = (int) substr($key, 1);
+                $queryParams['s'][$stripeIndex]['p'] = $value;
+            }
+        }
+
         // Add specific query params to the request
         $query = \http_build_query([
              // A `pk` query param represents the "preview key"

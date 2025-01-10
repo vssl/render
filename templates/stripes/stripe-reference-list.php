@@ -45,6 +45,12 @@
             </nav>
         </div>
         <script>
+        /**
+         * Script below is used to paginate through a list of reference stripe items.
+         * - It generates the pagination links based on the number of pages available.
+         * - It updates the URL with the page number when a link is clicked in this format:
+         *   "p{stripeIndex}={page}" (e.g. "p0=2" means we want the second page of the first stripe)
+         */
         (function () {
             const listEl = document.currentScript.parentElement;
             const referenceListItems =  listEl.querySelectorAll('.vssl-stripe--reference')
