@@ -36,7 +36,24 @@
                         <a href="#">Previous</a>
                     </li>
 
-                    <!-- other items added here via javascript -->
+                    <!-- these are placeholders for the page links and are removed by the script below -->
+                    <li class="current">
+                        <a href="#">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">4</a>
+                    </li>
+                    <li>
+                        <a href="#">5</a>
+                    </li>
+
+                    <!-- other items added here via the script below -->
 
                     <li class="next">
                         <a href="#">Next</a>
@@ -59,6 +76,11 @@
             const next = paginationEl.querySelector('.next a')
             const { itemCount, maxItems, stripeIndex } = listEl.dataset
             const pageCount = Math.ceil(itemCount / maxItems)
+
+            // Select the list items that aren't prev or next and remove them
+            paginationEl
+                .querySelectorAll('li:not(.previous):not(.next)')
+                .forEach(item => item.remove())
 
             const pageLinks = [];
             for (let i = 0; i < pageCount; i++) {
