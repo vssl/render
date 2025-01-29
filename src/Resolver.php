@@ -4,7 +4,7 @@ namespace Vssl\Render;
 
 use Journey\Cache\CacheAdapterInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\RequestInterface;
 
 class Resolver
 {
@@ -32,7 +32,7 @@ class Resolver
     /**
      * Initialize a new Resolver
      */
-    public function __construct(ServerRequestInterface $request, $config = false)
+    public function __construct(RequestInterface $request, $config = false)
     {
         $this->request = $request;
         $this->config = is_array($config) ? static::config($config) : static::config();
@@ -145,16 +145,44 @@ class Resolver
      */
     public function resolve()
     {
-        $query = null;
-        parse_str($this->request->getUri()->getQuery(), $query);
-        $querySuffix = !empty($query['pk']) ? "pk={$query['pk']}" : '';
+        $pageSlug = $this->request->getUri()->getPath();
+        $queryParams = $this->request->getQueryParams();
+
+        // Find each query param that is a `p` followed by a number
+        $paginateParams = array_filter($queryParams, function ($key) {
+            return preg_match('/^p\d+$/', $key);
+        }, ARRAY_FILTER_USE_KEY);
+
+        // Add paginate params to the request in the `s` query param (see below)
+        if (!empty($paginateParams)) {
+            $queryParams['s'] ??= [];
+            foreach ($paginateParams as $key => $value) {
+                $stripeIndex = (int) substr($key, 1);
+                $queryParams['s'][$stripeIndex]['p'] = $value;
+            }
+        }
+
+        // Add specific query params to the request
+        $query = \http_build_query([
+             // A `pk` query param represents the "preview key"
+            'pk' => $queryParams['pk'] ?? null,
+
+            /**
+             * A query param where the name is 's' followed by a number in
+             * brackets and a key in brackets represents a key-value pair for a
+             * specific stripe on the page.
+             *
+             * This is initially being used for paginating through a list of
+             * reference stripe items
+             * (e.g. "s[2][p]=3&s[4][p]=2" means we want the third stripe to
+             * show page 3 and the fifth stripe to show page 2)
+             */
+            's' => $queryParams['s'] ?? null,
+        ]);
+
 
         try {
-            $response = $this->api->getPage(
-                $this->request->getUri()->getPath(),
-                $querySuffix
-            );
-
+            $response = $this->api->getPage($pageSlug, $query);
             if ($response && ($page = $this->decodePage($response))) {
                 $status = $response->getStatusCode();
                 return [
@@ -169,7 +197,7 @@ class Resolver
                     'type' => !empty($page['type']) ? $page['type'] : false
                 ];
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $status = 500;
         }
 
