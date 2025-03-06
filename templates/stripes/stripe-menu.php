@@ -18,7 +18,7 @@ if (!function_exists('vsslStripeMenuLinkList')) {
     }
 }
 
-if (count($menu_links)) : ?>
+if (!empty($menu_links)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
     echo !isset($collapsible) || $collapsible ? " data-collapsible=\"true\"" : '';
