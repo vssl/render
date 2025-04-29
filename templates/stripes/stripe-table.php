@@ -1,5 +1,16 @@
 <?php if (!empty($tableData)) :
+  $rowCount = !empty($rowCount) ? $rowCount : count($tableData);
+  $columnCount = !empty($columnCount)
+    ? $columnCount : (!empty($tableData[0]) ? count($tableData[0]) : 0);
+
+  $tableData = array_slice($tableData, 0, $rowCount);
+  $tableData = array_map(function($row) use ($columnCount) {
+    return array_slice($row, 0, $columnCount);
+  }, $tableData);
+
   $dataAttributes = [
+    'rowCount' => $rowCount,
+    'columnCount' => $columnCount,
     'captionPosition' => !empty($captionPosition) && $captionPosition === 'above' ? $captionPosition : 'below',
     'hasAlternatingRows' => !empty($hasAlternatingRows) && $hasAlternatingRows ? 'true' : 'false',
     'hasHeadersInFirstRow' => !empty($hasHeadersInFirstRow) && $hasHeadersInFirstRow ? 'true' : 'false',
@@ -7,6 +18,8 @@
   ];
 ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+    echo " data-row-count=\"{$dataAttributes['rowCount']}\"";
+    echo " data-column-count=\"{$dataAttributes['columnCount']}\"";
     echo " data-caption-position=\"{$dataAttributes['captionPosition']}\"";
     echo " data-has-alternating-rows=\"{$dataAttributes['hasAlternatingRows']}\"";
     echo " data-has-headers-in-first-row=\"{$dataAttributes['hasHeadersInFirstRow']}\"";
