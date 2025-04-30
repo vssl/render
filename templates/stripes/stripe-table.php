@@ -1,7 +1,7 @@
 <?php if (!empty($tableData)) :
-  $rowCount = !empty($rowCount) ? $rowCount : count($tableData);
-  $columnCount = !empty($columnCount)
-    ? $columnCount : (!empty($tableData[0]) ? count($tableData[0]) : 0);
+  $rowCount = $rowCount ?? count($tableData);
+  $firstRow = $tableData[0] ?? [];
+  $columnCount = $columnCount ?? count($firstRow);
 
   $tableData = array_slice($tableData, 0, $rowCount);
   $tableData = array_map(function($row) use ($columnCount) {
