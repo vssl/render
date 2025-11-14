@@ -5,15 +5,18 @@
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--link--card vssl-stripe--card">
             <?php if (!empty($image)) : ?>
-            <div class="vssl-stripe--link--thumbnail">
-                <a tabindex="-1" href="<?= !empty($url['html'])
+            <div class="vssl-stripe--link--image">
+                <img class="vssl-stripe--link--thumbnail"
+                    src="<?= $this->image($image, $image_style ?? null) ?>"
+                    alt="<?= $image_alt ?? '' ?>"
+                    loading="lazy" />
+                <a class="vssl-stripe--link--image-overlay"
+                   tabindex="-1" 
+                   aria-hidden="true"
+                   href="<?= !empty($url['html'])
                     ? $this->inline($url['html'])
                     : (!empty($url) && is_string($url) ? $url : '')
-                ?>">
-                    <img src="<?= $this->image($image, $image_style ?? null) ?>"
-                        alt="<?= $image_alt ?? '' ?>"
-                        loading="lazy" />
-                </a>
+                ?>"></a>
             </div>
             <?php endif; ?>
 
