@@ -80,7 +80,11 @@
               <?php
                 $sortMethod = !empty($sortMethods[$colIndex]) && $sortMethods[$colIndex] !== 'disabled' ? $sortMethods[$colIndex] : false;
               ?>
-              <th colspan="<?= $item['colspan'] ?? 1 ?>" <?= $sortMethod ? 'class="sortable" role="button" tabindex="0"' : '' ?> data-column-index="<?= $colIndex ?>" <?= $sortMethod ? 'data-sort-method="' . $sortMethod . '" aria-label="Sort by ' . htmlspecialchars(strip_tags($item['text']), ENT_QUOTES) . '"' : '' ?>><?= $item['text'] ?><?php if ($sortMethod) : ?> <span class="vssl-icon vssl-stripe--table--sort-icon" aria-hidden="true">&updownarrow;</span><?php endif; ?></th>
+              <th colspan="<?= $item['colspan'] ?? 1 ?>" <?= $sortMethod ? 'class="sortable"' : '' ?> data-column-index="<?= $colIndex ?>" <?= $sortMethod ? 'data-sort-method="' . $sortMethod . '"' : '' ?>><?= $item['text'] ?><?php if ($sortMethod) : ?>
+                 <button type="button" class="vssl-stripe--table--sort-button" aria-label="Sort by <?= htmlspecialchars(strip_tags($item['text']), ENT_QUOTES) ?>">
+                   <span class="vssl-icon vssl-stripe--table--sort-icon" aria-hidden="true">&updownarrow;</span>
+                 </button>
+                 <?php endif; ?></th>
             <?php endforeach; ?>
           </tr>
         </thead>
@@ -93,7 +97,7 @@
               <?php
                 $sortMethod = !empty($sortMethods[$colIndex]) && $sortMethods[$colIndex] !== 'disabled' ? $sortMethods[$colIndex] : false;
               ?>
-              <th colspan="<?= $item['colspan'] ?? 1 ?>" <?= $sortMethod ? 'class="sortable" role="button" tabindex="0"' : '' ?> data-column-index="<?= $colIndex ?>" <?= $sortMethod ? 'data-sort-method="' . $sortMethod . '" aria-label="Sort by ' . htmlspecialchars(strip_tags($item['text']), ENT_QUOTES) . '"' : '' ?>><?= $item['text'] ?><?php if ($sortMethod) : ?> <span class="vssl-icon vssl-stripe--table--sort-icon" aria-hidden="true">&updownarrow;</span><?php endif; ?></th>
+              <th colspan="<?= $item['colspan'] ?? 1 ?>" <?= $sortMethod ? 'class="sortable"' : '' ?> data-column-index="<?= $colIndex ?>" <?= $sortMethod ? 'data-sort-method="' . $sortMethod . '"' : '' ?>><?= $item['text'] ?><?php if ($sortMethod) : ?> <button type="button" class="vssl-stripe--table--sort-button" aria-label="Sort by <?= htmlspecialchars(strip_tags($item['text']), ENT_QUOTES) ?>"><span class="vssl-icon vssl-stripe--table--sort-icon" aria-hidden="true">&updownarrow;</span></button><?php endif; ?></th>
             <?php endforeach; ?>
           </tr>
         <?php endif; ?>
@@ -295,24 +299,15 @@
         });
       }
 
-      // Attach event listeners to sortable headers
-      const sortableHeaders = wrapper.querySelectorAll('th.sortable');
-      sortableHeaders.forEach(header => {
-        // Click event
-        header.addEventListener('click', (e) => {
+      // Attach event listeners to sort buttons
+      const sortButtons = wrapper.querySelectorAll('.vssl-stripe--table--sort-button');
+      sortButtons.forEach(button => {
+        const header = button.closest('th');
+
+        button.addEventListener('click', (e) => {
           const columnIndex = parseInt(header.dataset.columnIndex);
           const sortMethod = header.dataset.sortMethod;
           handleSort(columnIndex, sortMethod);
-        });
-
-        // Keyboard event for accessibility
-        header.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            const columnIndex = parseInt(header.dataset.columnIndex);
-            const sortMethod = header.dataset.sortMethod;
-            handleSort(columnIndex, sortMethod);
-          }
         });
       });
 
