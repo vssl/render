@@ -135,7 +135,14 @@
       function getSortType(sortMethod) {
         return (sortMethod && sortMethod !== 'disabled')
           ? sortMethod.split('-')[0]
-          : 'asc';
+          : 'alpha';
+      }
+
+      // Extract direction from compound sort method (e.g., 'alpha-asc' -> 'asc')
+      function getSortDirection(sortMethod) {
+        if (!sortMethod || sortMethod === 'disabled') return 'asc';
+        const parts = sortMethod.split('-');
+        return parts[1] || 'asc';
       }
 
       // Compare two values using the specified sort method
@@ -177,13 +184,16 @@
           });
 
           // Populate the select with options
-          // Use the column's sort method if defined, otherwise default to alpha
+          // Use the column's sort method if defined, otherwise default to alpha-asc
           const sortMethod = sortMethods[columnIndex] && sortMethods[columnIndex] !== 'disabled'
             ? sortMethods[columnIndex]
-            : 'alpha';
+            : 'alpha-asc';
+
+          const direction = getSortDirection(sortMethod);
 
           const sortedValues = Array.from(uniqueValues).sort((a, b) => {
-            return compareValues(a, b, sortMethod);
+            const comparison = compareValues(a, b, sortMethod);
+            return direction === 'desc' ? -comparison : comparison;
           });
 
           sortedValues.forEach(value => {
@@ -202,17 +212,19 @@
 
       // Handle sorting
       function handleSort(columnIndex, sortMethod) {
-        // Toggle sort direction: null -> asc -> desc -> null
+        const defaultDirection = getSortDirection(sortMethod);
+
+        // Toggle sort direction: null -> default -> opposite -> null
         if (currentSort.column === columnIndex) {
-          if (currentSort.direction === 'asc') {
-            currentSort.direction = 'desc';
-          } else if (currentSort.direction === 'desc') {
+          if (currentSort.direction === defaultDirection) {
+            currentSort.direction = defaultDirection === 'asc' ? 'desc' : 'asc';
+          } else {
             currentSort.direction = null;
             currentSort.column = null;
           }
         } else {
           currentSort.column = columnIndex;
-          currentSort.direction = 'asc';
+          currentSort.direction = defaultDirection;
         }
 
         // Update sort button icons
