@@ -59,7 +59,7 @@
                 Filter by <?= strip_tags($headerCell['text']) ?>
               </label>
               <select class="vssl-stripe--table--filter-select" id="filter-col-<?= $colIndex ?>" data-column="<?= $colIndex ?>">
-                <option value="">All</option>
+                <option value="">-- Select a filter --</option>
               </select>
             </div>
           <?php endif; ?>
