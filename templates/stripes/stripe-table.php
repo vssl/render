@@ -218,9 +218,6 @@
         const allRows = Array.from(tbody.querySelectorAll('tr'));
         const rows = allRows.filter(row => row.querySelector('td'));
 
-        console.info('Sorting column:', columnIndex, 'method:', sortMethod, 'direction:', direction);
-        console.info('Found rows to sort:', rows.length);
-
         rows.sort((rowA, rowB) => {
           const cellA = rowA.querySelector(`[data-column-index="${columnIndex}"]`);
           const cellB = rowB.querySelector(`[data-column-index="${columnIndex}"]`);
