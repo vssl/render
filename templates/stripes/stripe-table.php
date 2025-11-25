@@ -78,7 +78,7 @@
           <tr>
             <?php foreach ($tableData[0] as $colIndex => $item) : ?>
               <?php
-                $sortMethod = !empty($sortMethods[$colIndex]) && $sortMethods[$colIndex] !== 'disabled' ? $sortMethods[$colIndex] : false;
+                $sortMethod = !empty($sortMethods[$colIndex]) && $sortMethods[$colIndex] !== 'disabled' && $sortMethods[$colIndex] !== '' ? $sortMethods[$colIndex] : false;
               ?>
               <th colspan="<?= $item['colspan'] ?? 1 ?>" <?= $sortMethod ? 'class="sortable"' : '' ?> data-column-index="<?= $colIndex ?>" <?= $sortMethod ? 'data-sort-method="' . $sortMethod . '"' : '' ?>><?= $item['text'] ?><?php if ($sortMethod) : ?>
                  <button type="button" class="vssl-stripe--table--sort-button" aria-label="Sort by <?= htmlspecialchars(strip_tags($item['text']), ENT_QUOTES) ?>">
@@ -95,7 +95,7 @@
           <tr>
             <?php foreach ($tableData[0] as $colIndex => $item) : ?>
               <?php
-                $sortMethod = !empty($sortMethods[$colIndex]) && $sortMethods[$colIndex] !== 'disabled' ? $sortMethods[$colIndex] : false;
+                $sortMethod = !empty($sortMethods[$colIndex]) && $sortMethods[$colIndex] !== 'disabled' && $sortMethods[$colIndex] !== '' ? $sortMethods[$colIndex] : false;
               ?>
               <th colspan="<?= $item['colspan'] ?? 1 ?>" <?= $sortMethod ? 'class="sortable"' : '' ?> data-column-index="<?= $colIndex ?>" <?= $sortMethod ? 'data-sort-method="' . $sortMethod . '"' : '' ?>><?= $item['text'] ?><?php if ($sortMethod) : ?> <button type="button" class="vssl-stripe--table--sort-button" aria-label="Sort by <?= htmlspecialchars(strip_tags($item['text']), ENT_QUOTES) ?>"><span class="vssl-icon vssl-stripe--table--sort-icon" aria-hidden="true">&updownarrow;</span></button><?php endif; ?></th>
             <?php endforeach; ?>
@@ -131,6 +131,31 @@
       let currentSort = { column: null, direction: null }; // null, 'asc', or 'desc'
       let activeFilters = {};
 
+      // Extract sort type from compound sort method (e.g., 'alpha-asc' -> 'alpha')
+      function getSortType(sortMethod) {
+        return (sortMethod && sortMethod !== 'disabled')
+          ? sortMethod.split('-')[0]
+          : 'asc';
+      }
+
+      // Compare two values using the specified sort method
+      function compareValues(valueA, valueB, sortMethod) {
+        const sortType = getSortType(sortMethod);
+
+        if (sortType === 'alpha') {
+          return valueA.toLowerCase().localeCompare(valueB.toLowerCase());
+        } else if (sortType === 'numeric') {
+          const numA = parseFloat(valueA) || 0;
+          const numB = parseFloat(valueB) || 0;
+          return numA - numB;
+        } else if (sortType === 'date') {
+          const dateA = new Date(valueA).getTime() || 0;
+          const dateB = new Date(valueB).getTime() || 0;
+          return dateA - dateB;
+        }
+        return 0;
+      }
+
       // Initialize filter dropdowns with unique values
       function initializeFilters() {
         const filterSelects = wrapper.querySelectorAll('.vssl-stripe--table--filter-select');
@@ -152,7 +177,15 @@
           });
 
           // Populate the select with options
-          const sortedValues = Array.from(uniqueValues).sort((a, b) => a.localeCompare(b));
+          // Use the column's sort method if defined, otherwise default to alpha
+          const sortMethod = sortMethods[columnIndex] && sortMethods[columnIndex] !== 'disabled'
+            ? sortMethods[columnIndex]
+            : 'alpha';
+
+          const sortedValues = Array.from(uniqueValues).sort((a, b) => {
+            return compareValues(a, b, sortMethod);
+          });
+
           sortedValues.forEach(value => {
             const option = document.createElement('option');
             option.value = value;
@@ -231,19 +264,7 @@
           const valueA = cellA.dataset.value || cellA.textContent.trim();
           const valueB = cellB.dataset.value || cellB.textContent.trim();
 
-          let comparison = 0;
-
-          if (sortMethod === 'alpha') {
-            comparison = valueA.toLowerCase().localeCompare(valueB.toLowerCase());
-          } else if (sortMethod === 'numeric') {
-            const numA = parseFloat(valueA) || 0;
-            const numB = parseFloat(valueB) || 0;
-            comparison = numA - numB;
-          } else if (sortMethod === 'date') {
-            const dateA = new Date(valueA).getTime() || 0;
-            const dateB = new Date(valueB).getTime() || 0;
-            comparison = dateA - dateB;
-          }
+          const comparison = compareValues(valueA, valueB, sortMethod);
 
           return direction === 'desc' ? -comparison : comparison;
         });
