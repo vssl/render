@@ -35,7 +35,8 @@ if (!empty($menu_links)) : ?>
         </nav>
     </div>
 
-    <script>
+    <!-- Script moved to hydration.js -->
+    <!-- <script>
     (function () {
         const menuEl = document.currentScript.parentElement
 
@@ -108,6 +109,6 @@ if (!empty($menu_links)) : ?>
             }
         }
     })()
-    </script>
+    </script> -->
 </div>
 <?php endif;

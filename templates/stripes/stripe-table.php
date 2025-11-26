@@ -120,7 +120,8 @@
       </tbody>
     </table>
   </div>
-  <script>
+  <!-- Script moved to hydration.js -->
+  <!-- <script>
     (function() {
       const wrapper = document.currentScript.previousElementSibling.parentElement;
       const table = wrapper.querySelector('table');
@@ -349,6 +350,6 @@
         initializeFilters();
       }
     })();
-  </script>
+  </script> -->
 </div>
 <?php endif;

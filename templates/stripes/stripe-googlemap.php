@@ -1,6 +1,12 @@
 <?php if ($address) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
+    echo !empty($options['marker']) ? " data-marker=\"" . htmlspecialchars($options['marker'], ENT_QUOTES) . "\"" : '';
+    echo !empty($options['coordinates']) ? " data-coordinates=\"" . htmlspecialchars(json_encode($options['coordinates']), ENT_QUOTES) . "\"" : '';
+    echo !empty($address) ? " data-address=\"" . htmlspecialchars($address, ENT_QUOTES) . "\"" : '';
+    echo !empty($maptype) ? " data-maptype=\"{$maptype}\"" : ' data-maptype="roadmap"';
+    echo !empty($zoom) ? " data-zoom=\"{$zoom}\"" : '';
+    echo !empty($options['styles']) ? " data-styles=\"" . htmlspecialchars($options['styles'], ENT_QUOTES) . "\"" : ' data-styles="[]"';
 ?>>
     <div class="vssl-stripe-column">
         <div class="vssl-stripe--googlemap--embed">
@@ -25,10 +31,11 @@
         </div>
     </div>
 
-    <script>
+    <!-- Script moved to hydration.js -->
+    <!-- <script>
     (function () {
         const stripeEl = document.currentScript.parentElement
-    
+
         if (typeof google !== 'undefined') {
             try {
                 initStripe()
@@ -38,21 +45,21 @@
         } else {
             console.error('Google Maps API is not available in this script.')
         }
-    
+
         function initStripe() {
             const marker = <?= !empty($options['marker']) ? "'" . $options['marker'] . "'" : 'false' ?>
-    
+
             const coordinates = <?= !empty($options['coordinates']) ? "'" . $options['coordinates'] . "'" : 'false' ?>
-    
+
             const address = <?= !empty($address) ? "'$address'" : 'false' ?>
-    
+
             const maptype = <?= !empty($maptype) ? "'$maptype'" : "'roadmap'" ?>
-    
+
             const zoom = parseInt("<?= $zoom ?>", 10)
             const stylesJson = "<?= !empty($options['styles']) ? $options['styles'] : '[]' ?>"
             const styles = maptype === 'roadmap' ? JSON.parse(stylesJson) : []
             const config = { marker, coordinates, address, maptype, zoom, styles }
-    
+
             if (coordinates) {
                 buildMap(config)
             } else if (address) {
@@ -61,11 +68,11 @@
                 console.warn('No coordinates or address set for Google Maps API. Doing nothing.')
             }
         }
-    
+
         function buildMap(config) {
             const mapWrapEl = stripeEl.querySelector('.vssl-stripe--googlemap--map')
             const customMarker = 'https://s3.amazonaws.com/cdn.vssl.io/marker.png'
-    
+
             const map = new google.maps.Map(mapWrapEl, {
                 center: config.coordinates,
                 zoom: config.zoom,
@@ -79,7 +86,7 @@
                 icon: config.marker || customMarker
             })
         }
-    
+
         function geocode(config) {
             const geocoder = new google.maps.Geocoder
             geocoder.geocode({ address: config.address }, (results, status) => {
@@ -90,12 +97,12 @@
                 }
             })
         }
-    
+
         const embedEl = stripeEl.querySelector('.vssl-stripe--googlemap--embed')
         embedEl.addEventListener('click', function() {
             this.classList.add('is-engaged')
         })
     })()
-    </script>
+    </script> -->
 </div>
 <?php endif;
