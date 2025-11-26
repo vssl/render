@@ -38,7 +38,7 @@
     <?php
       // Render filter inputs for columns with filtering enabled
       $hasFilters = false;
-      if (!empty($filterMethods) && $hasHeadersInFirstRow && !empty($tableData[0])) {
+      if (!empty($filterMethods)) {
         foreach ($filterMethods as $colIndex => $filterMethod) {
           if ($filterMethod === 'enabled') {
             $hasFilters = true;
