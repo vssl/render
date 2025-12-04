@@ -39,35 +39,5 @@
         </div>
         <button type="button" class="vssl-stripe--infographic--collapse">Close</button>
     </div>
-
-    <!-- Script moved to hydration.js -->
-    <!-- <script>
-    (function () {
-        const infographicEl = document.currentScript.parentElement
-        const enlargener = infographicEl.querySelector('.vssl-stripe--infographic--enlarge')
-        const collapser = infographicEl.querySelector('.vssl-stripe--infographic--collapse')
-
-        function onEnlarge() {
-            infographicEl.setAttribute('data-is-enlarged', true)
-            document.documentElement.classList.add('vssl-scroll-lock')
-            document.body.addEventListener('keyup', onInfographicKeyup)
-        }
-
-        function onCollapse() {
-            infographicEl.removeAttribute('data-is-enlarged')
-            document.documentElement.classList.remove('vssl-scroll-lock')
-            document.body.removeEventListener('keyup', onInfographicKeyup)
-        }
-
-        function onInfographicKeyup(e) {
-            if (e.key === 'Escape') {
-                onCollapse()
-            }
-        }
-
-        enlargener.addEventListener('click', onEnlarge)
-        collapser.addEventListener('click', onCollapse)
-    })()
-    </script> -->
 </div>
 <?php endif;
