@@ -48,10 +48,10 @@
         </div>
 
         <?php if (!empty($paginate) && $paginate && $total_pages > 1) : ?>
-        <div class="vssl-stripe--reference-list--pagination">
+        <div class="vssl-stripe--pagination vssl-stripe--reference-list--pagination">
             <nav class="vssl-stripe-column" aria-label="Pagination">
                 <ul>
-                    <li class="previous">
+                    <li class="vssl-stripe--pagination--previous">
                         <?php if ($current_page <= 1) : ?>
                         <span>Previous</span>
                         <?php else : ?>
@@ -66,7 +66,7 @@
                     </li>
 
                     <?php for ($i = 0; $i < $total_pages; $i++) : ?>
-                    <li<?= ($i + 1) == $current_page ? ' class="current" aria-current="page"' : '' ?>>
+                    <li<?= ($i + 1) == $current_page ? ' class="vssl-stripe--pagination--current" aria-current="page"' : '' ?>>
                         <a href="?<?=
                         htmlspecialchars(
                             http_build_query(
@@ -76,7 +76,7 @@
                         ?>"><?= $i + 1 ?></a>
                     </li>
                     <?php endfor; ?>
-                    <li class="next">
+                    <li class="vssl-stripe--pagination--next">
                         <?php if ($current_page >= $total_pages) : ?>
                         <span>Next</span>
                         <?php else : ?>
