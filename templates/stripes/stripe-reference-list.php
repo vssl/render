@@ -1,149 +1,97 @@
-<?php if (!empty($reference_pages)) : ?>
-    <?php
-        // Replace everything after the last "/" with "stripe-reference"
-        $reference_template = preg_replace(
-            "/\/.*$/",
-            '/stripe-reference',
-            $template_name
-        );
+<?php if (!empty($reference_pages)) :
+    // Replace everything after the last "/" with "stripe-reference"
+    $referenceTemplate = preg_replace(
+        "/\/.*$/",
+        '/stripe-reference',
+        $template_name
+    );
+
+    $pagination_param = 'p' . ($stripe_index ?? 0);
+
+    $total_items = $reference_pages_total ?? 0;
+    $items_per_page = (!empty($max_items) ? $max_items : null) ?? 100;
+    $total_pages = ceil($total_items / $items_per_page);
+    $current_page = $_REQUEST[$pagination_param] ?? 1;
+
+    $stripeIdAttr = !empty($stripe_index) ? 's' . $this->e($stripe_index) : '';
     ?>
     <div
+        id="<?= $stripeIdAttr ?>"
         class="vssl-stripe vssl-stripe--reference-list"
         data-stripe-index="<?= $stripe_index ?? 0 ?>"
-        data-item-count="<?= $reference_pages_total ?? 0 ?>"
+        data-item-count="<?= $total_items ?>"
         data-paginate="<?= !empty($paginate) && $paginate ?>"
         data-max-items="<?= (!empty($max_items) ? $max_items : null) ?? 100 ?>"
     >
-        <?php
-            foreach ($reference_pages as $reference_page) {
+        <div class="vssl-stripe--reference-list--items">
+            <?php foreach ($reference_pages as $reference_page) : ?>
+            <div class="vssl-stripe--reference-list--item vssl-stripe--reference"
+                data-type="<?= !empty($reference_page['type']) ? $reference_page['type'] : '' ?>">
+            <?php
+                $referenceTypeTemplate = $referenceTemplate . '--' . ($reference_page['type'] ?? 'default');
                 $reference_vars = array_merge(
                     get_defined_vars(),
                     [
                         'type' => 'stripe-reference',
-                        'template_name' => $reference_template,
+                        'template_name' => $referenceTemplate,
                         'reference_page' => $reference_page
                     ]
                 );
-                $this->insert($reference_template, $reference_vars);
-            }
-        ?>
+                if ($this->engine->exists("$referenceTypeTemplate")) {
+                    $this->insert($referenceTypeTemplate, $reference_vars);
+                } else {
+                    $this->insert($referenceTemplate . '--default', $reference_vars);
+                }
+            ?>
+            </div>
+            <?php endforeach; ?>
+        </div>
 
-        <?php if (!empty($paginate) && $paginate) : ?>
+        <?php if (!empty($paginate) && $paginate && $total_pages > 1) : ?>
         <div class="vssl-stripe--reference-list--pagination">
-            <nav aria-label="pagination">
+            <nav class="vssl-stripe-column" aria-label="Pagination">
                 <ul>
                     <li class="previous">
-                        <a href="#">Previous</a>
+                        <?php if ($current_page <= 1) : ?>
+                        <span>Previous</span>
+                        <?php else : ?>
+                        <a href="?<?=
+                        htmlspecialchars(
+                            http_build_query(
+                                array_merge($_GET, [$pagination_param => max(1, $current_page - 1)])
+                            )
+                        ) . '#' . $stripeIdAttr
+                        ?>">Previous</a>
+                        <?php endif; ?>
                     </li>
 
-                    <!-- these are placeholders for the page links and are removed by the script below -->
-                    <li class="current">
-                        <a href="#">1</a>
+                    <?php for ($i = 0; $i < $total_pages; $i++) : ?>
+                    <li<?= ($i + 1) == $current_page ? ' class="current" aria-current="page"' : '' ?>>
+                        <a href="?<?=
+                        htmlspecialchars(
+                            http_build_query(
+                                array_merge($_GET, [$pagination_param => $i + 1])
+                            )
+                        ) . '#' . $stripeIdAttr
+                        ?>"><?= $i + 1 ?></a>
                     </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">3</a>
-                    </li>
-                    <li>
-                        <a href="#">4</a>
-                    </li>
-                    <li>
-                        <a href="#">5</a>
-                    </li>
-
-                    <!-- other items added here via the script below -->
-
+                    <?php endfor; ?>
                     <li class="next">
-                        <a href="#">Next</a>
+                        <?php if ($current_page >= $total_pages) : ?>
+                        <span>Next</span>
+                        <?php else : ?>
+                        <a href="?<?=
+                        htmlspecialchars(
+                            http_build_query(
+                                array_merge($_GET, [$pagination_param => min($total_pages, $current_page + 1)])
+                            )
+                        ) . '#' . $stripeIdAttr
+                        ?>">Next</a>
+                        <?php endif; ?>
                     </li>
                 </ul>
             </nav>
         </div>
-        <script>
-        /**
-         * Script below is used to paginate through a list of reference stripe items.
-         * - It generates the pagination links based on the number of pages available.
-         * - It updates the URL with the page number when a link is clicked in this format:
-         *   "p{stripeIndex}={page}" (e.g. "p0=2" means we want the second page of the first stripe)
-         */
-        (function () {
-            const listEl = document.currentScript.parentElement;
-            const referenceListItems =  listEl.querySelectorAll('.vssl-stripe--reference')
-            const paginationEl = listEl.querySelector('.vssl-stripe--reference-list--pagination')
-            const prev = paginationEl.querySelector('.previous a')
-            const next = paginationEl.querySelector('.next a')
-            const { itemCount, maxItems, stripeIndex } = listEl.dataset
-            const pageCount = Math.ceil(itemCount / maxItems)
-
-            // Select the list items that aren't prev or next and remove them
-            paginationEl
-                .querySelectorAll('li:not(.previous):not(.next)')
-                .forEach(item => item.remove())
-
-            const pageLinks = [];
-            for (let i = 0; i < pageCount; i++) {
-                const item = document.createElement('li')
-                const link = document.createElement('a')
-                link.href = '#'
-                link.innerHTML = i + 1
-                item.append(link)
-                if (i === 0) item.classList.add('current')
-                pageLinks.push(item)
-            }
-            const pageNumbers = Array(pageLinks.length)
-                .fill(0)
-                .map((_, i) => i + 1)
-
-            paginationEl.querySelector('.previous').after(...pageLinks)
-
-            prev.addEventListener('click', onClickPrevious)
-            next.addEventListener('click', onClickNext)
-
-            for (const linkEl of pageLinks) {
-                linkEl.addEventListener('click', onClickNumber)
-            }
-
-            function goToPage(page) {
-                const url = new URL(window.location)
-                const index =
-                url.searchParams.set('p' + stripeIndex, page)
-                if (url.href !== window.location.href) {
-                    window.location = url
-                }
-            }
-
-            function onClickPrevious(e) {
-                e.preventDefault()
-                e.stopPropagation()
-                const currentEl = paginationEl.querySelector('.current')
-                if (+currentEl.textContent > 1) {
-                  goToPage(+currentEl.previousSibling.textContent)
-                }
-            }
-
-            function onClickNext(e) {
-                e.preventDefault()
-                e.stopPropagation()
-                const currentEl = paginationEl.querySelector('.current')
-                if (+currentEl.textContent < pageNumbers.length) {
-                  goToPage(+currentEl.nextSibling.textContent)
-                }
-            }
-
-            function onClickNumber(e) {
-                e.preventDefault()
-                e.stopPropagation()
-                const item = e.target.tagName.toLowerCase() === 'li'
-                    ? e.target
-                    : e.target?.parentElement
-                if (item) {
-                  goToPage(item.textContent)
-                }
-            }
-        })()
-        </script>
         <?php endif; ?>
     </div>
 <?php endif;
