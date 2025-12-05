@@ -53,42 +53,6 @@ if (count($slides)) : ?>
     </div>
 
     <?php if (count($slides) > 1) : ?>
-    <script>
-    (function () {
-        const galleryEl = document.currentScript.parentElement
-        const nextBtn = galleryEl.querySelector('.vssl-stripe--gallery--next')
-        const prevBtn = galleryEl.querySelector('.vssl-stripe--gallery--prev')
-        const currentCounter = galleryEl.querySelector('.vssl-stripe--gallery--current')
-        const slideEls = galleryEl.querySelectorAll('.vssl-stripe--gallery--slide')
-        const controls = galleryEl.querySelector('.vssl-stripe--gallery--controls')
-    
-        let slideIndex = 0
-        const slideCount = slideEls.length
-        function setSlideIndex(index) {
-            slideIndex = index >= slideCount ? 0 : index < 0 ? slideCount - 1 : index
-    
-            slideEls[slideIndex].dataset.active = true
-            currentCounter.innerHTML = slideIndex + 1
-    
-            nextSlideIndex = slideIndex + 1 === slideCount ? 0 : slideIndex + 1
-            prevSlideIndex = slideIndex === 0 ? slideCount - 1 : slideIndex - 1
-            slideEls[nextSlideIndex].querySelector('img').removeAttribute('loading')
-            slideEls[prevSlideIndex].querySelector('img').removeAttribute('loading')
-            slideEls[nextSlideIndex].dataset.active = false
-            slideEls[prevSlideIndex].dataset.active = false
-    
-            childImage = slideEls[slideIndex].querySelector('.vssl-stripe--gallery--image')
-            ratio = (childImage?.clientHeight || 0) / (childImage?.clientWidth || 1)
-            controls.style = ratio
-            ? `height: 0; padding-bottom: ${ratio * 100}%;`
-            : ''
-        }
-    
-        setSlideIndex(0)
-        nextBtn.addEventListener('click', () => setSlideIndex(slideIndex + 1))
-        prevBtn.addEventListener('click', () => setSlideIndex(slideIndex - 1))
-    })()
-    </script>
     <?php endif; ?>
 </div>
 <?php endif;
