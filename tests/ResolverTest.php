@@ -30,7 +30,7 @@ class ResolverTest extends TestCase
     /**
      * Initialize a resolver instance.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $cache = (new LocalAdapter('/tmp'))->clear();
         $this->request = new ServerRequest(
@@ -62,7 +62,7 @@ class ResolverTest extends TestCase
     public function testResolver()
     {
         $page = $this->resolver->getRequest()->getAttribute('vssl-page');
-        $this->assertInternalType('array', $page);
+        $this->assertIsArray($page);
         $this->assertEquals($page['status'], 200);
         $this->assertArrayHasKey('id', $page['data']);
         $this->assertInstanceOf(Renderer::class, $page['page']);

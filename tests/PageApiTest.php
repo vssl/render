@@ -45,7 +45,7 @@ class PageApiTest extends TestCase
     /**
      * Initialize a PageApi instance.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->cache = (new LocalAdapter('/tmp'))->clear();
         $this->request = new ServerRequest(
@@ -55,7 +55,7 @@ class PageApiTest extends TestCase
         $this->resolver = new Resolver($this->request, [
             'cache' => $this->cache,
             'cache_ttl' => 300,
-            'base_uri' => 'https://api.vssl.io',
+            'base_uri' => getenv('VSSL_TEST_API_URL') ?: 'https://api.vssl.io',
         ]);
         $this->api = $this->resolver->getPageApi();
     }
@@ -93,7 +93,9 @@ class PageApiTest extends TestCase
     {
         $originalIds = [69, 71, 72];
         $response = $this->api->getPagesById($originalIds);
-        $pages = json_decode((string) $response->getBody(), true);
+        $data = json_decode((string) $response->getBody(), true);
+        // The mock router returns { "pages": [...] }
+        $pages = $data['pages'] ?? $data['data'] ?? $data ?? [];
         $ids = array_map(function ($page) {
             return $page['id'];
         }, $pages);
