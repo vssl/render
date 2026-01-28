@@ -24,7 +24,7 @@ class MiddlewareTest extends TestCase
     /**
      * Setup our middleware test environment.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->handler = new MockRequestHandler();
         $cache = (new LocalAdapter('/tmp'))->clear();

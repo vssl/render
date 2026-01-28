@@ -29,7 +29,7 @@ class RendererTest extends TestCase
     /**
      * Initialize a resolver instance.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->data = json_decode(file_get_contents(__DIR__ . "/server/assets/single.json"), true);
         $this->renderer = new Renderer(
@@ -46,8 +46,8 @@ class RendererTest extends TestCase
     public function testRenderer()
     {
         $output = (string) $this->renderer;
-        $this->assertInternalType('string', $output);
-        $this->assertTrue((boolean) preg_match("/vssl-stripe--header/", $output));
+        $this->assertIsString($output);
+        $this->assertTrue((bool) preg_match("/vssl-stripe--header/", $output));
     }
 
     /**
@@ -64,8 +64,8 @@ class RendererTest extends TestCase
         ];
         $this->renderer->setData($data);
         $output = (string) $this->renderer;
-        $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
-        $this->assertTrue((boolean) preg_match("/<a>Test<\/a>/", $output));
+        $this->assertTrue((bool) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
+        $this->assertTrue((bool) preg_match("/<a>Test<\/a>/", $output));
     }
 
     /**
@@ -118,8 +118,8 @@ class RendererTest extends TestCase
         ];
         $renderer = new Renderer($config, $data);
         $output = (string) $renderer;
-        $this->assertTrue((boolean) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
-        $this->assertTrue((boolean) preg_match("/https:\/\/api.vssl.io\/images\/sepia\/123.jpg/", $output));
+        $this->assertTrue((bool) preg_match("/3xnf}yxFwVHCsXR8p3BRBRZQi2/", $output));
+        $this->assertTrue((bool) preg_match("/https:\/\/api.vssl.io\/images\/sepia\/123.jpg/", $output));
     }
 
     /**

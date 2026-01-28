@@ -27,7 +27,7 @@ class MetadataTest extends TestCase
     /**
      * Initialize a resolver instance.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->data = json_decode(file_get_contents(__DIR__ . "/server/assets/single.json"), true);
         $cache = (new LocalAdapter('/tmp'))->clear();
