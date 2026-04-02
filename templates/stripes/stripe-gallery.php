@@ -35,12 +35,12 @@ if (count($slides)) : ?>
             <?php if (count($slides) > 1) : ?>
             <div class="vssl-stripe--gallery--controls" style="height: 0px; padding-bottom: 100%;">
                 <div class="vssl-stripe--gallery--buttons">
-                    <div class="vssl-stripe--gallery--button vssl-stripe--gallery--next">
-                        <span class="vssl-icon">&rarr;</span>
-                    </div>
-                    <div class="vssl-stripe--gallery--button vssl-stripe--gallery--prev">
-                        <span class="vssl-icon">&larr;</span>
-                    </div>
+                    <button type="button" class="vssl-stripe--gallery--button vssl-stripe--gallery--next" aria-label="Next image">
+                        <span class="vssl-icon" aria-hidden="true">&rarr;</span>
+                    </button>
+                    <button type="button" class="vssl-stripe--gallery--button vssl-stripe--gallery--prev" aria-label="Previous image">
+                        <span class="vssl-icon" aria-hidden="true">&larr;</span>
+                    </button>
                 </div>
                 <div class="vssl-stripe--gallery--counter">
                     <span class="vssl-stripe--gallery--current">1</span
