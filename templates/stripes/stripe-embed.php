@@ -3,7 +3,10 @@
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
     <div class="vssl-stripe-column">
-        <div class="vssl-stripe--embed--content">
+        <div class="vssl-stripe--embed--content"<?php
+            // An explicit height overrides the theme's default aspect-ratio sizing.
+            echo !empty($height) ? ' style="height: ' . (int) $height . 'px; padding-bottom: 0;"' : '';
+        ?>>
             <?= $embed ?>
         </div>
     </div>

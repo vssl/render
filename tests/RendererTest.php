@@ -137,4 +137,40 @@ class RendererTest extends TestCase
         $this->renderer->setData($data);
         $this->assertEquals('Error rendering page: k+M8itwwby/pfbbKmz2', (string) $this->renderer);
     }
+
+    /**
+     * An embed stripe with an explicit height renders that height inline.
+     *
+     * @return void
+     */
+    public function testEmbedStripeWithExplicitHeight()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-embed',
+            'embed' => '<iframe style="width:100%; height:100%;" src="//example.com"></iframe>',
+            'height' => 480,
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('style="height: 480px; padding-bottom: 0;"', $output);
+    }
+
+    /**
+     * An embed stripe without a height renders no inline style (default sizing).
+     *
+     * @return void
+     */
+    public function testEmbedStripeWithoutHeight()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-embed',
+            'embed' => '<iframe style="width:100%; height:100%;" src="//example.com"></iframe>',
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('class="vssl-stripe--embed--content"', $output);
+        $this->assertStringNotContainsString('padding-bottom: 0;', $output);
+    }
 }
