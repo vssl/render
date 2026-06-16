@@ -1,4 +1,4 @@
-<?php $tag = !empty($heading_tag) ? $heading_tag : 'h2' ?>
+<?php $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h2'; ?>
 
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';

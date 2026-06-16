@@ -28,8 +28,9 @@ if (!empty($menu_links)) : ?>
 ?>>
     <div class="vssl-stripe-column">
         <nav>
-            <?php if (!empty($menu_label) && !empty($menu_show_label) && $menu_show_label) : ?>
-            <h2 class="vssl-stripe--menu--title"><?= $menu_label ?></h2>
+            <?php if (!empty($menu_label) && !empty($menu_show_label) && $menu_show_label) :
+                $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h2'; ?>
+            <<?= $tag ?> class="vssl-stripe--menu--title"><?= $menu_label ?></<?= $tag ?>>
             <?php endif; ?>
             <?= vsslStripeMenuLinkList($menu_links) ?>
         </nav>
