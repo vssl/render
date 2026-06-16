@@ -1,3 +1,4 @@
+<?php $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h1'; ?>
 <header class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo (!empty($image) ? ' data-has-background-image="true"' : '');
     echo (!empty($featured_image) ? ' data-has-featured-image="true"' : '');
@@ -25,7 +26,7 @@
                 <?php endif; ?>
 
                 <?php if (!empty($hed['html'])) : ?>
-                <h1 class="vssl-stripe--header--hed"><?= $this->inline($hed['html']) ?></h1>
+                <<?= $tag ?> class="vssl-stripe--header--hed"><?= $this->inline($hed['html']) ?></<?= $tag ?>>
                 <?php endif; ?>
 
                 <?php if (!empty($dek['html'])) : ?>

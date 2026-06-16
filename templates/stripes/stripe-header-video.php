@@ -1,3 +1,4 @@
+<?php $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h1'; ?>
 <header class="vssl-stripe--header <?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($image) ? ' data-has-image="true"' : '';
     echo !empty($videoEmbed) ? ' data-has-video="true"' : '';
@@ -10,7 +11,7 @@
     <div class="vssl-stripe-column<?= !empty($layout) && $layout == 'video-left' ? ' video-left' : '' ?>">
         <?php if (!empty($hed['html'])) : ?>
         <div class=vssl-stripe--header-video--text>
-            <h1 class="vssl-stripe--header--hed vssl-stripe--header-video--hed"><?= $this->inline($hed['html']) ?></h1>
+            <<?= $tag ?> class="vssl-stripe--header--hed vssl-stripe--header-video--hed"><?= $this->inline($hed['html']) ?></<?= $tag ?>>
 
             <?php if (!empty($btn) && !empty($btntxt) && !empty($btnurl)) : ?>
             <div class="vssl-stripe--header--button vssl-stripe--header-video--button">

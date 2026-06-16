@@ -7,8 +7,9 @@ $links = array_values(array_filter($links, function ($link) {
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
 ?>>
     <div class="vssl-stripe-column">
-        <?php if (!empty($relatedLabel['html'])) : ?>
-        <h2 class="vssl-stripe--related--label"><?= $relatedLabel['html'] ?></h2>
+        <?php if (!empty($relatedLabel['html'])) :
+            $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h2'; ?>
+        <<?= $tag ?> class="vssl-stripe--related--label"><?= $relatedLabel['html'] ?></<?= $tag ?>>
         <?php endif; ?>
         <div class="vssl-stripe--related--links">
             <?php foreach ($links as $link) : ?>
