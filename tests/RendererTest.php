@@ -173,4 +173,41 @@ class RendererTest extends TestCase
         $this->assertStringContainsString('class="vssl-stripe--embed--content"', $output);
         $this->assertStringNotContainsString('padding-bottom: 0;', $output);
     }
+
+    /**
+     * A file stripe with custom link text uses it for the download button label
+     * and aria-label.
+     *
+     * @return void
+     */
+    public function testFileStripeUsesCustomLinkText()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-file',
+            'file' => ['file' => 'report.pdf', 'filename' => 'report.pdf', 'id' => 1],
+            'link_text' => 'Download the 2026 report',
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('>Download the 2026 report</a>', $output);
+        $this->assertStringContainsString('aria-label="Download the 2026 report"', $output);
+    }
+
+    /**
+     * A file stripe without custom link text falls back to "Download File".
+     *
+     * @return void
+     */
+    public function testFileStripeFallsBackToDefaultLinkText()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-file',
+            'file' => ['file' => 'report.pdf', 'filename' => 'report.pdf', 'id' => 1],
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('>Download File</a>', $output);
+    }
 }

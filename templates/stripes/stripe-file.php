@@ -4,9 +4,13 @@ $fileExtension = !empty($file['file'])
     ? strtoupper(pathinfo($file['file'], PATHINFO_EXTENSION))
     : null;
 
-$downloadLabel = !empty($filename['html'])
-    ? 'Download ' . strip_tags($filename['html'])
-    : 'Download File';
+$downloadText = !empty($link_text) ? $link_text : 'Download File';
+
+$downloadLabel = !empty($link_text)
+    ? $link_text
+    : (!empty($filename['html'])
+        ? 'Download ' . strip_tags($filename['html'])
+        : 'Download File');
 
 $downloadAriaLabel = htmlspecialchars($downloadLabel, ENT_QUOTES);
 ?>
@@ -48,7 +52,7 @@ $downloadAriaLabel = htmlspecialchars($downloadLabel, ENT_QUOTES);
                     class="vssl-button"
                     href="<?= $this->file($file) ?>"
                     aria-label="<?= $downloadAriaLabel ?>"
-                >Download File</a>
+                ><?= $this->e($downloadText) ?></a>
             </div>
         </div>
     </div>
