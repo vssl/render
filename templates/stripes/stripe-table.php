@@ -12,6 +12,11 @@
   $sortMethods = $sortMethods ?? [];
   $filterMethods = $filterMethods ?? [];
 
+  // A stable, unique id used to associate the scrollable region with the
+  // caption that names it (falls back to the stripe index, then a random id).
+  $tableUid = $id ?? $stripe_index ?? uniqid();
+  $captionId = "vssl-stripe--table--caption--{$tableUid}";
+
   $dataAttributes = [
     'rowCount' => $rowCount,
     'columnCount' => $columnCount,
@@ -66,12 +71,23 @@
         <?php endforeach; ?>
       </div>
     <?php endif; ?>
-    <table>
-      <?php if (!empty($caption)) : ?>
-        <caption class="vssl-stripe--table--caption">
-          <?= !empty($caption['html']) ? $this->inline($caption['html']) : $caption ?>
-        </caption>
-      <?php endif; ?>
+    <?php
+      // The scrollable region is keyboard-focusable (tabindex="0") so that
+      // keyboard users can scroll a wide table that overflows horizontally.
+      // It is named by the caption when present, otherwise a generic label.
+    ?>
+    <div
+      class="vssl-stripe--table--scroll-wrap"
+      role="region"
+      tabindex="0"
+      <?= !empty($caption) ? "aria-labelledby=\"{$captionId}\"" : 'aria-label="Table"' ?>
+    >
+      <table>
+        <?php if (!empty($caption)) : ?>
+          <caption id="<?= $captionId ?>" class="vssl-stripe--table--caption">
+            <?= !empty($caption['html']) ? $this->inline($caption['html']) : $caption ?>
+          </caption>
+        <?php endif; ?>
 
       <?php if ($hasHeadersInFirstRow && !$hasHeadersInFirstColumn) : ?>
         <thead>
@@ -118,7 +134,8 @@
           endforeach;
         ?>
       </tbody>
-    </table>
+      </table>
+    </div>
   </div>
 </div>
 <?php endif;
