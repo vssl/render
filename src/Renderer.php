@@ -382,6 +382,19 @@ class Renderer
     }
 
     /**
+     * Process stripe-file data. (implements preprocessStripeHook)
+     *
+     * @param  array $stripe array of data
+     * @return array
+     */
+    public function processStripeFile($stripe)
+    {
+        $stripe['openInNewTab'] = !empty($stripe['open_in_new_tab']);
+
+        return $stripe;
+    }
+
+    /**
      * Process stripe-table data.
      *
      * @param  array $stripe array of data
