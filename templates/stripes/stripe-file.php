@@ -20,6 +20,10 @@ $fileUrlParts = $fileUrl ? parse_url($fileUrl) : null;
 $fileProtocol = !empty($fileUrlParts['scheme']) ? $fileUrlParts['scheme'] . '://' : null;
 $fileDomain = $fileUrlParts['host'] ?? null;
 $filePath = $fileUrlParts['path'] ?? null;
+
+$filePathDirectory = $filePath ? pathinfo($filePath, PATHINFO_DIRNAME) : null;
+$filePathDirectory = ($filePathDirectory && $filePathDirectory !== '.') ? rtrim($filePathDirectory, '/') . '/' : null;
+$filePathFilename = $filePath ? pathinfo($filePath, PATHINFO_BASENAME) : null;
 ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
@@ -62,13 +66,16 @@ $filePath = $fileUrlParts['path'] ?? null;
                             <?php endif; ?>
                         >
                             <?php if (!empty($fileProtocol)) : ?>
-                            <span class="vssl-stripe--file--path--protocol"><?= $this->e($fileProtocol) ?></span><?php
+                            <span class="vssl-stripe--file--url-protocol"><?= $this->e($fileProtocol) ?></span><?php
                             endif;
                             if (!empty($fileDomain)) :
-                            ?><span class="vssl-stripe--file--path--domain"><?= $this->e($fileDomain) ?></span><?php
+                            ?><span class="vssl-stripe--file--url-domain"><?= $this->e($fileDomain) ?></span><?php
                             endif;
-                            if (!empty($filePath)) :
-                            ?><span class="vssl-stripe--file--path--path"><?= $this->e($filePath) ?></span>
+                            if (!empty($filePathDirectory)) :
+                            ?><span class="vssl-stripe--file--url-directory"><?= $this->e($filePathDirectory) ?></span><?php
+                            endif;
+                            if (!empty($filePathFilename)) :
+                            ?><span class="vssl-stripe--file--url-filename"><?= $this->e($filePathFilename) ?></span>
                             <?php endif; ?>
                         </a>
                     </div>
