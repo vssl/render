@@ -2,13 +2,13 @@
 
 namespace Tests;
 
+use GuzzleHttp\Psr7\Message;
 use GuzzleHttp\Psr7\ServerRequest;
-use GuzzleHttp\Psr7\str;
-use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Tests\Mocks\ArrayCache;
 use Vssl\Render\Renderer;
 use Vssl\Render\Resolver;
 
@@ -38,7 +38,7 @@ class PageApiTest extends TestCase
     /**
      * Cache instance.
      *
-     * @var \Journey\Cache\Adapters\LocalAdapter
+     * @var \Psr\SimpleCache\CacheInterface
      */
     protected $cache;
 
@@ -47,7 +47,7 @@ class PageApiTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->cache = (new LocalAdapter('/tmp'))->clear();
+        $this->cache = new ArrayCache();
         $this->request = new ServerRequest(
             'GET',
             'https://demo.vssl.io/test-page'
@@ -70,7 +70,7 @@ class PageApiTest extends TestCase
         $this->cache->clear();
         $responseA = $this->api->call('GET', 'https://demo.vssl.io/cache-test');
         $responseB = $this->api->call('GET', 'https://demo.vssl.io/cache-test');
-        $this->assertEquals(\GuzzleHttp\Psr7\str($responseA), \GuzzleHttp\Psr7\str($responseB));
+        $this->assertEquals(Message::toString($responseA), Message::toString($responseB));
     }
 
     /**

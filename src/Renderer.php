@@ -23,13 +23,6 @@ class Renderer
     protected $data;
 
     /**
-     * Cache adapter.
-     *
-     * @var \Journey\Cache\CacheAdapterIterface
-     */
-    protected $cache;
-
-    /**
      * String data to output.
      *
      * @var string

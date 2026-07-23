@@ -3,7 +3,6 @@
 namespace Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use Journey\Cache\Adapters\LocalAdapter;
 use League\Plates\Engine;
 use PHPUnit\Framework\TestCase;
 use Vssl\Render\Renderer;
