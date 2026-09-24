@@ -23,13 +23,6 @@ class Renderer
     protected $data;
 
     /**
-     * Cache adapter.
-     *
-     * @var \Journey\Cache\CacheAdapterIterface
-     */
-    protected $cache;
-
-    /**
      * String data to output.
      *
      * @var string
@@ -377,6 +370,19 @@ class Renderer
         if (empty($stripe['zoom'])) {
           $stripe['zoom'] = (empty($stripe['address']) ? 8 : 15);
         }
+
+        return $stripe;
+    }
+
+    /**
+     * Process stripe-file data. (implements preprocessStripeHook)
+     *
+     * @param  array $stripe array of data
+     * @return array
+     */
+    public function processStripeFile($stripe)
+    {
+        $stripe['openInNewTab'] = !empty($stripe['open_in_new_tab']);
 
         return $stripe;
     }

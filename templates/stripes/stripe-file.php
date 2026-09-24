@@ -4,11 +4,26 @@ $fileExtension = !empty($file['file'])
     ? strtoupper(pathinfo($file['file'], PATHINFO_EXTENSION))
     : null;
 
-$downloadLabel = !empty($filename['html'])
-    ? 'Download ' . strip_tags($filename['html'])
-    : 'Download File';
+$downloadText = !empty($link_text) ? $link_text : 'Download File';
+
+$downloadLabel = !empty($link_text)
+    ? $link_text
+    : (!empty($filename['html'])
+        ? 'Download ' . strip_tags($filename['html'])
+        : 'Download File');
 
 $downloadAriaLabel = htmlspecialchars($downloadLabel, ENT_QUOTES);
+
+$fileUrl = !empty($file['file']) ? $this->file($file) : null;
+$fileUrlParts = $fileUrl ? parse_url($fileUrl) : null;
+
+$fileProtocol = !empty($fileUrlParts['scheme']) ? $fileUrlParts['scheme'] . '://' : null;
+$fileDomain = $fileUrlParts['host'] ?? null;
+$filePath = $fileUrlParts['path'] ?? null;
+
+$filePathDirectory = $filePath ? pathinfo($filePath, PATHINFO_DIRNAME) : null;
+$filePathDirectory = ($filePathDirectory && $filePathDirectory !== '.') ? rtrim($filePathDirectory, '/') . '/' : null;
+$filePathFilename = $filePath ? pathinfo($filePath, PATHINFO_BASENAME) : null;
 ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
@@ -40,6 +55,31 @@ $downloadAriaLabel = htmlspecialchars($downloadLabel, ENT_QUOTES);
                         <p><?= $this->inline($description['html']) ?></p>
                     </div>
                     <?php endif; ?>
+
+                    <?php if (!empty($fileUrl)) : ?>
+                    <div class="vssl-stripe--file--url">
+                        <a
+                            href="<?= $this->e($fileUrl) ?>"
+                            <?php if (!empty($openInNewTab)) : ?>
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            <?php endif; ?>
+                        >
+                            <?php if (!empty($fileProtocol)) : ?>
+                            <span class="vssl-stripe--file--url-protocol"><?= $this->e($fileProtocol) ?></span><?php
+                            endif;
+                            if (!empty($fileDomain)) :
+                            ?><span class="vssl-stripe--file--url-domain"><?= $this->e($fileDomain) ?></span><?php
+                            endif;
+                            if (!empty($filePathDirectory)) :
+                            ?><span class="vssl-stripe--file--url-directory"><?= $this->e($filePathDirectory) ?></span><?php
+                            endif;
+                            if (!empty($filePathFilename)) :
+                            ?><span class="vssl-stripe--file--url-filename"><?= $this->e($filePathFilename) ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -48,7 +88,11 @@ $downloadAriaLabel = htmlspecialchars($downloadLabel, ENT_QUOTES);
                     class="vssl-button"
                     href="<?= $this->file($file) ?>"
                     aria-label="<?= $downloadAriaLabel ?>"
-                >Download File</a>
+                    <?php if (!empty($openInNewTab)) : ?>
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    <?php endif; ?>
+                ><?= $this->e($downloadText) ?></a>
             </div>
         </div>
     </div>

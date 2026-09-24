@@ -2,9 +2,9 @@
 
 namespace Vssl\Render;
 
-use Journey\Cache\CacheAdapterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class Resolver
 {
@@ -37,10 +37,10 @@ class Resolver
         $this->request = $request;
         $this->config = is_array($config) ? static::config($config) : static::config();
         if (!empty($this->config['cache'])
-            && !$this->config['cache'] instanceof CacheAdapterInterface
+            && !$this->config['cache'] instanceof CacheInterface
         ) {
             throw new ResolverException(
-                'Cache must implement \Journey\Cache\CacheAdapterInterface.'
+                'Cache must implement \Psr\SimpleCache\CacheInterface.'
             );
         }
 
@@ -128,9 +128,9 @@ class Resolver
     }
 
     /**
-     * Get the configured CacheAdapterInterface.
+     * Get the configured CacheInterface.
      *
-     * @return \Journey\Cache\CacheAdapterInterface
+     * @return \Psr\SimpleCache\CacheInterface
      */
     public function getCache()
     {

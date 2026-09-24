@@ -5,8 +5,9 @@ namespace Vssl\Render;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
-use Journey\Cache\CacheAdapterInterface;
+use GuzzleHttp\Psr7\Message;
 use Psr\Http\Message\RequestInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class PageApi
 {
@@ -34,7 +35,7 @@ class PageApi
     /**
      * A cache adapter for storing results.
      *
-     * @var \Journey\Cache\CacheAdapterInterface
+     * @var \Psr\SimpleCache\CacheInterface
      */
     protected $cache;
 
@@ -143,7 +144,7 @@ class PageApi
             && !$this->config['hasPassword'];
 
         try {
-            if (!$shouldCache || !$value = $this->cache->get($cacheKey)) {
+            if (!$shouldCache || !$value = $this->cache->get($cacheKey, false)) {
                 if (!empty($body)) {
                     $response = $this->http->request(strtoupper($method), $url, ['json' => $body]);
                 } else {
@@ -157,12 +158,12 @@ class PageApi
         }
 
         if (!isset($response) && !empty($value)) {
-            $response = \GuzzleHttp\Psr7\parse_response($value);
+            $response = Message::parseResponse($value);
         } elseif ($shouldCache && !empty($response)) {
             $this->cache->set(
                 $cacheKey,
-                \GuzzleHttp\Psr7\str($response),
-                !empty($this->ttl) ? time() + $this->ttl : 0
+                Message::toString($response),
+                !empty($this->ttl) ? $this->ttl : null
             );
         }
 

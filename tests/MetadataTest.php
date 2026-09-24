@@ -3,8 +3,8 @@
 namespace Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
+use Tests\Mocks\ArrayCache;
 use Vssl\Render\Metadata;
 use Vssl\Render\Resolver;
 
@@ -30,7 +30,7 @@ class MetadataTest extends TestCase
     public function setUp(): void
     {
         $this->data = json_decode(file_get_contents(__DIR__ . "/server/assets/single.json"), true);
-        $cache = (new LocalAdapter('/tmp'))->clear();
+        $cache = new ArrayCache();
         $this->metadata = new Metadata(
             Resolver::config([
                 'cache' => $cache,

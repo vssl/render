@@ -4,9 +4,9 @@ namespace Tests;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
-use Journey\Cache\Adapters\LocalAdapter;
-use Journey\Cache\CacheAdapterInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\CacheInterface;
+use Tests\Mocks\ArrayCache;
 use Vssl\Render\Renderer;
 use Vssl\Render\Resolver;
 use Vssl\Render\ResolverException;
@@ -32,7 +32,7 @@ class ResolverTest extends TestCase
      */
     public function setUp(): void
     {
-        $cache = (new LocalAdapter('/tmp'))->clear();
+        $cache = new ArrayCache();
         $this->request = new ServerRequest(
             'GET',
             'https://demo.vssl.io/test-page'
@@ -77,7 +77,7 @@ class ResolverTest extends TestCase
     {
         $resolver = new Resolver($this->request, [
             'base_uri' => 'http://' . bin2hex(openssl_random_pseudo_bytes(16)) . ".com",
-            'cache' => new LocalAdapter('/tmp')
+            'cache' => new ArrayCache()
         ]);
         $page = $resolver->getRequest()->getAttribute('vssl-page');
         $this->assertArrayHasKey('error', $page);
@@ -110,6 +110,6 @@ class ResolverTest extends TestCase
      */
     public function testGetCache()
     {
-        $this->assertInstanceOf(CacheAdapterInterface::class, $this->resolver->getCache());
+        $this->assertInstanceOf(CacheInterface::class, $this->resolver->getCache());
     }
 }

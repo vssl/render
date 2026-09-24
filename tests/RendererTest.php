@@ -3,7 +3,6 @@
 namespace Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use Journey\Cache\Adapters\LocalAdapter;
 use League\Plates\Engine;
 use PHPUnit\Framework\TestCase;
 use Vssl\Render\Renderer;
@@ -172,5 +171,89 @@ class RendererTest extends TestCase
         $output = (string) $this->renderer;
         $this->assertStringContainsString('class="vssl-stripe--embed--content"', $output);
         $this->assertStringNotContainsString('padding-bottom: 0;', $output);
+    }
+
+    /**
+     * A file stripe with custom link text uses it for the download button label
+     * and aria-label.
+     *
+     * @return void
+     */
+    public function testFileStripeUsesCustomLinkText()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-file',
+            'file' => ['file' => 'report.pdf', 'filename' => 'report.pdf', 'id' => 1],
+            'link_text' => 'Download the 2026 report',
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('>Download the 2026 report</a>', $output);
+        $this->assertStringContainsString('aria-label="Download the 2026 report"', $output);
+    }
+
+    /**
+     * A file stripe without custom link text falls back to "Download File".
+     *
+     * @return void
+     */
+    public function testFileStripeFallsBackToDefaultLinkText()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-file',
+            'file' => ['file' => 'report.pdf', 'filename' => 'report.pdf', 'id' => 1],
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('>Download File</a>', $output);
+    }
+
+    /**
+     * A table stripe wraps its table in a keyboard-focusable scrollable region
+     * so wide tables that overflow horizontally can be scrolled without a mouse.
+     * When a caption is present the region is named by it via aria-labelledby.
+     *
+     * @return void
+     */
+    public function testTableStripeRendersKeyboardScrollableRegion()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-table',
+            'id' => 7,
+            'caption' => ['html' => 'Course schedule'],
+            'hasHeadersInFirstRow' => true,
+            'dataset' => [['Course', 'Term'], ['Art', 'Spring']],
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('class="vssl-stripe--table--scroll-wrap"', $output);
+        $this->assertStringContainsString('role="region"', $output);
+        $this->assertStringContainsString('tabindex="0"', $output);
+        $this->assertStringContainsString('aria-labelledby="vssl-stripe--table--caption--7"', $output);
+        $this->assertStringContainsString('<caption id="vssl-stripe--table--caption--7"', $output);
+    }
+
+    /**
+     * A table stripe without a caption falls back to a generic aria-label so the
+     * scrollable region still has an accessible name.
+     *
+     * @return void
+     */
+    public function testTableStripeWithoutCaptionUsesAriaLabel()
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = [
+            'type' => 'stripe-table',
+            'id' => 8,
+            'hasHeadersInFirstRow' => true,
+            'dataset' => [['Course', 'Term'], ['Art', 'Spring']],
+        ];
+        $this->renderer->setData($data);
+        $output = (string) $this->renderer;
+        $this->assertStringContainsString('class="vssl-stripe--table--scroll-wrap"', $output);
+        $this->assertStringContainsString('aria-label="Table"', $output);
     }
 }

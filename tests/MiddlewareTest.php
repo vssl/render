@@ -3,11 +3,11 @@
 namespace Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use Journey\Cache\Adapters\LocalAdapter;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Tests\Mocks\ArrayCache;
 use Tests\Mocks\MockRequestHandler;
 use Vssl\Render\Middleware;
 use Vssl\Render\Resolver;
@@ -27,7 +27,7 @@ class MiddlewareTest extends TestCase
     public function setUp(): void
     {
         $this->handler = new MockRequestHandler();
-        $cache = (new LocalAdapter('/tmp'))->clear();
+        $cache = new ArrayCache();
         Resolver::config([
             'cache' => $cache,
             'base_uri' => 'https://api.vssl.io',
