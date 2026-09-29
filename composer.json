@@ -24,7 +24,7 @@
         "psr/http-message": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "psr/http-server-handler": "^1.0",
-        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/guzzle": "^7.12",
         "league/plates": "^3.3",
         "psr/simple-cache": "^3.0",
         "guzzlehttp/psr7": "^2.7",
