@@ -258,6 +258,53 @@ class RendererTest extends TestCase
     }
 
     /**
+     * A menu stripe without a variation renders the default nav with its
+     * visible label as a heading.
+     *
+     * @return void
+     */
+    public function testMenuStripeDefaultRendersNav()
+    {
+        $output = $this->renderMenuStripe(null, true);
+        $this->assertStringContainsString('<h2 class="vssl-stripe--menu--hed">Dashboards</h2>', $output);
+        $this->assertStringNotContainsString('<details', $output);
+    }
+
+    /**
+     * A collapsed menu stripe with a visible label renders a disclosure
+     * toggled by that label.
+     *
+     * @return void
+     */
+    public function testCollapsedMenuStripeRendersDisclosure()
+    {
+        $output = $this->renderMenuStripe('collapsed', true);
+        $this->assertStringContainsString('data-variation="collapsed"', $output);
+        $this->assertStringContainsString('<details class="vssl-stripe--menu--disclosure">', $output);
+        $this->assertStringContainsString(
+            '<span class="vssl-stripe--menu--summary-text">Dashboards</span>',
+            $output
+        );
+        $this->assertStringContainsString('<nav aria-label="Dashboards">', $output);
+        $this->assertStringNotContainsString('vssl-stripe--menu--hed', $output);
+    }
+
+    /**
+     * A collapsed menu stripe with a hidden label has nothing to toggle, so it
+     * skips the disclosure and always shows its links.
+     *
+     * @return void
+     */
+    public function testCollapsedMenuStripeWithHiddenLabelAlwaysShowsLinks()
+    {
+        $output = $this->renderMenuStripe('collapsed', false);
+        $this->assertStringContainsString('data-variation="collapsed"', $output);
+        $this->assertStringNotContainsString('<details', $output);
+        $this->assertStringNotContainsString('Dashboards', $output);
+        $this->assertStringContainsString('<span class="vssl-stripe--menu--link--text">Enrollment</span>', $output);
+    }
+
+    /**
      * A grid item with a label renders it above the subheading, with the
      * plain-text label exposed as a data attribute.
      *
@@ -346,6 +393,27 @@ class RendererTest extends TestCase
     {
         $data = $this->renderer->getData();
         $data['stripes'][] = $stripe;
+        $this->renderer->setData($data);
+        return (string) $this->renderer;
+    }
+
+    /**
+     * Render the page with an appended menu stripe.
+     *
+     * @param  string|null $variation
+     * @param  bool        $showLabel
+     * @return string
+     */
+    protected function renderMenuStripe(?string $variation, bool $showLabel): string
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = array_filter([
+            'type' => 'stripe-menu',
+            'variation' => $variation,
+            'menu_label' => 'Dashboards',
+            'menu_show_label' => $showLabel,
+            'menu_links' => [['link' => '/enrollment', 'title' => 'Enrollment']],
+        ], fn ($value) => $value !== null);
         $this->renderer->setData($data);
         return (string) $this->renderer;
     }
