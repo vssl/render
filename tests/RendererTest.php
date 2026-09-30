@@ -256,4 +256,97 @@ class RendererTest extends TestCase
         $this->assertStringContainsString('class="vssl-stripe--table--scroll-wrap"', $output);
         $this->assertStringContainsString('aria-label="Table"', $output);
     }
+
+    /**
+     * A grid item with a label renders it above the subheading, with the
+     * plain-text label exposed as a data attribute.
+     *
+     * @return void
+     */
+    public function testGridItemRendersLabel()
+    {
+        $output = $this->renderWithStripe([
+            'type' => 'stripe-grid',
+            'items' => [
+                ['id' => 'a', 'weight' => 0, 'label' => ['html' => '<em>New</em>'], 'subhed' => ['html' => 'Item A']],
+                ['id' => 'b', 'weight' => 1, 'subhed' => ['html' => 'Item B']],
+            ],
+        ]);
+        $this->assertStringContainsString('class="vssl-stripe--grid-item--label"', $output);
+        $this->assertStringContainsString('data-label="New"', $output);
+        $this->assertSame(1, substr_count($output, 'vssl-stripe--grid-item--label'));
+    }
+
+    /**
+     * A reference stripe's own label takes precedence over the referenced
+     * page's header label.
+     *
+     * @return void
+     */
+    public function testReferenceStripeRendersOwnLabel()
+    {
+        $output = $this->renderWithStripe($this->referenceStripe(['label' => ['html' => 'Featured']]));
+        $this->assertStringContainsString('class="vssl-stripe--reference--label"', $output);
+        $this->assertStringContainsString('data-label="Featured"', $output);
+        $this->assertStringNotContainsString('data-label="Program"', $output);
+    }
+
+    /**
+     * A reference stripe without its own label falls back to the referenced
+     * page's header label.
+     *
+     * @return void
+     */
+    public function testReferenceStripeFallsBackToPageLabel()
+    {
+        $output = $this->renderWithStripe($this->referenceStripe());
+        $this->assertStringContainsString('data-label="Program"', $output);
+    }
+
+    /**
+     * A reference stripe with no label anywhere renders no label element.
+     *
+     * @return void
+     */
+    public function testReferenceStripeWithoutAnyLabel()
+    {
+        $stripe = $this->referenceStripe();
+        unset($stripe['reference_page']['label']);
+        $output = $this->renderWithStripe($stripe);
+        $this->assertStringNotContainsString('vssl-stripe--reference--label', $output);
+    }
+
+    /**
+     * Build a reference stripe pointing at a page with a header label.
+     *
+     * @param  array $overrides
+     * @return array
+     */
+    protected function referenceStripe(array $overrides = []): array
+    {
+        return array_merge([
+            'type' => 'stripe-reference',
+            'reference_page' => [
+                'id' => 42,
+                'type' => 'page',
+                'slug' => '/programs/art',
+                'title' => 'Art Program',
+                'label' => ['html' => 'Program'],
+            ],
+        ], $overrides);
+    }
+
+    /**
+     * Render the page with an appended stripe.
+     *
+     * @param  array $stripe
+     * @return string
+     */
+    protected function renderWithStripe(array $stripe): string
+    {
+        $data = $this->renderer->getData();
+        $data['stripes'][] = $stripe;
+        $this->renderer->setData($data);
+        return (string) $this->renderer;
+    }
 }

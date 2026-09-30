@@ -1,4 +1,8 @@
 <?php if (!empty($reference_page)) : ?>
+<?php
+// The stripe's own label wins; otherwise fall back to the referenced page's header label.
+$referenceLabel = !empty($label['html']) ? $label : ($reference_page['label'] ?? null);
+?>
 <div class="vssl-stripe-column">
     <div class="vssl-stripe--reference--card vssl-stripe--card">
         <?php if (!empty($reference_page['image'])) : ?>
@@ -13,14 +17,19 @@
 
         <div class="vssl-stripe--reference--text">
             <div class="vssl-stripe--reference--page-info">
-                <? if (!empty($reference_page['title'])) : ?>
+                <?php if (!empty($referenceLabel['html'])) : ?>
+                <div class="vssl-stripe--reference--label"
+                    data-label="<?= $this->e(strip_tags($referenceLabel['html'])) ?>"
+                    ><?= $this->inline($referenceLabel['html']) ?></div>
+                <?php endif; ?>
+                <?php if (!empty($reference_page['title'])) : ?>
                 <h3 class="vssl-stripe--reference--title">
                     <a href="<?= $reference_page['slug'] ?>"><?= $this->inline($reference_page['title']) ?></a>
                 </h3>
-                <? endif; ?>
-                <? if (!empty($reference_page['summary'])) : ?>
+                <?php endif; ?>
+                <?php if (!empty($reference_page['summary'])) : ?>
                 <p class="vssl-stripe--reference--description"><?= $this->inline($reference_page['summary']) ?></p>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>

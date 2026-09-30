@@ -15,11 +15,18 @@
                     </div>
                     <?php endif; ?>
 
-                    <?php if (!empty($item['subhed']['html']) ||
+                    <?php if (!empty($item['label']['html']) ||
+                        !empty($item['subhed']['html']) ||
                         !empty($item['desc']['html']) ||
                         count($items) > 1
                     ) : ?>
                     <div class="vssl-stripe--grid-item--text">
+                        <?php if (!empty($item['label']['html'])) : ?>
+                        <div class="vssl-stripe--grid-item--label"
+                            data-label="<?= $this->e(strip_tags($item['label']['html'])) ?>"
+                            ><?= $this->inline($item['label']['html']) ?></div>
+                        <?php endif; ?>
+
                         <?php if (!empty($item['subhed']['html'])) : ?>
                         <h4 class="vssl-stripe--grid-item--subhed"><?= $this->inline($item['subhed']['html']) ?></h4>
                         <?php endif; ?>
