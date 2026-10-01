@@ -271,35 +271,29 @@ class RendererTest extends TestCase
     }
 
     /**
-     * A collapsed menu stripe with a visible label renders a disclosure
-     * toggled by that label.
+     * A full-width menu stripe always shows its links, with its visible label
+     * as a heading.
      *
      * @return void
      */
-    public function testCollapsedMenuStripeRendersDisclosure()
+    public function testFullWidthMenuStripeRendersHeadingAndLinks()
     {
-        $output = $this->renderMenuStripe('collapsed', true);
-        $this->assertStringContainsString('data-variation="collapsed"', $output);
-        $this->assertStringContainsString('<details class="vssl-stripe--menu--disclosure">', $output);
-        $this->assertStringContainsString(
-            '<span class="vssl-stripe--menu--summary-text">Dashboards</span>',
-            $output
-        );
-        $this->assertStringContainsString('<nav aria-label="Dashboards">', $output);
-        $this->assertStringNotContainsString('vssl-stripe--menu--hed', $output);
+        $output = $this->renderMenuStripe('full-width', true);
+        $this->assertStringContainsString('data-variation="full-width"', $output);
+        $this->assertStringContainsString('<h2 class="vssl-stripe--menu--hed">Dashboards</h2>', $output);
+        $this->assertStringContainsString('<span class="vssl-stripe--menu--link--text">Enrollment</span>', $output);
+        $this->assertStringNotContainsString('<details', $output);
     }
 
     /**
-     * A collapsed menu stripe with a hidden label has nothing to toggle, so it
-     * skips the disclosure and always shows its links.
+     * A full-width menu stripe with a hidden label skips the heading.
      *
      * @return void
      */
-    public function testCollapsedMenuStripeWithHiddenLabelAlwaysShowsLinks()
+    public function testFullWidthMenuStripeWithHiddenLabelSkipsHeading()
     {
-        $output = $this->renderMenuStripe('collapsed', false);
-        $this->assertStringContainsString('data-variation="collapsed"', $output);
-        $this->assertStringNotContainsString('<details', $output);
+        $output = $this->renderMenuStripe('full-width', false);
+        $this->assertStringContainsString('data-variation="full-width"', $output);
         $this->assertStringNotContainsString('Dashboards', $output);
         $this->assertStringContainsString('<span class="vssl-stripe--menu--link--text">Enrollment</span>', $output);
     }

@@ -1,7 +1,4 @@
 <?php
-// The "collapsed" variation renders the menu as a disclosure toggled by the menu
-// label. A collapsed menu with a hidden label skips the disclosure and always
-// shows its links.
 if (!function_exists('vsslStripeMenuLinkList')) {
     function vsslStripeMenuLinkList($links, $depth = 1)
     {
@@ -21,11 +18,7 @@ if (!function_exists('vsslStripeMenuLinkList')) {
     }
 }
 
-if (!empty($menu_links)) :
-    $isCollapsed = ($variation ?? null) === 'collapsed'
-        && !empty($menu_label)
-        && !empty($menu_show_label);
-    ?>
+if (!empty($menu_links)) : ?>
 <div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($variation) ? " data-variation=\"{$variation}\"" : '';
     echo !isset($collapsible) || $collapsible ? " data-collapsible=\"true\"" : '';
@@ -34,17 +27,6 @@ if (!empty($menu_links)) :
         : '';
 ?>>
     <div class="vssl-stripe-column">
-        <?php if ($isCollapsed) : ?>
-        <details class="vssl-stripe--menu--disclosure">
-            <summary class="vssl-stripe--menu--summary">
-                <span class="vssl-stripe--menu--summary-text"><?= $this->e($menu_label) ?></span>
-                <span class="vssl-stripe--menu--expand-icon" aria-hidden="true"></span>
-            </summary>
-            <nav aria-label="<?= $this->e($menu_label) ?>">
-                <?= vsslStripeMenuLinkList($menu_links) ?>
-            </nav>
-        </details>
-        <?php else : ?>
         <nav>
             <?php if (!empty($menu_label) && !empty($menu_show_label) && $menu_show_label) :
                 $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h2'; ?>
@@ -52,7 +34,6 @@ if (!empty($menu_links)) :
             <?php endif; ?>
             <?= vsslStripeMenuLinkList($menu_links) ?>
         </nav>
-        <?php endif; ?>
     </div>
 </div>
 <?php endif;
