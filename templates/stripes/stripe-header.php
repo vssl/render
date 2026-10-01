@@ -1,5 +1,5 @@
 <?php $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h1'; ?>
-<header class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
+<div class="<?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo (!empty($image) ? ' data-has-background-image="true"' : '');
     echo (!empty($featured_image) ? ' data-has-featured-image="true"' : '');
     echo (!empty($variation) ? " data-variation=\"{$variation}\"" : '');
@@ -41,4 +41,4 @@
             <?php endif; ?>
         </div>
     </div>
-</header>
+</div>

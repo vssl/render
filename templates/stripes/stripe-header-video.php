@@ -1,5 +1,5 @@
 <?php $tag = in_array($heading_tag ?? '', ['h1', 'h2', 'h3'], true) ? $heading_tag : 'h1'; ?>
-<header class="vssl-stripe--header <?= $this->e($type, 'wrapperClasses') ?>"<?php
+<div class="vssl-stripe--header <?= $this->e($type, 'wrapperClasses') ?>"<?php
     echo !empty($image) ? ' data-has-image="true"' : '';
     echo !empty($videoEmbed) ? ' data-has-video="true"' : '';
     echo !empty($inset) || !empty($bgVideoUrl) ? ' data-has-inset="true"' : '';
@@ -60,4 +60,4 @@
         </div>
         <?php endif; ?>
     </div>
-</header>
+</div>
