@@ -118,7 +118,7 @@ class PageApi
     public function getPagesById($ids)
     {
         $ids = array_filter(array_map(function ($id) {
-            return is_numeric($id) ? (integer) $id : null;
+            return is_numeric($id) ? (int) $id : null;
         }, $ids));
         return $this->call("get", "/pages?ids=" . implode(",", $ids));
     }
