@@ -1,0 +1,108 @@
+#!/bin/sh
+# Symlinks this vssl/render checkout into a project’s vendor/vssl/render and reports how it compares to the version in
+# the project’s composer.lock. See “Developing against a local checkout” in README.MD for the setup, which runs it from
+# the project root on container start and after composer install/update.
+#
+# The checkout should be mounted read-only outside the project. Composer only ever replaces the symlink, never the
+# checkout itself.
+
+name=vssl/render
+checkout=$(cd "$(dirname "$0")/.." && pwd)
+root=$PWD
+package="$root/vendor/$name"
+source_path=${VSSL_RENDER_PATH:-$checkout}
+
+if [ -t 2 ]; then
+    warn_start=$(printf '\033[1;33m')
+    warn_end=$(printf '\033[0m')
+fi
+
+say() {
+    echo "$name: $*"
+}
+
+warn() {
+    echo "${warn_start}$name: WARNING: $*${warn_end}" >&2
+}
+
+checkout_git() {
+    git -c safe.directory='*' -C "$checkout" "$@" 2>/dev/null
+}
+
+# Prints the locked version and commit, e.g. "6.9.2 e7cc4826e661369e04fe1aa8e7ee81aaf636e749"
+locked_release() {
+    php -r '
+        foreach (json_decode(file_get_contents($argv[1]), true)["packages"] ?? [] as $package) {
+            if ($package["name"] === $argv[2]) {
+                echo $package["version"], " ", $package["source"]["reference"] ?? "";
+            }
+        }
+    ' "$root/composer.lock" "$name"
+}
+
+compare_to_lock() {
+    set -- $(locked_release)
+    version=$1
+    reference=$2
+
+    if [ -z "$version" ]; then
+        warn "$name isn’t in composer.lock, so the linked checkout can’t be checked against it"
+        return
+    fi
+
+    if ! head=$(checkout_git rev-parse HEAD); then
+        warn "can’t read git metadata in $source_path, so it can’t be checked against locked $version." \
+            "Git worktrees don’t work here (their metadata lives outside the mount); use a separate clone instead," \
+            "made with \`git clone --no-hardlinks\` if you clone locally."
+        return
+    fi
+
+    short_head=$(echo "$head" | cut -c1-7)
+    short_reference=$(echo "$reference" | cut -c1-7)
+    branch=$(checkout_git symbolic-ref --short -q HEAD || echo "detached HEAD")
+    current="$branch @ $(checkout_git describe --tags --always || true)"
+    [ "${current% @ }" != "$current" ] && current="$current$short_head"
+    if [ -n "$(checkout_git --no-optional-locks status --porcelain --untracked-files=no)" ]; then
+        current="$current, uncommitted changes"
+    fi
+
+    if [ "$head" = "$reference" ]; then
+        say "linked $source_path ($current), matches locked $version"
+    elif ! checkout_git cat-file -e "$reference^{commit}"; then
+        warn "linked $source_path ($current), but locked $version ($short_reference) isn’t in" \
+            "the checkout, so they can’t be compared. Run \`git fetch --tags\` in the checkout."
+    elif checkout_git merge-base --is-ancestor "$reference" HEAD; then
+        ahead=$(checkout_git rev-list --count "$reference..HEAD")
+        if [ "$(checkout_git describe --tags --abbrev=0)" = "$version" ]; then
+            say "linked $source_path ($current), $ahead unreleased commit(s) on top of locked $version"
+        else
+            warn "linked $source_path ($current) is newer than $version, which this project’s composer.lock" \
+                "expects" \
+                "($ahead commits ahead, including later releases)"
+        fi
+    elif checkout_git merge-base --is-ancestor HEAD "$reference"; then
+        warn "linked $source_path ($current) is older than $version, which this project’s composer.lock expects" \
+            "($(checkout_git rev-list --count "HEAD..$reference") commits behind)"
+    else
+        warn "linked $source_path ($current) has diverged from $version, which this project’s composer.lock expects"
+    fi
+}
+
+if [ ! -f "$root/composer.lock" ]; then
+    warn "no composer.lock in $root; run this from the project root"
+    exit 1
+fi
+
+if [ "$(readlink "$package")" != "$checkout" ]; then
+    # Never delete a real checkout, e.g. one still bind-mounted into vendor/ by an old docker-compose.override.yml
+    if [ ! -L "$package" ] && { [ -e "$package/.git" ] || grep -q " $package " /proc/mounts 2>/dev/null; }; then
+        warn "vendor/$name is a mounted folder or git checkout, not an installed release, so it wasn’t replaced" \
+            "with a link to $source_path. If a docker-compose.override.yml mounts it, remove that mount and run" \
+            "\`docker compose up -d\`."
+        exit 1
+    fi
+    mkdir -p "$(dirname "$package")"
+    rm -rf "$package"
+    ln -s "$checkout" "$package"
+fi
+compare_to_lock
