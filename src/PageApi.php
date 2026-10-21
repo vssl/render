@@ -136,7 +136,8 @@ class PageApi
     public function call($method, $url, $body = null, $withPath = true, $withCache = true)
     {
         $url = $withPath ? rtrim($this->apiPath, '/') . '/' . ltrim($url, '/') : $url;
-        $cacheKey = $this->host . '::' . strtoupper($method) . "::" . $url;
+        // PSR-16 reserves {}()/\@: in keys, so hash them (Symfony's Psr16Cache throws on reserved characters)
+        $cacheKey = sha1($this->host . '::' . strtoupper($method) . "::" . $url);
 
         $shouldCache = $withCache
             && !empty($this->cache)

@@ -3,7 +3,9 @@
 namespace Tests\Mocks;
 
 use DateInterval;
+use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionInterface;
 
 /**
  * A minimal in-memory PSR-16 cache used in place of a real cache backend for tests.
@@ -22,11 +24,13 @@ class ArrayCache implements CacheInterface
 
     public function get(string $key, mixed $default = null): mixed
     {
+        $this->validateKey($key);
         return $this->has($key) ? $this->values[$key] : $default;
     }
 
     public function set(string $key, mixed $value, null|int|DateInterval $ttl = null): bool
     {
+        $this->validateKey($key);
         $this->values[$key] = $value;
         $this->expirations[$key] = is_int($ttl) ? time() + $ttl : null;
         return true;
@@ -83,5 +87,17 @@ class ArrayCache implements CacheInterface
         }
 
         return true;
+    }
+
+    /**
+     * Reject keys that PSR-16 reserves, like real cache backends (e.g. Symfony's Psr16Cache) do.
+     */
+    protected function validateKey(string $key): void
+    {
+        if ($key === '' || strpbrk($key, '{}()/\\@:') !== false) {
+            throw new class ("Invalid cache key \"{$key}\"") extends InvalidArgumentException implements
+                InvalidArgumentExceptionInterface {
+            };
+        }
     }
 }
